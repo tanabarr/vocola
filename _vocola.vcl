@@ -81,6 +81,8 @@ Tile Windows <n> = tileWindows($1);  # Edge is <n> units right of center
 <direction>  := Left | Right | Up | Down;
 <left_right> := Left | Right;
 <start_end> := (Start={Home} | End={End});
+<compass> := (North={Shift+Ctrl+Home} | South={Shift+Ctrl+End} |
+ East={Shift+End} | West={Shift+Home});
 
 ### Characters
 <n> <direction>       = {$2_$1};
@@ -137,6 +139,7 @@ Yank That            = {Ctrl+v};
 Paste Here           = ButtonClick() {Ctrl+v};
 Duplicate That       = {Ctrl+c}{Left}{Ctrl+v};
 Keep That            = {Ctrl+c}{Ctrl+a}{Del}{Ctrl+v};
+Select <compass>     = $1;
 
 ### Miscellaneous
 Undo <n> = {Ctrl+z_$1};
