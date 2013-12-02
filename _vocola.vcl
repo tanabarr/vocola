@@ -9,7 +9,7 @@ Copy to (NatSpeak|Emacs|Composition)
 Close Here = ButtonClick(2,1) Wait(100) c;
 # implemented elsewhere
 #Close Window = {Alt+Space}c;
-Switch to Browser = AppBringUp(iexplore);
+#Switch to Browser = AppBringUp(chrome);
 
 (Switch|Next) View     = {Ctrl+Tab};
 (Switch|Next) View <n> = {Ctrl+Tab_$2};
@@ -171,10 +171,10 @@ taskBar()   := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab_2};
 launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 <1to20> := 1..20;
 
-Switch to <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " ";
+#Switch to <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " ";
 # interference
 #Close     <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " " {Alt+F4};
-Switch to <1to20> Left    = taskBar() {Right_$1} " ";
+#Switch to <1to20> Left    = taskBar() {Right_$1} " ";
 #Close     <1to20> Left    = taskBar() {Right_$1} " " {Alt+F4};
 
 Launch <1to20> = launchBar() {Left}{Right_$1} " ";
@@ -199,3 +199,9 @@ Open | New | Save | File | Attachment | Browse | Directory:
 page = {PgDn};
 backup = {PgUp};
 escape = {Esc};
+
+#attach *** = {Ctrl+a}screen -R{enter}|131072
+#bash history = r|4
+#close prompt = {space}c|2
+#attach ***existing = {Ctrl+a}screen -x{enter}|131072
+#flag = {alt}aa|0

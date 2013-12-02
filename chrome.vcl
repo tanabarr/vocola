@@ -10,12 +10,13 @@ new = {Ctrl+T};
 new window = {Ctrl+n};
 next = {Ctrl+tab};
 previous = {Ctrl+Shift+tab};
-tab 0..9 = {Ctrl + $};
+switch tab 0..9 = {Ctrl + $1};
 private = {Alt+e} Wait(10){i};
 close = {Ctrl+w};
 bookmark = {Ctrl+d};
 tools = {Alt+e};
 reload={f5};
+back page={backspace};
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} $1;
 
 # Vimium
