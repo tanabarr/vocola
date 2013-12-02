@@ -1,4 +1,7 @@
 # Voice commands for mintty
+package install = "apt-cyg install ";
+package remove = "apt-cyg remove ";
+
 
 include Unimacro.vch;
 
@@ -15,23 +18,9 @@ screen 0..9 = {Ctrl + a} {$};
 
 # symbols
 
-#open = {Ctrl+X}{Ctrl+F};
-#save = {Ctrl+X}{Ctrl+S};
-#center = {Ctrl+L};
-#menu = {Ctrl+X}{Ctrl+B};
-#direct = {Ctrl+X}{d};
-#kaill = {Ctrl+X}{k};
-#up = {Ctrl+b};
-#down = {Ctrl+f};
-out = {Esc};
-#jump = " ";
-#quit = {Ctrl+G};
-#switch = {Ctrl + X} {o};
-#split = {Ctrl +X} {3};
 slap = {enter};
-#in = {insert};
 back = {backspace};
-#search = {ctrl +s};
+hat = "^";
 clam = "!";
 lat = "@";
 numb = "#";
@@ -66,7 +55,7 @@ Mike = "m";
 November = "n";
 Oscar = "o";
 Poppa = "p";
-QuÃ©bec = "q";
+Québec = "q";
 Romeo = "r";
 Sierra = "s";
 tango = "t";
@@ -76,3 +65,6 @@ whiskey = "w";
 x-ray = "x";
 Yankee = "y";
 Zulu = "z";
+nowrap = "{Esc}:set nowrap{enter}";
+double backslash = "\/\/";
+double dot slash = "../";

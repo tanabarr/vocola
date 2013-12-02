@@ -3,8 +3,8 @@
 include Unimacro.vch;
 
 
-zoom in = {Ctrl+plus};
-zoom out = {Ctrl+minus};
+#zoom in = {Ctrl+p}lus
+#zoom out = {Ctrl+m}inus
 save = {Ctrl+s};
 new = {Ctrl+T};
 new window = {Ctrl+n};

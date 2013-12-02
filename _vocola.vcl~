@@ -197,5 +197,5 @@ Open | New | Save | File | Attachment | Browse | Directory:
 #
 # Tan custom commands
 page = {PgDn};
-backup = {PgUp};
+upwards = {PgUp};
 escape = {Esc};
