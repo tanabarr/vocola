@@ -1,6 +1,6 @@
 # Voice commands for mintty
 include Unimacro.vch;
-include vim.vch;
+include vim.vcl;
 
 package install = "apt-cyg install ";
 package remove = "apt-cyg remove ";

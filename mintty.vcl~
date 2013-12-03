@@ -5,11 +5,7 @@ include vim.vch;
 package install = "apt-cyg install ";
 package remove = "apt-cyg remove ";
 
-
-# Voice commands for putty
-
 # screen
-
 screen next = {Ctrl + a} {n};
 screen prev = {Ctrl + a} {p};
 screen 0..9 = {Ctrl + a} {$};

@@ -1,7 +1,6 @@
 # Voice mappings for vim (enabled applications )
-# vim.vch
+# vim.vcl
 include vim_cmds.vch
-include keys.vch
 
 # symbols
 slap = {enter};
@@ -128,6 +127,8 @@ Select <compass>     = $1;
 
 #/*-------------------------------------------- */ 
 # vim commands
+
+include keys.vch
 
 nowrap = "{Esc}:set nowrap{enter}";
 double backslash = "\/\/";

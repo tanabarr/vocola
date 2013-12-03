@@ -1,7 +1,6 @@
 # Voice mappings for vim (enabled applications )
 # vim.vch
 include vim_cmds.vch
-include keys.vch
 
 # symbols
 slap = {enter};
@@ -107,7 +106,7 @@ Duplicate Graph      = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c}{Home}{Ctrl+v};
 ### Entire "Flow"   
 Flow Start           = {Ctrl+Home};
 Flow End             = {Ctrl+End};
-Select #New Line             = {Enter};
+#New Line             = {Enter};
 All           = {Ctrl+a};
 Copy All             = {Ctrl+a}{Ctrl+c};
 (Cut|Kill) All       = {Ctrl+a}{Ctrl+x};
@@ -128,6 +127,8 @@ Select <compass>     = $1;
 
 #/*-------------------------------------------- */ 
 # vim commands
+
+include keys.vch
 
 nowrap = "{Esc}:set nowrap{enter}";
 double backslash = "\/\/";
