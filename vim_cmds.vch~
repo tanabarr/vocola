@@ -1,63 +1,120 @@
 # keyboard mapping for vim commands (distinct from text editing)
+# vim_cmds.vch
 
-include = {Esc}i#{esc}ii{space};
-equals = i{right} = {Esc};
-copy current line = {Esc}yy;
-define = {Esc}i#{esc}id{space};
-split vertical = {Esc}:vsp;
-window left = {Esc}{ctrl+h};
-repeat macro = {Esc}@z;
-next change = {Esc}g,;
-undo jump = {Esc}``;
-make = {Esc}:make;
-return = {Esc}'';
-update = {Esc}:!ctags -a .;
-previous error = {Esc}:cp;
-folds = {Esc}{ctrl+f};
-hash = {Esc}i#{esc};
-insert space = {Esc}i{space}{esc};
-close = {Esc}:q;
-set mark = {Esc}mz;
-end long comment = {Esc}i#{esc}ie{enter};
-insert line break = {Esc}i{enter};
-save = {Esc}:w;
-goto mark = {Esc}'zi;
-previous = {Esc}:bp;
-taglist = {Esc}{ctrl+p};
-list changes = {Esc}:changes;
-previous command = {Esc}:{up};
-undo = {Esc}u;
-replace = {Esc}R;
-remove buffer = {Esc}:bd;
-next = {Esc}:bn;
-line comment = {Esc}i#{esc}il{enter};
-copy next line = {Esc}:+1y;
-insert blank line previous = {Esc}O{down};
-previous buffer = {Esc}:b#;
-start macro = {Esc}qz;
-window right = {Esc}{ctrl+l};
-list buffers = {Esc}:buffers{enter}:b;
-format = {Esc}Q;
-beginning previous = {Esc}-;
+# text editing
+copy previous line = {Esc}":-1y";
+copy current line = {Esc}"yy";
+copy next line = {Esc}":+1y";
+blank line previous = {Esc}"O"{down}{Esc};
+blank line next = {Esc}"o"{up}{Esc};
+remove previous line = {Esc}":-1d";
+remove next line = {Esc}":+1d";
+change character case = {Esc}"~";
+
+# text shortcuts
+define = {Esc}"i#"{esc}"id"{space};
+include = {Esc}"i#"{esc}"ii"{space};
+equals = i{right}" = "{Esc};
+hash = {Esc}"i#"{esc};
+insert space = {Esc}"i"{space}{esc};
+begin comment = {Esc}"i/* ";
+end comment = {Esc}"i */"{enter};
+begin long comment = {Esc}"i#"{esc}"ib"{space};
+end long comment = {Esc}"i#"{esc}"ie"{enter};
+insert line break = {Esc}"i"{enter};
+line comment = {Esc}"i#"{esc}"il"{enter};
+double slash backslash = "\/\/";
+double dot slash = "../";
+
+# text navigation actions
+list changes = {Esc}":changes";
+previous change = {Esc}"g;";
+##next change = {Esc}"g,";
+undo jump = {Esc}"``";
+return = {Esc}"''";
+set mark = {Esc}"mz";
+goto mark = {Esc}"'zi";
+beginning previous = {Esc}"-";
+beginning next = {Esc}"+";
+match bracket = {Esc}"%";
+scroll to bottom = {Esc}"zb";
+scroll to top = {Esc}"zt";
+Line 1..999 = {Esc}":$1 {Enter}";
+Back till <key>		= {Esc}"T $1";
+Till <key>		= {Esc}"t $1";
+Search <_anything>	= {Esc}"/ $1";
+
+# window navigation
+split vertical = {Esc}":vsp"{Enter};
+window left				= {Ctrl+w}"h";
+window right				= {Ctrl+w}"l";
+window up				= {Ctrl+w}"k";
+window down				= {Ctrl+w}"j";
+next window				= {Ctrl+w}"w";
+window close = {ESC}{Ctrl+w}"c";
+
+# buffer navigation
+previous = {Esc}":bp";
+remove buffer = {Esc}":bd";
+next = {Esc}":bn";
+previous buffer = {Esc}":b#";
+list buffers = {Esc}":buffers"{enter}":b";
+
+# standard actions
+start macro = {Esc}"qz";
+repeat macro = {Esc}"@z";
+format = {Esc}"Q";
+replace = {Esc}"R";
+normal mode 		= {ESC};
+Undo that		= {Esc}"u";
+undo that 1..99 times	= {Esc} Repeat($1, u);
 redo = {Esc}{ctrl+r};
-end comment = {Esc}i */{enter};
-remove previous line = {Esc}:-1d;
-copy previous line = {Esc}:-1y;
-remove next line = {Esc}:+1d;
-list errors = {Esc}:clist;
-window down = {Esc}{ctrl+j};
-matching = {Esc}%;
-edit another = {Esc}:e ;
-change character case = {Esc}~;
-file browser = {Esc}:e.;
-next error = {Esc}:cn;
-scroll to top = {Esc}zt;
-previous change = {Esc}g;;
-begin comment = {Esc}i/* ;
-begin long comment = {Esc}i#{esc}ib{space};
-match bracket = {Esc}%;
-window up = {Esc}{ctrl+k};
-insert blank line next = {Esc}o{up};
-scroll to bottom = {Esc}zb;
-beginning next = {Esc}+;
+insert 		= {ESC}"i";
+insert begin	= {Esc}"I";
+substitute	= {Esc}"s";
+change		= {Esc}"C";
+append		= {Esc}"a";
+append line	= {Esc}"A";
+open above	= {Esc}"O";
+open down	= {Esc}"o";
 
+# commandline actions
+make = {Esc}":make";
+update = {Esc}":!ctags -a ."{Enter};
+list errors = {Esc}":clist";
+next error = {Esc}":cn";
+previous error = {Esc}":cp";
+save file = {Esc}":w"{Enter};
+close = {Esc}":q"{Enter};
+#confirm force close definite = {Esc}":q!";
+previous command = {Esc}":"{up};
+edit another = {Esc}":e ";
+file browser = {Esc}":e."{Enter};
+(sub | substitute) line	= {Esc}":s///gc"Repeat(4, {Left});
+(sub | substitute) all	= {Esc}":%s///gc"Repeat(4, {Left});
+
+# plug-in actions
+folds = {Esc}{ctrl+f};
+taglist = {Esc}""{ctrl+p};
+
+# editor settings
+nowrap = "{Esc}:set nowrap{enter}";
+Edit vim RC		= {Esc} ":e ~\.vimrc" {Enter};
+reload			= {Esc} ":source \$MYVIMRC" {Enter};
+
+
+
+### surplus for reference
+
+#<surround> := ( par = "()" | bar = "||" | quote = "" );
+
+#Surround <surround> = $1{Left};
+#
+#.rb:
+#	new method <_anything>	= "def " Ruby.to_method($1);
+#	class <_anything>	= Ruby.classify($1);
+#	method <_anything>	= Ruby.to_method($1);
+#	variable <_anything>	= Ruby.to_method($1); 
+#
+#	Directory		= Dir;
+#	change directory	= chdir;

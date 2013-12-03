@@ -2,7 +2,7 @@
 
 <folder> := 
  ( 
- Temp            = C:\Temp
+#Temp            = C:\Temp
 # | Downloads       = C:\Programs\Downloads
 # | Start Menu      = "C:\Documents and Settings\Rick Mohr\Start Menu"
 ##### Voice   

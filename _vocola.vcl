@@ -183,16 +183,16 @@ Launch Bar = launchBar();
 # ---------------------------------------------------------------------------
 # Context-Sensitive Commands
 
-include folders.vch;
+#include folders.vch;
 
 ### Commands for "file browse" dialog boxes
 
-Open | New | Save | File | Attachment | Browse | Directory:
-  Folder <folder> = {Ctrl+c}$1\{Enter};
-  Go Up = ..{Enter};
-  Go Up <n> = Repeat($1, ..\) {Enter};
-  Folder List = {Shift+Tab_2}{Down}{PgUp};
-  Choose <n> = {Down_$1}{Enter}{Esc};
+#Open | New | Save | File | Attachment | Browse | Directory:
+#  Folder <folder> = {Ctrl+c}$1\{Enter};
+#  Go Up = ..{Enter};
+#  Go Up <n> = Repeat($1, ..\) {Enter};
+#  Folder List = {Shift+Tab_2}{Down}{PgUp};
+#  Choose <n> = {Down_$1}{Enter}{Esc};
 
 #
 # Tan custom commands

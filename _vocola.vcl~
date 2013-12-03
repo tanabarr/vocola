@@ -183,7 +183,7 @@ Launch Bar = launchBar();
 # ---------------------------------------------------------------------------
 # Context-Sensitive Commands
 
-include folders.vch;
+#include folders.vch;
 
 ### Commands for "file browse" dialog boxes
 
@@ -199,3 +199,9 @@ Open | New | Save | File | Attachment | Browse | Directory:
 page = {PgDn};
 backup = {PgUp};
 escape = {Esc};
+
+#attach *** = {Ctrl+a}screen -R{enter}|131072
+#bash history = r|4
+#close prompt = {space}c|2
+#attach ***existing = {Ctrl+a}screen -x{enter}|131072
+#flag = {alt}aa|0
