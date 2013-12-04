@@ -1,6 +1,5 @@
 # Voice mappings for vim (enabled applications )
-# vim.vch
-include vim_cmds.vch
+# vim.vcl
 
 # symbols
 slap = {enter};
@@ -19,169 +18,194 @@ laip = "(";
 rye = ")";
 
 
-# cursor commands
-
-
-# letters, shorttalk
-
-Alpha = "a";
-bravo = "b";
-Charlie = "c";
-Delta = "d";
-echo = "e";
-foxtrot = "f";
-golf = "g";
-Hotel = "h";
-India = "i";
-Juliet = "j";
-kilo = "k";
-Lima = "l";
-Mike = "m";
-November = "n";
-Oscar = "o";
-Poppa = "p";
-Québec = "q";
-Romeo = "r";
-Sierra = "s";
-tango = "t";
-uniform = "u";
-Victor = "v";
-whiskey = "w";
-x-ray = "x";
-Yankee = "y";
-Zulu = "z";
-
 # vim versions of text editing Mappings established in vocola general commands
 
 # ---------------------------------------------------------------------------
 # Text Editing
 
+<n> := (0..30); #  | 25 | 30 | 40 | 50);
 <direction>  := Left | Right | Up | Down;
 <left_right> := (Left={b} | Right={w});
 <start_end> := (Start={Home} | End={End});
 <compass> := (North={Shift+h} | South={Shift+l} |
  East={'$'} | West={0});
 <delmode> := (Change={c} | Kill={d});
+#Change line			= {Esc} C;
+#Change word			= {Esc} cw;
+#destroy line = {Esc} dd;
+#destroy word = {Esc} dw;
 
 ### Characters
-# implemented elsewhere
-#<n> <direction>       = {$2_$1};
+<n> <direction>       = {$2_$1};
 Kill (Char | 1 | One) = {Del};
 Kill Back [1]         = {Esc}{Backspace};
 Kill <n>              = {Del_$1};
 [Kill] Back <n>       = {Esc}{Backspace_$1};
 
 ### Words
-[One] Word <left_right> = $1;
-<n> Words <left_right> = Repeat($1,$2}); 
-#{Ctrl+$2_$1};
-Kill Word              = {Right_2}{Ctrl+Left}{Shift+Ctrl+Right}   {Del};
-Kill <n> Words         = {Right_2}{Ctrl+Left}{Shift+Ctrl+Right_$1}{Del};
-Kill Back Word         = {Left}{Ctrl+Right}{Shift+Ctrl+Left}   {Del};
-Kill Back <n> Words    = {Left}{Ctrl+Right}{Shift+Ctrl+Left_$1}{Del};
+[One] Word <left_right> = {Esc}$1;
+<n> Words <left_right> = {Esc} Repeat($1,$2); 
+Kill Word              = {Esc}"dw"; 
+Kill <n> Words         = {Esc}"$1dw";
+Kill Back Word         = {Esc}"db";
+Kill Back <n> Words    = {Esc}"$1db";
 
 ### Lines
-Line <start_end>     = $1;
-# implemented elsewhere
-#New Line             = {Enter};
-Line Here            = {Enter}{Left};
-Copy Line            = {home}{Shift+Down}{Shift+Home}{Ctrl+c};
-Kill Line            = {home}{Shift+Down}{Shift+Home}{Del};
-Kill Back Line       = {home}{Shift+Up}  {Shift+Home}{Del};
-Kill <n> Lines       = {home}{Shift+Down_$1}{Shift+Home}{Del};
-Kill Back <n> Lines  = {home}{Shift+Up_$1}  {Shift+Home}{Del};
-Kill Here            = {Shift+End}{Del};
-Kill Back Here       = {Shift+Home}{Del};
-Duplicate Line       = {home}{Shift+Down}{Shift+Home}{Ctrl+c}{Home}{Ctrl+v};
-                    
-### Paragraphs        
-Graph Start          = {Ctrl+Up}{Right}{Home};
-Graph End            = {Ctrl+Down}{Left_2}{End};
-(Paragraph|Graph) Here = {Enter}{Enter}{Left}{Left};
-Open (Graph|Line)    = {Enter}{Enter}{Left};
-Copy Graph           = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c};
-Kill Graph           = {Ctrl+Down}{Shift+Ctrl+Up}{Del};
-Duplicate Graph      = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c}{Home}{Ctrl+v};
-                    
-### Entire "Flow"   
-Flow Start           = {Ctrl+Home};
-Flow End             = {Ctrl+End};
-#New Line             = {Enter};
-All           = {Ctrl+a};
-Copy All             = {Ctrl+a}{Ctrl+c};
-(Cut|Kill) All       = {Ctrl+a}{Ctrl+x};
-Kill Flow Here       = {Ctrl+Shift+End} {Ctrl+x};
-Kill Back Flow Here  = {Ctrl+Shift+Home}{Ctrl+x};
-Replace All          = {Ctrl+a}{Del}{Ctrl+v};
-                    
-### Selection         
-Kill That            = {Del};
-# implemented elsewhere
-#Cut That             = {Ctrl+x};
-#Copy That            = {Ctrl+c};
-Yank That            = {Ctrl+v};
-Paste Here           = ButtonClick() {Ctrl+v};
-Duplicate That       = {Ctrl+c}{Left}{Ctrl+v};
-Keep That            = {Ctrl+c}{Ctrl+a}{Del}{Ctrl+v};
-Select <compass>     = $1;
+Line <start_end>     = {Esc}$1;
+New Line             = {Esc}i{Enter};
+#Line Here            = {Esc}i{Enter}{Left};
+Copy Line            = {Esc}"yy"; #{home}{Shift+Down}{Shift+Home}{Ctrl+c};
+Kill Line            = {Esc}"dd"; #home}{Shift+Down}{Shift+Home}{Del};
+Kill Back Line       = {Esc}":-1d"{Enter}; #{home}{Shift+Up}  {Shift+Home}{Del};
+#Kill <n> Lines       = {home}{Shift+Down_$1}{Shift+Home}{Del};
+#Kill Back <n> Lines  = {home}{Shift+Up_$1}  {Shift+Home}{Del};
+#Kill Here            = {Shift+End}{Del};
+#Kill Back Here       = {Shift+Home}{Del};
+#Duplicate Line       = {home}{Shift+Down}{Shift+Home}{Ctrl+c}{Home}{Ctrl+v};
+#remove previous line = {Esc}":-1d"{Enter};
+#remove next line = {Esc}":+1d"{Enter};
+#                    
+#### Paragraphs        
+#Graph Start          = {Ctrl+Up}{Right}{Home};
+#Graph End            = {Ctrl+Down}{Left_2}{End};
+#(Paragraph|Graph) Here = {Enter}{Enter}{Left}{Left};
+#Open (Graph|Line)    = {Enter}{Enter}{Left};
+#Copy Graph           = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c};
+#Kill Graph           = {Ctrl+Down}{Shift+Ctrl+Up}{Del};
+#Duplicate Graph      = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c}{Home}{Ctrl+v};
+#                    
+#### Entire "Flow"   
+#Flow Start           = {Ctrl+Home};
+##Flow End             = {Ctrl+End};
+##New Line             = {Enter};
+#All           = {Ctrl+a};
+#Copy All             = {Ctrl+a}{Ctrl+c};
+#(Cut|Kill) All       = {Ctrl+a}{Ctrl+x};
+#Kill Flow Here       = {Ctrl+Shift+End} {Ctrl+x};
+#Kill Back Flow Here  = {Ctrl+Shift+Home}{Ctrl+x};
+#Replace All          = {Ctrl+a}{Del}{Ctrl+v};
+#                    
+#### Selection         
+#Kill That            = {Del};
+## implemented elsewhere
+##Cut That             = {Ctrl+x};
+##Copy That            = {Ctrl+c};
+#Yank That            = {Ctrl+v};
+#Paste Here           = ButtonClick() {Ctrl+v};
+#Duplicate That       = {Ctrl+c}{Left}{Ctrl+v};
+#Keep That            = {Ctrl+c}{Ctrl+a}{Del}{Ctrl+v};
+#Select <compass>     = $1;
 
 #/*-------------------------------------------- */ 
 # vim commands
 
-include keys.vch
+# keyboard mapping for vim commands (distinct from text editing)
+include keys.vch;
 
-nowrap = "{Esc}:set nowrap{enter}";
-double backslash = "\/\/";
-double dot slash = "../";
+# text editing
+Copy previous line = {Esc}":-1y"{Enter};
+Copy current line = {Esc}"yy"{Enter};
+Copy next line = {Esc}":+1y"{Enter};
+Blank line previous = {Esc}"O"{down}{Esc};
+Blank line next = {Esc}"o"{up}{Esc};
+Change character case = {Esc}"~";
 
+# text shortcuts
+Define = {Esc}"i#"{esc}"id"{space};
+Include = {Esc}"i#"{esc}"ii"{space};
+Equals = i{right}" = "{Esc};
+Hash = {Esc}"i#"{esc};
+Insert space = {Esc}"i"{space}{esc};
+Begin comment = {Esc}"i/* ";
+End comment = {Esc}"i */"{enter};
+Begin long comment = {Esc}"i#"{esc}"ib"{space};
+End long comment = {Esc}"i#"{esc}"ie"{enter};
+Insert line break = {Esc}"i"{enter};
+Line comment = {Esc}"i#"{esc}"il"{enter};
+Double slash backslash = "\/\/";
+Double dot slash = "../";
 
-Edit vim RC		= {Esc} ":e ~\.vimrc" {Enter};
-reload			= {Esc} ":source \$MYVIMRC" {Enter};
+# text navigation actions
+List changes = {Esc}":changes";
+Previous change = {Esc}"g;";
+##next change = {Esc}"g,";
+Undo jump = {Esc}"``";
+Return = {Esc}"''";
+Set mark = {Esc}"mz";
+Goto mark = {Esc}"'zi";
+Beginning previous = {Esc}"-";
+Beginning next = {Esc}"+";
+Match bracket = {Esc}"%";
+Scroll to bottom = {Esc}"zb";
+scroll to top = {Esc}"zt";
+Line 1..999 = {Esc}":$1 {Enter}";
+Back till <key>		= {Esc}"T $1";
+Till <key>		= {Esc}"t $1";
+Search <_anything>	= {Esc}"/ $1";
 
-(sub | substitute) line	= {Esc} S;
-normal mode 		= {ESC};
+# window navigation
+Split vertical = {Esc}":vsp"{Enter};
+Window left				= {Ctrl+w}"h";
+Window right				= {Ctrl+w}"l";
+Window up				= {Ctrl+w}"k";
+Window down				= {Ctrl+w}"j";
+Next window				= {Ctrl+w}"w";
+Window close = {ESC}{Ctrl+w}"c";
 
-Undo that		= {Esc} u;
+# buffer navigation
+Previous buffer = {Esc}":bp"{Enter};
+Remove buffer = {Esc}":bd"{Enter};
+Next buffer = {Esc}":bn"{Enter};
+Switch buffer = {Esc}":b#"{Enter};
+list buffers = {Esc}":buffers"{enter}":b";
+
+# standard actions
+Start macro = {Esc}"qz";
+Repeat macro = {Esc}"'@'z"{Enter};
+Format = {Esc}"Q";
+Replace = {Esc}"R";
+Normal mode 		= {ESC};
+undo that		= {Esc}"u";
 undo that 1..99 times	= {Esc} Repeat($1, u);
+Redo that = {Esc}{ctrl+r};
+Insert 		= {ESC}"i";
+Insert begin	= {Esc}"I";
+Substitute	= {Esc}"s";
+Change		= {Esc}"C";
+Truncate	= {Esc}"D";
+Append		= {Esc}"a";
+Append line	= {Esc}"A";
+Open above	= {Esc}"O";
+Open down	= {Esc}"o";
+
+# commandline actions
+Make = {Esc}":make";
+Update = {Esc}":!ctags -a ."{Enter};
+List errors = {Esc}":clist";
+Next error = {Esc}":cn";
+Previous error = {Esc}":cp";
+Save file = {Esc}":w"{Enter};
+Close file = {Esc}":q"{Enter};
+Save and close file = {Esc}":x"{Enter};
+#confirm force close definite = {Esc}":q!";
+Previous command = {Esc}":"{up};
+Edit another = {Esc}":e ";
+File browser = {Esc}":e."{Enter};
+(sub | substitute) line	= {Esc}":s///gc"Repeat(4, {Left});
+(sub | substitute) all	= {Esc}":%s///gc"Repeat(4, {Left});
+
+# plug-in actions
+Folds = {Esc}{ctrl+f};
+Taglist = {Esc}""{ctrl+p};
+
+# editor settings
+Nowrap = "{Esc}:set nowrap{enter}";
+Edit vim RC		= {Esc} ":e ~\.vimrc" {Enter};
+Reload			= {Esc} ":source \$MYVIMRC" {Enter};
 
 
-save file 	= {ESC} :w {Enter};
 
-
-Split window				= {Ctrl+w} s;
-split window (vertically | vertical) 	= {Ctrl+w} v;
-window left				= {Ctrl+w} h;
-window right				= {Ctrl+w} l;
-window up				= {Ctrl+w} k;
-window down				= {Ctrl+w} j;
-next window				= {Ctrl+w} w;
-
-Line 1..999 = {Esc} :$1 {Enter};
-
-
-Change line			= {Esc} C;
-Change word			= {Esc} cw;
-
-
-Back till <key>		= {Esc} T $1;
-Till <key>		= {Esc} t $1;
-
-Search <_anything>	= {Esc} / $1;
-
-window close = {ESC}{Ctrl+w} c;
-
-insert 		= {ESC} i;
-insert begin	= {Esc} I;
-substitute	= {Esc} s;
-change		= {Esc} C;
-append		= {Esc} a;
-append line	= {Esc} A;
-open above	= {Esc} O;
-open down	= {Esc} o;
-
-destroy line = {Esc} dd;
-destroy word = {Esc} dw;
-
+### surplus for reference
 
 #<surround> := ( par = "()" | bar = "||" | quote = "" );
 
@@ -195,3 +219,6 @@ destroy word = {Esc} dw;
 #
 #	Directory		= Dir;
 #	change directory	= chdir;
+
+
+

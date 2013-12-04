@@ -65,6 +65,8 @@ Kill <n>              = {Del_$1};
 #Kill Here            = {Shift+End}{Del};
 #Kill Back Here       = {Shift+Home}{Del};
 #Duplicate Line       = {home}{Shift+Down}{Shift+Home}{Ctrl+c}{Home}{Ctrl+v};
+remove previous line = {Esc}":-1d"{Enter};
+remove next line = {Esc}":+1d"{Enter};
 #                    
 #### Paragraphs        
 #Graph Start          = {Ctrl+Up}{Right}{Home};
@@ -109,8 +111,6 @@ copy current line = {Esc}"yy"{Enter};
 copy next line = {Esc}":+1y"{Enter};
 blank line previous = {Esc}"O"{down}{Esc};
 blank line next = {Esc}"o"{up}{Esc};
-remove previous line = {Esc}":-1d"{Enter};
-remove next line = {Esc}":+1d"{Enter};
 change character case = {Esc}"~";
 
 # text shortcuts
