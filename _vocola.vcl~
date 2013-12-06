@@ -11,6 +11,7 @@ Copy to (NatSpeak|Emacs|Composition)
     = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
 Close Here = ButtonClick(2,1) Wait(100) c;
 Close Prompt = {Alt+Space}c;
+Context Menu = {Alt+f}{Down};
 # implemented elsewhere
 #Close Window = {Alt+Space}c;
 #Switch to Browser = AppBringUp(chrome);
@@ -20,8 +21,8 @@ Close Prompt = {Alt+Space}c;
 Previous View     = {Ctrl+Shift+Tab};
 Previous View <n> = {Ctrl+Shift+Tab_$1};
 
-Tab Back     = {Shift+Tab};
-Tab Back <n> = {Shift+Tab_$1};
+Back Tab     = {Shift+Tab};
+Back Tab  <n> = {Shift+Tab_$1};
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);

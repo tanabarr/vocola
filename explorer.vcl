@@ -7,8 +7,8 @@ Refresh [View] = {Alt+v}r;
 (Show|View) (Details=d | List=l) = {Alt+v} $2;
 Search = {Ctrl+e};
 Address    = {Alt+d};
-Left Side  = {Alt+d}{Tab_2}{Left};
-Right Side = {Alt+d}{Shift+Tab}{Left};
+#Left Side  = {Alt+d}{Tab_2}{Left};
+#Right Side = {Alt+d}{Shift+Tab}{Left};
 Go (Back=Left | Forward=Right) = SendSystemKeys({Alt+$1});
 Go (Back=Left | Forward=Right) 1..10 = SendSystemKeys({Alt+$1_$2});
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} $1;
@@ -45,4 +45,3 @@ Paste Here = ButtonClick(1,1) {Ctrl+v};
 ### Misc extra
 
 open with = {Alt+f} Wait(20) h;
-context menu = {Alt+f};
