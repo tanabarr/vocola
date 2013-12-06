@@ -5,24 +5,24 @@
 
 ### Switch applications, windows, and panels
 
-Switch Window = SendSystemKeys( {Alt+Tab} );
-Copy and Switch  = {Ctrl+a}{Ctrl+c} SendSystemKeys( {Alt+Tab} );
-Copy to (NatSpeak|Emacs|Composition)
-    = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
-Close Here = ButtonClick(2,1) Wait(100) c;
-Close Prompt = {Alt+Space}c;
-Context Menu = {Alt+f}{Down};
+Switch Window                        = SendSystemKeys( {Alt+Tab} );
+Copy and Switch                      = {Ctrl+a}{Ctrl+c} SendSystemKeys( {Alt+Tab} );
+                                        Copy to (NatSpeak|Emacs|Composition)
+                                     = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
+Close Here                           = ButtonClick(2,1) Wait(100) c;
+Close Prompt                         = {Alt+Space}c;
+Context Menu                         = {Alt+f}{Down};
 # implemented elsewhere
-#Close Window = {Alt+Space}c;
-#Switch to Browser = AppBringUp(chrome);
+#Close Window                        = {Alt+Space}c;
+#Switch to Browser                   = AppBringUp(chrome);
 
 (Switch|Next) View     = {Ctrl+Tab};
 (Switch|Next) View <n> = {Ctrl+Tab_$2};
-Previous View     = {Ctrl+Shift+Tab};
-Previous View <n> = {Ctrl+Shift+Tab_$1};
+Previous View          = {Ctrl+Shift+Tab};
+Previous View <n>      = {Ctrl+Shift+Tab_$1};
 
-Back Tab     = {Shift+Tab};
-Back Tab  <n> = {Shift+Tab_$1};
+Back Tab               = {Shift+Tab};
+Back Tab  <n>          = {Shift+Tab_$1};
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);
@@ -43,9 +43,9 @@ Die Die = GoToSleep();
 # ---------------------------------------------------------------------------
 # Mouse Handling
 
-Hit Down   = ButtonClick();
-Hit Double = ButtonClick(1,2);
-(Shift=1 | Control=2 | Alt=3) Click = ShiftKey($1) ButtonClick();
+Hit Down         = ButtonClick();
+Hit Double       = ButtonClick(1,2);
+(Shift           = 1 | Control                   = 2 | Alt = 3) Click = ShiftKey($1) ButtonClick();
 Hit Start [Menu] = SendSystemKeys( {Ctrl+Esc} );
 
 ### Straight mouse grid commands. (See documentation in utilities.vch)
@@ -66,7 +66,7 @@ Drag <n> <leftRight> = dragBy($2$1, 0);
 
 ### Move and resize windows
 
-Window <direction> = {Win+$1};
+Window move <direction> = SendSystemKeys({Win+$1});
 
 #<edge> := (Top=n | Bottom=s | Left=w | Right=e);
 #
@@ -198,14 +198,14 @@ Launch Bar = launchBar();
 #  Folder <folder> = {Ctrl+c}$1\{Enter};
 #  Go Up = ..{Enter};
 #  Go Up <n> = Repeat($1, ..\) {Enter};
-#  Folder List = {Shift+Tab_2}{Down}{PgUp};
-#  Choose <n> = {Down_$1}{Enter}{Esc};
+
 
 #
 # Tan custom commands
 Page = {PgDn};
 Backup = {PgUp};
 Escape = {Esc};
+Control Panel = SendSystemKeys({Win});
 
 #attach *** = {Ctrl+a}screen -R{enter}|131072
 #bash history = r|4
