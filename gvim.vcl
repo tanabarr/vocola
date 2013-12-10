@@ -3,6 +3,6 @@
 #include Unimacro.vch;
 include vim.vch;
 
-File Open = {Alt+f} o Wait(200) Repeat(2, {Shift+Tab});
+File Open = {Alt+f} o Wait(100) {Shift+Tab} Wait(50) {Shift+Tab};
 #Directory View = {Shift+Tab};
 

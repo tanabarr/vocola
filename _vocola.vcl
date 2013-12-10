@@ -1,4 +1,4 @@
-# Global voice commands
+### Global voice commands
 
 #  When overriding ensure commands have the same case and spelling
 #  overrid in application-specific command files
@@ -21,8 +21,12 @@ Context Menu                         = {Alt+f}{Down};
 Previous View          = {Ctrl+Shift+Tab};
 Previous View <n>      = {Ctrl+Shift+Tab_$1};
 
-Back Tab               = {Shift+Tab};
-Back Tab  <n>          = {Shift+Tab_$1};
+Back Tab      = {Shift+Tab};
+Back Tab  <n> = {Shift+Tab_$1};
+Page          = {PgDn};
+Page <n>      = {PgDn_$1};
+Backup        = {PgUp};
+Escape        = {Esc};
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);
@@ -135,7 +139,7 @@ Duplicate Graph      = {Ctrl+Down}{Shift+Ctrl+Up}{Ctrl+c}{Home}{Ctrl+v};
 ### Entire "Flow"   
 Flow Start           = {Ctrl+Home};
 Flow End             = {Ctrl+End};
-Select #New Line             = {Enter};
+#New Line             = {Enter};
 All           = {Ctrl+a};
 Copy All             = {Ctrl+a}{Ctrl+c};
 (Cut|Kill) All       = {Ctrl+a}{Ctrl+x};
@@ -202,13 +206,18 @@ Launch Bar = launchBar();
 
 #
 # Tan custom commands
-Page = {PgDn};
-Backup = {PgUp};
-Escape = {Esc};
-Control Panel = SendSystemKeys({Win});
+
+controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(100) {enter};
+soundControl() := controlPanel()  Wait(500) "s" {enter};
+<sound_device> := (headset=1 | car=2 | laptop=3);
+Control Panel           = controlPanel();
+Sound controls          = soundControl();
+Sound to <sound_device> = soundControl() Wait(1000) {Down_$1} 
+                          Wait(50) {Tab_2} Wait(50) {enter}
+                          Wait(50) {Tab_3} Wait(50) {enter};
 
 #attach *** = {Ctrl+a}screen -R{enter}|131072
 #bash history = r|4
 #close prompt = {space}c|2
 #attach ***existing = {Ctrl+a}screen -x{enter}|131072
-#flag = {alt}aa|0
+#flag = {alt}aa|0

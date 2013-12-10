@@ -2,7 +2,7 @@
 # 051213: tan modified
 # vim.vcl
 
-cmbols
+#symbols
 slap  = {enter};
 back  = {backspace};
 hat   = "^";
@@ -182,6 +182,7 @@ Nowrap                          = "{Esc}:set nowrap{enter}";
 Edit vim RC                     = {Esc} ":e ~\.vimrc" {Enter};
 Reload                          = {Esc} ":source \$MYVIMRC" {Enter};
 
+# ??
 
 
 ### surplus for reference     -credit neon?
