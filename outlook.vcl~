@@ -24,7 +24,7 @@ Microsoft Outlook:
   Search Messages = {Ctrl+Shift+f};
   Mark All Read = {Alt+e}e;
   Kill Line = {Del};
-  Save Attachment 1..10 = {Alt+f}n{Down_$1}{Up}{Enter};
+  Save Attachment 1..10 = {Alt+f}n{Down_$1}{Enter};
   Save Attachment All = {Alt+f}n{Up}{Enter};
 
 Message:
