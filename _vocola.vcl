@@ -214,7 +214,8 @@ Control Panel           = controlPanel();
 Sound controls          = soundControl();
 Sound to <sound_device> = soundControl() Wait(1000) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
-                          Wait(50) {Tab_3} Wait(50) {enter};
+                          Wait(50) {Tab_3} Wait(50) {enter}
+                          {Alt+f4};
 
 #attach *** = {Ctrl+a}screen -R{enter}|131072
 #bash history = r|4
