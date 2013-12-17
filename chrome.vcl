@@ -6,7 +6,8 @@ include Unimacro.vch;
 zoom in = {Ctrl+plus};
 zoom out = {Ctrl+minus};
 save = {Ctrl+s};
-new = {Ctrl+T};
+new = {Ctrl+t};
+last = {Ctrl+T};
 new window = {Ctrl+n};
 next = {Ctrl+tab};
 previous = {Ctrl+Shift+tab};
@@ -17,7 +18,7 @@ bookmark = {Ctrl+d};
 tools = {Alt+e};
 reload={f5};
 back page={backspace};
-(Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} $1;
+(Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} Wait(20) $1;
 
 # Vimium
 #address copy = y Wait(10){y};

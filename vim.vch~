@@ -69,9 +69,10 @@ Trunc Line                   = {Esc}"D";
 Flow Start                   = {Esc}"gg";
 Flow End                     = {Esc}"G";
 Copy To Range                = {Esc}":,co"{Left_3};
+Move Range                = {Esc}":,m"{Left_2};
 <edit_mode> Range            = {Esc}":,$1"{Left_2};
-<edit_mode> Flow Here        = {Esc}":.,\$\1"{Enter};
-<edit_mode> Back Flow Here   = {Esc}":.,0\1"{Enter};
+<edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
+<edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
 
 #/*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
@@ -182,6 +183,7 @@ Nowrap                          = "{Esc}:set nowrap{enter}";
 Edit vim RC                     = {Esc} ":e ~\.vimrc" {Enter};
 Reload                          = {Esc} ":source \$MYVIMRC" {Enter};
 
+# ??
 
 
 ### surplus for reference     -credit neon?

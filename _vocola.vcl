@@ -181,6 +181,8 @@ Environment Variables =
 taskBar()   := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab_2};
 launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 <1to20> := 1..20;
+Launch <1to20> = launchBar() {Down_$1}{Up} " ";
+Launch <1to20> from bottom = launchBar() {Up_$1} " ";
 
 #Switch to <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " ";
 # interference
@@ -188,8 +190,10 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 #Switch to <1to20> Left    = taskBar() {Right_$1} " ";
 #Close     <1to20> Left    = taskBar() {Right_$1} " " {Alt+F4};
 
-Launch <1to20> = launchBar() {Left}{Right_$1} " ";
-Launch Bar = launchBar();
+#<from_bottom> := (from bottom=Up | ""=Down);
+#<from_bottom> := (<0to20> from bottom={Up_$1} | <1to20>={Down_$1}{Up});
+#Launch <from_bottom> = launchBar() $1;
+#Launch Bar = launchBar();
 
 # ---------------------------------------------------------------------------
 # Context-Sensitive Commands
