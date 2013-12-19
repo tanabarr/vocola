@@ -6,7 +6,7 @@
 Refresh [View] = {Alt+v}r;
 (Show|View) (Details=d | List=l) = {Alt+v} $2;
 Search = {Ctrl+e};
-Address    = {Alt+d};
+(Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") Address = {Alt+d} Wait(20) $1;
 #Left Side  = {Alt+d}{Tab_2}{Left};
 #Right Side = {Alt+d}{Shift+Tab}{Left};
 Go (Back=Left | Forward=Right) = SendSystemKeys({Alt+$1});

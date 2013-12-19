@@ -25,8 +25,7 @@ Back Tab      = {Shift+Tab};
 Back Tab  <n> = {Shift+Tab_$1};
 Page          = {PgDn};
 Page <n>      = {PgDn_$1};
-Backup        = {PgUp};
-Escape        = {Esc};
+#Escape        = {Esc};
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);
@@ -69,8 +68,9 @@ Drag <n> <upDown>    = dragBy(0, $2$1);
 Drag <n> <leftRight> = dragBy($2$1, 0);
 
 ### Move and resize windows
-
+<ns> := 0..10;
 Window move <direction> = SendSystemKeys({Win+$1});
+Window move <direction> <ns> = Repeat($2, SendSystemKeys({Win+$1}));
 
 #<edge> := (Top=n | Bottom=s | Left=w | Right=e);
 #

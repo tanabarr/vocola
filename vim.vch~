@@ -69,7 +69,7 @@ Trunc Line                   = {Esc}"D";
 Flow Start                   = {Esc}"gg";
 Flow End                     = {Esc}"G";
 Copy To Range                = {Esc}":,co"{Left_3};
-Move Range                = {Esc}":,m"{Left_2};
+Move Range                   = {Esc}":,m"{Left_2};
 <edit_mode> Range            = {Esc}":,$1"{Left_2};
 <edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
 <edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
@@ -87,6 +87,8 @@ Change case <n>                 = {Esc} Repeat($1,"~");
 (sub | substitute) line         = {Esc}":s///gc"Repeat(4, {Left});
 (sub | substitute) range        = {Esc}":,s///gc"Repeat(7, {Left});
 (sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
+(sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
+(sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
 Paste                           = {Esc}p;
 Paste Back                      = {Esc}P;
 Insert                          = {ESC}"i";
@@ -169,10 +171,15 @@ Vim Window close                = {ESC}{Ctrl+w}"c";
 
 # buffer navigation
 Previous buffer                 = {Esc}":bp"{Enter};
-Remove buffer                   = {Esc}":bd"{Enter};
+Close buffer                   = {Esc}":bd"{Enter};
 Next buffer                     = {Esc}":bn"{Enter};
 Switch buffer                   = {Esc}":b#"{Enter};
 list buffers                    = {Esc}":buffers"{enter}":b";
+
+# tab navigation
+<tab_actions> := (Previous=p | Close=c | Next=n | List=s | Last=l | First=fir);
+<tab_actions> tab                 = {Esc}":tab$1"{Enter};
+switch tab <n>                   = {Esc}":tabn $1"{enter};
 
 # plug-in actions
 Vim Folds                       = {Esc}{ctrl+f};
