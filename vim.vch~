@@ -35,7 +35,7 @@ rye   = ")";
 <n> <direction>              = {$2_$1};
 <edit_mode> (Char | 1 | One) = {Esc}"$1l";
 <edit_mode> Back [1]         = {Esc}"$1h";
-<edit_mode> <n>              = {Esc}"$2$1l";
+<edit_mode> <n> Chars        = {Esc}"$2$1l";
 <edit_mode> Back <n>         = {Esc}"$2$1h";
 
 ### Words

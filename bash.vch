@@ -2,4 +2,5 @@
 
 <common_actions> := (edit="vim" | source="source");
 edit vim config = {Esc}"ivim ~/.vimrc"{Enter};
-<common_actions> bash config = {Esc}"i$1 ~/.bashrc"{Enter};
+edit bash config = {Esc}"ivim ~/.bashrc"{Enter};
+bash history = {Esc}{Ctrl+r};

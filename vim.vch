@@ -157,8 +157,8 @@ Insert line break               = {Esc}"i"{enter};
 Line comment                    = {Esc}"i#"{esc}"il"{enter};
 Double slash backslash          = {Esc}"\/\/";
 Double dot slash                = {Esc}"../";
-Function definition             = {Esc}"idef ():" {Left_3};
-Function definition <_anything> = {Esc}"idef $1():" {Left_2};
+Function definition             = "def ():" {Left_3};
+Function definition <_anything> = "idef $1():" {Left_2};
 
 # window navigation
 Split vertical                  = {Esc}":vsp"{Enter};
