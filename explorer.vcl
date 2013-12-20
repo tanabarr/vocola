@@ -45,3 +45,5 @@ Paste Here = ButtonClick(1,1) {Ctrl+v};
 ### Misc extra
 
 open with = {Alt+f} Wait(20) h;
+file edit = {Alt+f}e;
+file options = {Alt+f};
