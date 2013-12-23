@@ -19,8 +19,9 @@ tools = {Alt+e};
 reload={f5};
 back page={backspace};
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} Wait(20) $1;
-
 # Vimium
+text box = {Esc}gi;
+show links = {Esc}f;
 #address copy = y Wait(10){y};
 #address go = {Alt+d};
 #link copy <n> = yf$1;

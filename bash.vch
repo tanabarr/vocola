@@ -4,3 +4,4 @@
 edit vim config = {Esc}"ivim ~/.vimrc"{Enter};
 edit bash config = {Esc}"ivim ~/.bashrc"{Enter};
 bash history = {Esc}{Ctrl+r};
+break = {Esc}{Ctrl+c};
