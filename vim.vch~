@@ -1,6 +1,6 @@
 # Voice mappings for vim (enabled applications )
 # 051213: tan modified
-# vim.vcl
+# vim.vch
 
 #symbols
 slap  = {enter};
@@ -31,12 +31,12 @@ rye   = ")";
                             East={'$'} | West={0});
 <edit_mode>             := (Change={c} | Kill={d} | Copy={y});
 
-### Characters
+### Characters ( assumes we are in insert mode when calling)
 <n> <direction>              = {$2_$1};
-<edit_mode> (Char | 1 | One) = {Esc}"$1l";
-<edit_mode> Back [1]         = {Esc}"$1h";
-<edit_mode> <n> Chars        = {Esc}"$2$1l";
-<edit_mode> Back <n>         = {Esc}"$2$1h";
+<edit_mode> (Char | 1 | One) = {Esc}{Right}"$1l";
+<edit_mode> Back [1]         = {Esc}{Right}"$1h";
+<edit_mode> <n> Chars        = {Esc}{Right}"$2$1l";
+<edit_mode> Back <n>         = {Esc}{Right}"$2$1h";
 
 ### Words
 [One] Word                   = {Esc}"w";
@@ -51,8 +51,8 @@ Back <n> Words               = {Esc}"$1b";
 
 ### Lines
 Line <start_end>             = {Esc}$1;
-New Line                     = {Esc}o;
-New Back Line                = {Esc}O;
+New Line Next                = {Esc}o;
+Back Line New                = {Esc}O;
 Duplicate Line               = {Esc}"yyp";
 Line Here                    = {Esc}i{Enter};
 <edit_mode> Here             = {Esc}$1"\$";
@@ -64,17 +64,19 @@ Line Here                    = {Esc}i{Enter};
 <edit_mode> Next Line        = {Esc}":+1$1"{Enter};
 Kill Back Line               = {Esc}":-1d"{Enter};
 Trunc Line                   = {Esc}"D";
+Copy Line To                = {Esc}":.co";
+Move Line To                = {Esc}":.m";
                    
 ### Entire "Flow"
 Flow Start                   = {Esc}"gg";
 Flow End                     = {Esc}"G";
-Copy To Range                = {Esc}":,co"{Left_3};
-Move Range                   = {Esc}":,m"{Left_2};
-<edit_mode> Range            = {Esc}":,$1"{Left_2};
+Copy Range To                = {Esc}":co"{Left_2};
+Move Range To                = {Esc}":m"{Left};
+<edit_mode> Range            = {Esc}":$1"{Left};
 <edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
 <edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
 
-#/*-------------------------------------------- */ 
+#*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
 include keys.vch;
 
@@ -85,7 +87,7 @@ Blank line next                 = {Esc}"o"{up}{Esc};
 Change case                     = {Esc}"~";
 Change case <n>                 = {Esc} Repeat($1,"~");
 (sub | substitute) line         = {Esc}":s///gc"Repeat(4, {Left});
-(sub | substitute) range        = {Esc}":,s///gc"Repeat(7, {Left});
+(sub | substitute) range        = {Esc}":s///gc"Repeat(6, {Left});
 (sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
 (sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
 (sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
@@ -157,8 +159,8 @@ Insert line break               = {Esc}"i"{enter};
 Line comment                    = {Esc}"i#"{esc}"il"{enter};
 Double slash backslash          = {Esc}"\/\/";
 Double dot slash                = {Esc}"../";
-Function definition             = {Esc}"idef ():" {Left_3};
-Function definition <_anything> = {Esc}"idef $1():" {Left_2};
+Function definition             = "def ():" {Left_3};
+Function definition <_anything> = "idef $1():" {Left_2};
 
 # window navigation
 Split vertical                  = {Esc}":vsp"{Enter};
