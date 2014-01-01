@@ -32,3 +32,8 @@ show links = {Esc}f;
 #             save [file] as <text> = a-f, a/20") + Text("%(text)s
 #             find <text> = {Ctrl+f}/20") + Text("%(text)s\n
 #            },
+
+# Add torrent for download on web UI
+#<local_remote> := (local="192.168.1.194:8112" | remote="");
+#add deluge torrent <local_remote> = <Ctrl+t> Wait(1000) $1 Wait(100) "siemens{enter}";
+#add deluge torrent  = <Ctrl+t>; #/Wait(1000) $1 Wait(100) "siemens{enter}";

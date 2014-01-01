@@ -118,8 +118,8 @@ Line <start_end>     = $1;
 # implemented elsewhere
 #New Line             = {Enter};
 Line Here            = {Enter}{Left};
-Copy Line            = {home}{Shift+Down}{Shift+Home}{Ctrl+c};
-Kill Line            = {home}{Shift+Down}{Shift+Home}{Del};
+Copy Line            = {home}{Shift+End}{Ctrl+c};
+Kill Line            = {home}{Shift+End}{Del};
 Kill Back Line       = {home}{Shift+Up}  {Shift+Home}{Del};
 Kill <n> Lines       = {home}{Shift+Down_$1}{Shift+Home}{Del};
 Kill Back <n> Lines  = {home}{Shift+Up_$1}  {Shift+Home}{Del};
