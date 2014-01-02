@@ -216,7 +216,7 @@ soundControl() := controlPanel()  Wait(500) "s" {enter};
 <sound_device> := (headset=1 | car=2 | laptop=3);
 Control Panel           = controlPanel();
 Sound controls          = soundControl();
-Sound to <sound_device> = soundControl() Wait(1000) {Down_$1} 
+Sound to <sound_device> = soundControl() Wait(1500) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
                           Wait(50) {Tab_3} Wait(50) {enter}
                           {Alt+f4};
