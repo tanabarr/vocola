@@ -33,10 +33,18 @@ rye   = ")";
 
 ### Characters ( assumes we are in insert mode when calling)
 <n> <direction>              = {$2_$1};
-<edit_mode> (Char | 1 | One) = {Esc}{Right}"$1l";
-<edit_mode> Back [1]         = {Esc}{Right}"$1h";
-<edit_mode> <n> Chars        = {Esc}{Right}"$2$1l";
-<edit_mode> Back <n>         = {Esc}{Right}"$2$1h";
+#<edit_mode> (Char | 1 | One) = {Esc}{Right}"$1l";
+#<edit_mode> Back [1]         = {Esc}{Right}"$1h";
+#<edit_mode> <n> Chars        = {Esc}{Right}"$2$1l";
+#<edit_mode> Back <n>         = {Esc}{Right}"$2$1h";
+(Change={c} | Copy={y}) (Char | 1 | One) = {Esc}{Right}"$1l";
+(Change={c} | Copy={y}) Back [1]         = {Esc}{Right}"$1h";
+(Change={c} | Copy={y}) <n> Chars        = {Esc}{Right}"$2$1l";
+(Change={c} | Copy={y}) Back <n>         = {Esc}{Right}"$2$1h";
+Kill (Char | 1 | One) = {Del}; # {Right}"$1l";
+Kill Back [1]         = {Left}{Del};
+Kill <n> Chars        = {Del_$1};
+Kill Back <n>         = {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
 
 ### Words
 [One] Word                   = {Esc}"w";
@@ -91,6 +99,7 @@ Change case <n>                 = {Esc} Repeat($1,"~");
 (sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
 (sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
 (sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
+comment (in="#/" | out="^/#") range         = {Esc}":s/$1/gc"Repeat(9, {Left});
 Paste                           = {Esc}p;
 Paste Back                      = {Esc}P;
 Insert                          = {ESC}"i";

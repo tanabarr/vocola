@@ -1,4 +1,5 @@
-inesswoman Voice commands for chrome
+# Voice commands for chrome
+# chrome.vcl
 
 include Unimacro.vch;
 
@@ -24,7 +25,7 @@ text box = {Esc}gi;
 show links = {Esc}f;
 #address copy = y Wait(10){y};
 #address go = {Alt+d};
-#link copy <n> = yf$1;
+copy links = {Esc}yf;
 
 
 #             save [file] = {Ctrl+s}
