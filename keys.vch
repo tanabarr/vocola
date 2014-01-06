@@ -31,7 +31,7 @@ Tab Key = {Tab};
              | escape=Esc
              );
 <mod> := Shift | control-key=Ctrl | Alt;
-<nn> := 1..99;
+<nn> := 1..50;
 
 [Press]               <special> <nn> = {$1_$2};
 [Press]             <mod> <key> <nn> = {$1+$2_$3};

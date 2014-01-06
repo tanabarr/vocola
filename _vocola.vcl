@@ -7,8 +7,7 @@
 
 Switch Window                        = SendSystemKeys( {Alt+Tab} );
 Copy and Switch                      = {Ctrl+a}{Ctrl+c} SendSystemKeys( {Alt+Tab} );
-                                        Copy to (NatSpeak|Emacs|Composition)
-                                     = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
+Copy to (NatSpeak|Emacs|Composition) = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
 Close Here                           = ButtonClick(2,1) Wait(100) c;
 Close Prompt                         = {Alt+Space}c;
 Context Menu                         = {Alt+f}{Down};

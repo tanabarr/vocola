@@ -7,8 +7,7 @@
 
 Switch Window                        = SendSystemKeys( {Alt+Tab} );
 Copy and Switch                      = {Ctrl+a}{Ctrl+c} SendSystemKeys( {Alt+Tab} );
-                                        Copy to (NatSpeak|Emacs|Composition)
-                                     = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
+Copy to (NatSpeak|Emacs|Composition) = {Ctrl+a}{Ctrl+c} HeardWord(switch,to,$1);
 Close Here                           = ButtonClick(2,1) Wait(100) c;
 Close Prompt                         = {Alt+Space}c;
 Context Menu                         = {Alt+f}{Down};
@@ -216,7 +215,7 @@ soundControl() := controlPanel()  Wait(500) "s" {enter};
 <sound_device> := (headset=1 | car=2 | laptop=3);
 Control Panel           = controlPanel();
 Sound controls          = soundControl();
-Sound to <sound_device> = soundControl() Wait(2000) {Down_$1} 
+Sound to <sound_device> = soundControl() Wait(1500) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
                           Wait(50) {Tab_3} Wait(50) {enter}
                           {Alt+f4};
