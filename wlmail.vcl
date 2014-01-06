@@ -2,7 +2,8 @@
 
 include Unimacro.vch;
 
-move to folder = {Ctrl+Shift}v;
+move to folder = {Alt+e}m;
+#Ctrl+Shift}v;
 sort with date = {Alt}vb Wait(11) {Down}{Enter};
 sort with flag = {Alt}vb Wait(11) {Down_6}{Enter};
 flag = {Alt}aa;

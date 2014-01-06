@@ -99,7 +99,7 @@ Change case <n>                 = {Esc} Repeat($1,"~");
 (sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
 (sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
 (sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
-comment (in="#/" | out="^/#") range         = {Esc}":s/$1/gc"Repeat(9, {Left});
+comment (in="#/" | out="^/#") range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
 Paste                           = {Esc}p;
 Paste Back                      = {Esc}P;
 Insert                          = {ESC}"i";
@@ -114,9 +114,9 @@ Start macro                     = {Esc}"qz";
 Repeat macro                    = {Esc}"\@z"{Enter};
 Format                          = {Esc}"Q";
 Normal mode                     = {ESC};
-vim undo                        = {Esc}"u";
-vim undo <n>                    = {Esc}"$1u";
-vim redo                        = {Esc}{ctrl+r};
+undo vim                        = {Esc}"u";
+undo vim <n>                    = {Esc}"$1u";
+redo vim                        = {Esc}{ctrl+r};
 #bash history
 #align
 #hash insert aft
@@ -136,6 +136,7 @@ Scroll [to] bottom              = {Esc}"zb";
 Scroll [to] top                 = {Esc}"zt";
 Scroll [to] middle              = {Esc}"zz";
 Line 1..999                     = {Esc}":$1 {Enter}";
+Line 1..999 insert              = {Esc}":$1 {Enter}i";
 Back till <key>                 = {Esc}"T$1";
 Till <key>                      = {Esc}"t$1";
 Search <_anything>              = {Esc}"/\c$1";
@@ -153,12 +154,13 @@ Save and close file             = {Esc}":x"{Enter};
 Previous command                = {Esc}":"{up};
 Edit another                    = {Esc}":e ";
 File browser                    = {Esc}":e."{Enter};
+Bundle command                  = {Esc}":Neobundle";
 
 # text shortcuts
 Def include                     = {Esc}"i#include ";
 Def Define                      = {Esc}"i#define ";
-Equals                          = {Esc}i{right}"                     = ";
-Hash                            = {Esc}"i#"{esc};
+#Equals                          = {Esc}i{right}= ";
+#Hash                            = {Esc}"i#"{esc};
 Insert space                    = {Esc}"i"{space}{esc};
 Begin comment                   = {Esc}"i/* ";
 End comment                     = {Esc}"i */"{enter};
@@ -201,8 +203,9 @@ Nowrap                          = "{Esc}:set nowrap{enter}";
 Edit vim RC                     = {Esc} ":e ~\.vimrc" {Enter};
 Reload                          = {Esc} ":source \$MYVIMRC" {Enter};
 
-# ??
-
+# histories
+command history = {Esc}"q:";
+pattern match history = {Esc}"q/";
 
 ### surplus for reference     -credit neon?
 ## Can be used instead of unimacro "brackets" if ^X characters become a problem

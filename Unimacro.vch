@@ -498,3 +498,6 @@ EMACS(command) := Unimacro("EMACS $command");
 ## 
 
 HW(text) := Unimacro("HW $text");
+
+## AutoHotkey support:
+AHK(script) := Unimacro("AHK $script");

@@ -29,7 +29,7 @@ break = {Esc}{Ctrl+c};
 
 #<show> [<desc> [<desc> [<desc>]]] directory =
 #ls When($2," $2") When($3," $3") When($4," $4") $1{enter};
-<show> <desc> directory = ls When($2," $2") $1{enter};
+<show> <desc> directory = ls $2 $1{enter};
 <show> directory = ls $1{enter};
 
 
