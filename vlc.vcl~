@@ -1,4 +1,0 @@
-# Voice commands for vlc
-
-include Unimacro.vch;
-minimise = {Alt+v}f;
