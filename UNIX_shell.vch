@@ -9,6 +9,7 @@ SHELL(pathname) := Replace($pathname, " ", "\ ");
 ## miscellaneous Shell commands
 ##
 
+vim config = ".vimrc";
 <common_actions> := (edit="vim" | source="source");
 edit vim config = {Esc}"ivim ~/.vimrc"{Enter};
 <common_actions> bash config = {Esc}"i$1 ~/.bashrc"{Enter};

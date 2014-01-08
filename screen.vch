@@ -4,9 +4,9 @@
 screen new = {Ctrl+a}"c";
 screen remove = {Ctrl+a}"X";
 screen crop = {Ctrl+a}"Q";
-scrollback mode = {Ctrl+a}"[";
-scrollback paste = {Ctrl+a}"]";
-scrollback mark = {'>'} ;
+screen scrollback = {Ctrl+a}"[";
+screen paste = {Ctrl+a}"]";
+screen mark = '>';
 screen kill = {Ctrl+a}"k";
 screen help = {Ctrl+a}"?";
 screen split = {Ctrl+a}"S";

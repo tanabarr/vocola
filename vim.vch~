@@ -62,6 +62,7 @@ Line <start_end>             = {Esc}$1;
 New Line Next                = {Esc}o;
 Back Line New                = {Esc}O;
 Duplicate Line               = {Esc}"yyp";
+Swap Line               = {Esc}"ddp";
 Line Here                    = {Esc}i{Enter};
 <edit_mode> Here             = {Esc}$1"\$";
 <edit_mode> Back Here        = {Esc}$1"0";
@@ -140,8 +141,9 @@ Scroll [to] middle              = {Esc}"zz";
 ### Jump to start of absolute line number L (directly up to 99,999):
 ###
 #
-## go to absolute line number $line:
-GotoLine(line) := {Esc}":$line {Enter}";
+## go to relative line number $line:
+GotoLine(line) := {Esc}":$line{Enter}";
+#GotoLine(line) := {Esc}":$line{Enter}";
 
 GotoLine4(thousands, hundreds, tens, ones) :=
 GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
@@ -187,8 +189,9 @@ Insert line break               = {Esc}"i"{enter};
 Line comment                    = {Esc}"i#"{esc}"il"{enter};
 Double slash backslash          = {Esc}"\/\/";
 Double dot slash                = {Esc}"../";
-Function definition             = "def ():" {Left_3};
-Function definition <_anything> = "idef $1():" {Left_2};
+Function definition             = {Esc}{Right}"idef ():" {Left_3};
+Function definition <_anything> = {Esc}{Right}"idef $1():" {Left_2};
+Show Help                       = {Esc}":help ";
 
 # window navigation
 Split vertical                  = {Esc}":vsp"{Enter};
@@ -211,9 +214,23 @@ list buffers                    = {Esc}":buffers"{enter}":b";
 <tab_actions> tab                 = {Esc}":tab$1"{Enter};
 switch tab <n>                   = {Esc}":tabn $1"{enter};
 
+# tab navigation
+<tag_actions> := (Previous=":tN{enter}" | Jump="{Ctrl+]}" | Next=":tn{enter}" | 
+                  Match=":ts{enter}" | Return="{Ctrl+t}" | Stack=":tags{enter}");
+tag <tab_actions> = {Esc}$1;
+
 # plug-in actions
 Vim Folds                       = {Esc}{ctrl+f};
 Vim Taglist                     = {Esc}""{ctrl+p};
+Vim Align                       = {Esc}":Align ";
+# UNITE plug-in, mappings in .vimrc
+#Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
+Unite files = {Esc}"\t";
+Unite files non recursive = {Esc}"\f";
+Unite recent = {Esc}"\r";
+Unite outline = {Esc}"\o";
+Unite history = {Esc}"\y";
+Unite buffer = {Esc}"\e";
 
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";

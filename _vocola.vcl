@@ -220,8 +220,4 @@ Sound to <sound_device> = soundControl() Wait(1500) {Down_$1}
                           Wait(50) {Tab_3} Wait(50) {enter}
                           {Alt+f4};
 
-#attach *** = {Ctrl+a}screen -R{enter}|131072
-#bash history = r|4
-#close prompt = {space}c|2
-#attach ***existing = {Ctrl+a}screen -x{enter}|131072
-#flag = {alt}aa|0
+
