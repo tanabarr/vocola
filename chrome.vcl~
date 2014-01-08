@@ -25,7 +25,7 @@ text box = {Esc}gi;
 show links = {Esc}f;
 #address copy = y Wait(10){y};
 #address go = {Alt+d};
-copy link = {Esc}yf;
+copy links = {Esc}yf;
 
 
 #             save [file] = {Ctrl+s}

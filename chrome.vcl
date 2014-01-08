@@ -3,16 +3,16 @@
 
 include Unimacro.vch;
 
-
+<n> := 0..9;
 zoom in = {Ctrl+plus};
 zoom out = {Ctrl+minus};
 save = {Ctrl+s};
 new = {Ctrl+t};
 last = {Ctrl+T};
 new window = {Ctrl+n};
-next = {Ctrl+tab};
-previous = {Ctrl+Shift+tab};
-switch tab 0..9 = {Ctrl + $1};
+next <n> = Repeat($1,  {Ctrl+tab});
+previous <n> = Repeat($1,  {Ctrl+Shift+tab});
+switch tab <n> = {Ctrl + $1};
 private = {Alt+e} Wait(10){i};
 close = {Ctrl+w};
 bookmark = {Ctrl+d};
