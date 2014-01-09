@@ -79,11 +79,17 @@ Move Line To                = {Esc}":.m";
 ### Entire "Flow"
 Flow Start                   = {Esc}"gg";
 Flow End                     = {Esc}"G";
-Copy Range To                = {Esc}":co"{Left_2};
-Move Range To                = {Esc}":m"{Left};
-<edit_mode> Range            = {Esc}":$1"{Left};
 <edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
 <edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
+
+### Range
+Copy Range To            = {Esc}":co"{Left_2};
+Move Range               = {Esc}":m"{Left};
+Indent Range             = {Esc}":>"{Left};
+Un Indent Range          = {Esc}":<"{Left};
+<edit_mode> Range        = {Esc}":$1"{Left};
+(sub | substitute) range = {Esc}":s///gc"Repeat(6, {Left});
+comment (in="#/" | out="^/#") range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
 
 #*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
@@ -97,11 +103,9 @@ Change case                     = {Esc}"~";
 Change case <n>                 = {Esc} Repeat($1,"~");
 # TODO: could use absolute line numbering when entering a range, and relative otherwise
 (sub | substitute) line         = {Esc}":s///gc"Repeat(4, {Left});
-(sub | substitute) range        = {Esc}":s///gc"Repeat(6, {Left});
 (sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
 (sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
 (sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
-comment (in="#/" | out="^/#") range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
 Paste                           = {Esc}p;
 Paste Back                      = {Esc}P;
 Insert                          = {ESC}"i";
@@ -120,7 +124,7 @@ undo vim                        = {Esc}"u";
 undo vim <n>                    = {Esc}"$1u";
 redo vim                        = {Esc}{ctrl+r};
 #bash history
-#align
+
 #hash insert aft
 
 # special navigation actions
@@ -143,7 +147,7 @@ Scroll [to] middle              = {Esc}"zz";
 ###
 #
 ## go to relative line number $line:
-GotoLine(line) := {Esc}":$line{Enter}" Wait(20) "zz";
+GotoLine(line) := {Esc}":$line{Enter}" Wait(50) "zz";
 #GotoLine(line) := {Esc}":$line{Enter}";
 
 GotoLine4(thousands, hundreds, tens, ones) :=
@@ -228,12 +232,13 @@ tag <tab_actions> = {Esc}$1;
 Vim Folds                       = {Esc}{ctrl+f};
 Vim Taglist                     = {Esc}""{ctrl+p};
 Vim Align                       = {Esc}":Align ";
+Vim Align <key>                      = {Esc}":Align $1"{Left_7};
 # UNITE plug-in, mappings in .vimrc
 #Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
 Unite files = {Esc}"\t";
 Unite files non recursive = {Esc}"\f";
 Unite recent = {Esc}"\r";
-Unite outline = {Esc}"\o";
+#Unite outline = {Esc}"\o";
 Unite history = {Esc}"\y";
 Unite buffer = {Esc}"\e";
 
