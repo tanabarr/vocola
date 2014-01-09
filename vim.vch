@@ -181,7 +181,7 @@ Save and close file             = {Esc}":x"{Enter};
 Previous command                = {Esc}":"{up};
 Edit another                    = {Esc}":e ";
 File browser                    = {Esc}":e."{Enter};
-Bundle command                  = {Esc}":Neobundle";
+Bundle command                  = "Neobundle";
 
 # text shortcuts
 Def include                     = {Esc}"i#include ";
@@ -237,7 +237,7 @@ Vim Align <key>                      = {Esc}":Align $1"{Left_7};
 #Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
 Unite files = {Esc}"\t";
 Unite files non recursive = {Esc}"\f";
-Unite recent = {Esc}"\r";
+Unite recent = {Esc}"\m";
 #Unite outline = {Esc}"\o";
 Unite history = {Esc}"\y";
 Unite buffer = {Esc}"\e";
