@@ -181,7 +181,7 @@ Save and close file             = {Esc}":x"{Enter};
 Previous command                = {Esc}":"{up};
 Edit another                    = {Esc}":e ";
 File browser                    = {Esc}":e."{Enter};
-Bundle command                  = "Neobundle";
+Bundle command                  = "NeoBundle";
 
 # text shortcuts
 Def include                     = {Esc}"i#include ";

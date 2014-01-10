@@ -4,7 +4,9 @@
 ### View
 
 Refresh [View] = {Alt+v}r;
-(Show|View) (Details=d | List=l) = {Alt+v} $2;
+#(Show|View) (Details=d | List=l) = {Alt+v} $2;
+<view_mode> := (Extra Large=x | Large=r | Medium=m | List=l | Details=d);
+View Mode <view_mode> = {Alt+v}$1;
 Search = {Ctrl+e};
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") Address = {Alt+d} Wait(20) $1;
 #Left Side  = {Alt+d}{Tab_2}{Left};
