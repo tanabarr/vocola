@@ -180,8 +180,9 @@ Environment Variables =
 taskBar()   := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab_2};
 launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 <1to20> := 1..20;
-Launch <1to20> = launchBar() {Down_$1}{Up} " ";
-Launch <1to20> from bottom = launchBar() {Up_$1} " ";
+<launch_actions> := (Launch=" "  | launch Close=" {Alt+f4}");
+<launch_actions> <1to20> = launchBar() {Down_$2}{Up} $1;
+<launch_actions> <1to20> from bottom = launchBar() {Up_$2} $1;
 
 #Switch to <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " ";
 # interference

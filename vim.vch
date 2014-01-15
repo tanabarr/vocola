@@ -200,6 +200,7 @@ Double dot slash                = {Esc}"../";
 Function definition             = {Esc}{Right}"idef ():" {Left_3};
 Function definition <_anything> = {Esc}{Right}"idef $1():" {Left_2};
 Show Help                       = {Esc}":help ";
+Set setting                       = {Esc}":set ";
 
 # window navigation
 Split vertical                  = {Esc}":vsp"{Enter};
@@ -226,11 +227,11 @@ switch tab <n>                   = {Esc}":tabn $1"{enter};
 # tab navigation
 <tag_actions> := (Previous=":tN{enter}" | Jump="{Ctrl+]}" | Next=":tn{enter}" | 
                   Match=":ts{enter}" | Return="{Ctrl+t}" | Stack=":tags{enter}");
-tag <tab_actions> = {Esc}$1;
+Vim Tag <tab_actions> = {Esc}$1;
 
 # plug-in actions
 Vim Folds                       = {Esc}{ctrl+f};
-Vim Taglist                     = {Esc}""{ctrl+p};
+Vim Taglist                     = {Esc}""{ctrl+g};
 Vim Align                       = {Esc}":Align ";
 Vim Align <key>                      = {Esc}":Align $1"{Left_7};
 # UNITE plug-in, mappings in .vimrc

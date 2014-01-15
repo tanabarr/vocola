@@ -3,7 +3,7 @@
 include Unimacro.vch;
 
 move to folder = {Alt+e}m;
-move to junk = {Ctrl+Alt}j;
+move to junk folder = {Alt+Ctrl+j};
 #Ctrl+Shift}v;
 sort with date = {Alt}vb Wait(11) {Down}{Enter};
 sort with flag = {Alt}vb Wait(11) {Down_6}{Enter};
