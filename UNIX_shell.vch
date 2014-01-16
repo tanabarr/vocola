@@ -15,6 +15,7 @@ edit vim config = {Esc}"ivim ~/.vimrc"{Enter};
 <common_actions> bash config = {Esc}"i$1 ~/.bashrc"{Enter};
 bash history = {Ctrl+r};
 break = {Esc}{Ctrl+c};
+double dash = "--";
 
 ##
 ## Directory information/listing commands

@@ -147,19 +147,21 @@ Scroll [to] middle              = {Esc}"zz";
 ###
 #
 ## go to relative line number $line:
-GotoLine(line) := {Esc}":$line{Enter}" Wait(50) "zz";
+GotoLine(line) := {Esc}":$line{Enter}" Wait(100) "zz";
 #GotoLine(line) := {Esc}":$line{Enter}";
 
 GotoLine4(thousands, hundreds, tens, ones) :=
 GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
 
-<ln> := 1..9;
+<ln> := 1..999;
+#<ln> := 1..9;
 
 # jumped to the line then  adjust the middle
 line <ln> = GotoLine($1);
-line <ln> <ln> = GotoLine4(0, 0, $1, $2);
-line <ln> <ln> <ln> = GotoLine4( 0, $1, $2, $3);
-line <ln> <ln> <ln> <ln> = GotoLine4( $1,$2,$3,$4);
+#line <ln> = GotoLine($1);
+#line <ln> <ln> = GotoLine4(0, 0, $1, $2);
+#line <ln> <ln> <ln> = GotoLine4( 0, $1, $2, $3);
+#line <ln> <ln> <ln> <ln> = GotoLine4( $1,$2,$3,$4);
 
 #Line 1..999 insert              = {Esc}":$1 {Enter}i";
 Back till <key>                 = {Esc}"T$1";
@@ -170,7 +172,7 @@ Search go <_anything>              = {Esc}"/\c$1"{enter};
 
 # commandline actions
 Make                            = {Esc}":make";
-Tag Update                      = {Esc}":!ctags -a ."{Enter};
+Tag File Update                      = {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
 List errors                     = {Esc}":clist";
 Next error                      = {Esc}":cn";
 Previous error                  = {Esc}":cp";
@@ -234,6 +236,8 @@ Vim Folds                       = {Esc}{ctrl+f};
 Vim Taglist                     = {Esc}""{ctrl+g};
 Vim Align                       = {Esc}":Align ";
 Vim Align <key>                      = {Esc}":Align $1"{Left_7};
+## omnicomplete
+complete = {ctrl+x}{ctrl+o};
 # UNITE plug-in, mappings in .vimrc
 #Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
 Unite files = {Esc}"\t";
@@ -245,6 +249,7 @@ Unite buffer = {Esc}"\e";
 
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";
+setting based                        = "{Esc}:set paste{enter}";
 Edit vim RC                     = {Esc} ":e ~\.vimrc" {Enter};
 Reload                          = {Esc} ":source \$MYVIMRC" {Enter};
 
