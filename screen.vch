@@ -4,7 +4,7 @@
 screen new = {Ctrl+a}"c";
 screen remove = {Ctrl+a}"X";
 screen crop = {Ctrl+a}"Q";
-screen scrollback = {Ctrl+a}"[";
+screen scroll back = {Ctrl+a}"[";
 screen paste = {Ctrl+a}"]";
 screen mark = '>';
 screen kill = {Ctrl+a}"k";
