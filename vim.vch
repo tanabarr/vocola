@@ -89,7 +89,9 @@ Indent Range             = {Esc}":>"{Left};
 Un Indent Range          = {Esc}":<"{Left};
 <edit_mode> Range        = {Esc}":$1"{Left};
 (sub | substitute) range = {Esc}":s///gc"Repeat(6, {Left});
-comment (in="#/" | out="^/#") range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
+#comment (in="#/" | out="^/#") range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
+comment (in="\/\/ /" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
+= {Esc}":s/$1/"; # c style 
 
 #*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
@@ -183,7 +185,6 @@ Search go <_anything>              = {Esc}"/\c$1"{enter};
 # commandline actions
 Make                            = {Esc}":make";
 Vim Tag File Update                      = {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
-Bash Tag File Update                      = {Esc}"ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
 List errors                     = {Esc}":clist";
 Next error                      = {Esc}":cn";
 Previous error                  = {Esc}":cp";
@@ -210,7 +211,7 @@ End long comment                = {Esc}"i#"{esc}"ie"{enter};
 Insert line break               = {Esc}"i"{enter};
 Line comment                    = {Esc}"i#"{esc}"il"{enter};
 Double slash backslash          = {Esc}"\/\/";
-Double dot slash                = {Esc}"../";
+reference = "->";
 Function definition             = {Esc}{Right}"idef ():" {Left_3};
 Function definition <_anything> = {Esc}{Right}"idef $1():" {Left_2};
 Show Help                       = {Esc}":help ";
@@ -231,7 +232,9 @@ Previous buffer                 = {Esc}":bp"{Enter};
 Close buffer                   = {Esc}":bd"{Enter};
 Next buffer                     = {Esc}":bn"{Enter};
 Switch buffer                   = {Esc}":b#"{Enter};
-list buffers                    = {Esc}":buffers"{enter}":b";
+Show buffers                    = {Esc}":buffers"{enter};
+<nn> = 1..20;
+numbered buffer <nn>        = {Esc}":b$1"{enter};
 
 # tab navigation
 <tab_actions> := (Previous=p | Close=c | Next=n | List=s | Last=l | First=fir);
@@ -251,15 +254,15 @@ Vim Tag Stack=":tags{enter}";
 
 # plug-in actions
 Vim Folds                       = {Esc}{ctrl+f};
-Vim Taglist                     = {Esc}""{ctrl+g};
+Vim show Taglist                     = {Esc}""{ctrl+g};
 Vim Align                       = {Esc}":Align ";
 Vim Align <key>                      = {Esc}":Align $1"{Left_7};
 ## omnicomplete
 complete = {ctrl+x}{ctrl+o};
 # UNITE plug-in, mappings in .vimrc
 #Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
-Unite files = {Esc}"\t";
-Unite files non recursive = {Esc}"\f";
+Unite files = {Esc}"\f";
+Unite files recursive = {Esc}"\t";
 Unite recent = {Esc}"\m";
 #Unite outline = {Esc}"\o";
 Unite history = {Esc}"\y";

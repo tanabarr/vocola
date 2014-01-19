@@ -8,14 +8,24 @@ SHELL(pathname) := Replace($pathname, " ", "\ ");
 ##
 ## miscellaneous Shell commands
 ##
+<common_actions> := (edit = "vim" | source = "source");
 
-vim config = ".vimrc";
-<common_actions> := (edit="vim" | source="source");
-edit vim config = {Esc}"ivim ~/.vimrc"{Enter};
+vim config                   = ".vimrc";
+edit vim config              = {Esc}"ivim ~/.vimrc"{Enter};
 <common_actions> bash config = {Esc}"i$1 ~/.bashrc"{Enter};
-bash history = {Ctrl+r};
-break = {Esc}{Ctrl+c};
-double dash = "--";
+bash history                 = {Ctrl+r};
+break                        = {Esc}{Ctrl+c};
+double dash                  = "--";
+Bash Tag File Update         = "ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+make tar                     = "tar -cf ";
+extract tar                  = "tar -xf ";
+confirm force remove file = "rm -r";
+Double point slash        = "../";
+change ownership          = "chown -R tan:tan ";
+change mode               = "chmod -R 755 ";
+home root                 = "~/";
+enter list                = "{enter}ls{enter}";
+change absolute directory = "cd -P .{enter}";
 
 ##
 ## Directory information/listing commands
