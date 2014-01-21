@@ -211,14 +211,20 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 #
 # Tan custom commands
 
-controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(100) {enter};
-soundControl() := controlPanel()  Wait(500) "s" {enter};
+controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(100) {enter}
+                  WaitForWindow("");
+soundControl() := controlPanel()  Wait(500) "s" {enter} WaitForWindow("Sound");
 <sound_device> := (headset=1 | car=2 | laptop=3);
 Control Panel           = controlPanel();
 Sound controls          = soundControl();
-Sound to <sound_device> = soundControl() Wait(1500) {Down_$1} 
+Sound to <sound_device> = soundControl() Wait(500) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
                           Wait(50) {Tab_3} Wait(50) {enter}
                           {Alt+f4};
-
+<up_down> := (Up="Right" | Down="Left");
+<adjust_amount> := (tiny=2 | small=5 | medium=10 | large=20);
+volume <up_down> <adjust_amount> <sound_device> = soundControl() Wait(500) {Down_$3} 
+#volume <up_down> <sound_device> = soundControl() Wait(500) {down_$2}
+                                           Wait(50) {Alt+p} Wait(50) {Ctrl+Tab} {$1_$2}
+                                           Repeat(3, {Alt+f4} Wait(100));
 

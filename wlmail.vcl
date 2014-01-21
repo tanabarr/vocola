@@ -11,4 +11,4 @@ flag = {Alt}aa;
 Save Attachment [All] = {Alt+f}v Wait(100) {Tab_2}{Enter};
 #Save Attachment All = {Alt+f}v{Up}{Enter};
 
-
+add contact = {enter} WaitForWindow("") {Alt+t}"ds"{enter}{Alt+f4};

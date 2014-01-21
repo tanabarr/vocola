@@ -30,6 +30,8 @@
 <compass>               := (North={Shift+h} | South={Shift+l} |
                             East={'$'} | West={0});
 <edit_mode>             := (Change={c} | Kill={d} | Copy={y});
+<location>              := (Here="i{enter}" | Next="o" | Back="O" |
+                            Copy="yyp");
 
 ### Characters ( assumes we are in insert mode when calling)
 <n> <direction>              = {$2_$1};
@@ -59,11 +61,9 @@ Back <n> Words               = {Esc}"$1b";
 
 ### Lines
 Line <start_end>             = {Esc}$1;
-New Line Next                = {Esc}o;
-Back Line New                = {Esc}O;
+Insert [empty] line <location>                = {Esc}$1;
 Duplicate Line               = {Esc}"yyp";
 Swap Line               = {Esc}"ddp";
-Line Here                    = {Esc}i{Enter};
 <edit_mode> Here             = {Esc}$1"\$";
 <edit_mode> Back Here        = {Esc}$1"0";
 <edit_mode> Line             = {Esc}$1$1;
@@ -80,6 +80,7 @@ Move Line To                = {Esc}":.m";
 Flow Start                   = {Esc}"gg";
 Flow End                     = {Esc}"G";
 <edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
+<edit_mode> Flow All         = {Esc}":0,\$$1"{Enter};
 <edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
 
 ### Range
