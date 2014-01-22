@@ -150,22 +150,25 @@ Scroll [to] middle              = {Esc}"zz";
 ###
 #
 ## go to relative line number $line:
-GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
-#GotoLine(line) := {Esc}":$line{Enter}";
+#GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
+##GotoLine(line) := {Esc}":$line{Enter}";
 
-GotoLine4(thousands, hundreds, tens, ones) :=
-#GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-GotoLine($thousands$hundreds$tens$ones);
+#GotoLine4(thousands, hundreds, tens, ones) :=
+##GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
+#GotoLine($thousands$hundreds$tens$ones);
 
 #<ln> := 1..999;
 <ln> := 1..9;
 
 # jumped to the line then  adjust the middle
-line <ln> = GotoLine($1);
-line <ln> <ln> = GotoLine($1$2);
-#line <ln> <ln> <ln> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
-line <ln> <ln> <ln> = GotoLine($1$2$3);
-line <ln> <ln> <ln> <ln> = GotoLine($1$2$3$4);
+#line <ln> = GotoLine($1);
+#line <ln> <ln> = GotoLine($1$2);
+##line <ln> <ln> <ln> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
+#line <ln> <ln> <ln> = GotoLine($1$2$3);
+#line <ln> <ln> <ln> <ln> = GotoLine($1$2$3$4);
+line <ln> [<ln> [<ln> [<ln>]]] 
+#    (Go="" | Change={c} | Kill={d} | Copy={y})
+    = {Esc}":$1$2$3$4"{Enter} Wait(500) "zz";
 
 #line <ln> = GotoLine($1);
 #line <ln> <ln> = GotoLine4(0, 0, $1, $2);
