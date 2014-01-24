@@ -211,9 +211,9 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 #
 # Tan custom commands
 
-controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(100) {enter}
+controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(500) {enter}
                   WaitForWindow("");
-soundControl() := controlPanel()  Wait(500) "s" {enter} WaitForWindow("Sound");
+soundControl() := controlPanel()  Wait(1000) "s" {enter} WaitForWindow("Sound");
 <sound_device> := (headset=1 | car=2 | laptop=3);
 Control Panel           = controlPanel();
 Sound controls          = soundControl();

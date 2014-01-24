@@ -7,6 +7,7 @@ Search for <_anything>	= {Ctrl+l} $1 {Enter};
 #fullscreen = {Alt+v}f;
 <forward_back> := (forward="Right" | back="Left");
 
-<forward_back> track = When($1, {Ctrl+$1}, {Ctrl+Right});
+<forward_back> track = {Esc}{Ctrl+$1};
+#When($1, {Ctrl+$1}, {Ctrl+Right});
 (play | pause) =  " ";
 volume (Up | Down) = {Ctrl+$1};
