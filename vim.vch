@@ -81,8 +81,7 @@ Move Line To                = {Esc}":.m";
                    
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
-Flow Start <insert>                 = {Esc}"gg$1";
-Flow End <insert>                    = {Esc}"G$1";
+Flow (Start="gg" | End="G") <insert>                 = {Esc}"$1" Wait(20) "$2";
 <edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
 <edit_mode> Flow All         = {Esc}":0,\$$1"{Enter};
 <edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
@@ -127,8 +126,8 @@ Start macro                     = {Esc}"qz";
 Repeat macro                    = {Esc}"\@z"{Enter};
 Format                          = {Esc}"Q";
 Normal mode                     = {ESC};
-undo vim                        = {Esc}"u";
-undo vim <1to30>                    = {Esc}"$1u";
+edit undo <1to9>                      = {Esc}"$1u";
+#undo vim <1to30>                    = {Esc}"$1u";
 redo vim                        = {Esc}{ctrl+r};
 #bash history
 
@@ -154,29 +153,29 @@ Scroll [to] middle              = {Esc}"zz";
 ###
 #
 ## go to relative line number $line:
-#GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
+GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
 ##GotoLine(line) := {Esc}":$line{Enter}";
-GotoLineMod(line, mod) := {Esc}":$line$mod {Enter}" Wait(1000) "zz";
-GotoLine4(thousands, hundreds, tens, ones, mod) :=
-    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+#GotoLineMod(line, mod) := {Esc}":$line$mod {Enter}" Wait(1000) "zz";
+#GotoLine4(thousands, hundreds, tens, ones, mod) :=
+#    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
 #GotoLine4(thousands, hundreds, tens, ones) :=
 #GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
 #GotoLine($thousands$hundreds$tens$ones);
 
 # jumped to the line then  adjust the middle
-#line <1to20> = GotoLine($1);
-#line <1to20> <1to20> = GotoLine($1$2);
+line <1to20> = GotoLine($1);
+line <1to20> <1to20> = GotoLine($1$2);
 ##line <1to20> <1to20> <1to20> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
-#line <1to20> <1to20> <1to20> = GotoLine($1$2$3);
-#line <1to20> <1to20> <1to20> <1to20> = GotoLine($1$2$3$4);
+line <1to20> <1to20> <1to20> = GotoLine($1$2$3);
+line <1to20> <1to20> <1to20> <1to20> = GotoLine($1$2$3$4);
 #line <1to20> [<1to20> [<1to20> [<1to20>]]] 
-<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
+##<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
 #    = {Esc}":$1$2$3$4"{Enter} Wait(500) "zz";
 
-line <line_mod> <1to20>  = GotoLineMod($2,$1);
-line <line_mod> <1to20> <1to20>  = GotoLine4(0, 0, $2, $3,$1);
-line <line_mod> <1to20> <1to20> <1to20>  = GotoLine4( 0, $2, $3, $4,$1);
-line <line_mod> <1to20> <1to20> <1to20> <1to20>  = GotoLine4( $2,$3,$4,$5,$1);
+#line <line_mod> <1to20>  = GotoLineMod($2,$1);
+#line <line_mod> <1to20> <1to20>  = GotoLine4(0, 0, $2, $3,$1);
+#line <line_mod> <1to20> <1to20> <1to20>  = GotoLine4( 0, $2, $3, $4,$1);
+#line <line_mod> <1to20> <1to20> <1to20> <1to20>  = GotoLine4( $2,$3,$4,$5,$1);
 #line <1to20> = GotoLine($1);
 #line <1to20> <1to20> = GotoLine4(0, 0, $1, $2);
 #line <1to20> <1to20> <1to20> = GotoLine4( 0, $1, $2, $3);
