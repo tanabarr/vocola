@@ -120,15 +120,17 @@ Append                          = {Esc}"a";
 Append end                      = {Esc}"A";
 Substitute                      = {Esc}"s";
 Replace                         = {Esc}"R";
+Join Line                       = {Esc}"J";
 
 # standard actions
 Start macro                     = {Esc}"qz";
 Repeat macro                    = {Esc}"\@z"{Enter};
 Format                          = {Esc}"Q";
 Normal mode                     = {ESC};
-edit undo <1to9>                      = {Esc}"$1u";
+edit undo <1to9>                      = {Esc} When($1, "$1u", "u");
 #undo vim <1to30>                    = {Esc}"$1u";
-redo vim                        = {Esc}{ctrl+r};
+edit redo <1to9>                      = {Esc} When($1, "$1{Ctrl+r}", "{Ctrl+r}");
+#edit redo                       = {Esc}{ctrl+r};
 #bash history
 
 #hash insert aft
@@ -151,37 +153,38 @@ Scroll [to] middle              = {Esc}"zz";
 ##
 ### Jump to start of absolute line number L (directly up to 99,999):
 ###
-#
-## go to relative line number $line:
-GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
-##GotoLine(line) := {Esc}":$line{Enter}";
+
+## go to absolute line number $line:
+# jump to the line then  adjust the middle
+#GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
+GotoLine(line) := {Esc}"i:$line " Wait(1000) "zz";
+go line <1to9> = Gotogo line($1);
+go line <1to9> <1to9> = Gotogo line($1$2);
+go line <1to9> <1to9> <1to9> = Gotogo line($1$2$3);
+go line <1to9> <1to9> <1to9> <1to9> = Gotogo line($1$2$3$4);
+
+##<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
 #GotoLineMod(line, mod) := {Esc}":$line$mod {Enter}" Wait(1000) "zz";
 #GotoLine4(thousands, hundreds, tens, ones, mod) :=
 #    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+#line <line_mod> <1to9>  = GotoLineMod($2,$1);
+#line <line_mod> <1to9> <1to9>  = GotoLine4(0, 0, $2, $3,$1);
+#line <line_mod> <1to9> <1to9> <1to9>  = GotoLine4( 0, $2, $3, $4,$1);
+#line <line_mod> <1to9> <1to9> <1to9> <1to9>  = GotoLine4( $2,$3,$4,$5,$1);
+
 #GotoLine4(thousands, hundreds, tens, ones) :=
 #GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-#GotoLine($thousands$hundreds$tens$ones);
+#line <1to9> = GotoLine($1);
+#line <1to9> <1to9> = GotoLine4(0, 0, $1, $2);
+#line <1to9> <1to9> <1to9> = GotoLine4( 0, $1, $2, $3);
+#line <1to9> <1to9> <1to9> <1to9> = GotoLine4( $1,$2,$3,$4);
 
-# jumped to the line then  adjust the middle
-line <1to20> = GotoLine($1);
-line <1to20> <1to20> = GotoLine($1$2);
-##line <1to20> <1to20> <1to20> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
-line <1to20> <1to20> <1to20> = GotoLine($1$2$3);
-line <1to20> <1to20> <1to20> <1to20> = GotoLine($1$2$3$4);
-#line <1to20> [<1to20> [<1to20> [<1to20>]]] 
-##<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
+##line <1to9> <1to9> <1to9> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
+#line <1to9> [<1to9> [<1to9> [<1to9>]]] 
 #    = {Esc}":$1$2$3$4"{Enter} Wait(500) "zz";
-
-#line <line_mod> <1to20>  = GotoLineMod($2,$1);
-#line <line_mod> <1to20> <1to20>  = GotoLine4(0, 0, $2, $3,$1);
-#line <line_mod> <1to20> <1to20> <1to20>  = GotoLine4( 0, $2, $3, $4,$1);
-#line <line_mod> <1to20> <1to20> <1to20> <1to20>  = GotoLine4( $2,$3,$4,$5,$1);
-#line <1to20> = GotoLine($1);
-#line <1to20> <1to20> = GotoLine4(0, 0, $1, $2);
-#line <1to20> <1to20> <1to20> = GotoLine4( 0, $1, $2, $3);
-#line <1to20> <1to20> <1to20> <1to20> = GotoLine4( $1,$2,$3,$4);
-
 #Line 1..999 insert              = {Esc}":$1 {Enter}i";
+
+
 Back till <key>                 = {Esc}"T$1";
 Till <key>                      = {Esc}"t$1";
 Till repeat                 = {Esc}";";
