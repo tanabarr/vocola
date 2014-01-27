@@ -38,54 +38,54 @@
                             Copy="yyp");
 
 ### Characters ( assumes we are in insert mode when calling)
-<1to30> <direction>              = {$2_$1};
-#<edit_mode> (Char | 1 | One) = {Esc}{Right}"$1l";
-#<edit_mode> Back [1]         = {Esc}{Right}"$1h";
-#<edit_mode> <1to30> Chars        = {Esc}{Right}"$2$1l";
-#<edit_mode> Back <1to30>         = {Esc}{Right}"$2$1h";
-(Change={c} | Copy={y}) (Char | 1 | One) = {Esc}{Right}"$1l";
-(Change={c} | Copy={y}) Back [1]         = {Esc}{Right}"$1h";
-(Change={c} | Copy={y}) <1to30> Chars        = {Esc}{Right}"$2$1l";
-(Change={c} | Copy={y}) Back <1to30>         = {Esc}{Right}"$2$1h";
-Kill (Char | 1 | One) = {Del}; # {Right}"$1l";
-Kill Back [1]         = {Left}{Del};
-Kill <1to30> Chars        = {Del_$1};
-Kill Back <1to30>         = {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
+<1to30> <direction>                       =  {$2_$1};
+#<edit_mode> (Char | 1 | One)             =  {Esc}{Right}"$1l";
+#<edit_mode> Back [1]                     =  {Esc}{Right}"$1h";
+#<edit_mode> <1to30> Chars                =  {Esc}{Right}"$2$1l";
+#<edit_mode> Back <1to30>                 =  {Esc}{Right}"$2$1h";
+(Change={c} | Copy={y}) (Char | 1 | One)  =  {Esc}{Right}"$1l";
+(Change={c} | Copy={y}) Back [1]          =  {Esc}{Right}"$1h";
+(Change={c} | Copy={y}) <1to30> Chars     =  {Esc}{Right}"$2$1l";
+(Change={c} | Copy={y}) Back <1to30>      =  {Esc}{Right}"$2$1h";
+Kill (Char | 1 | One)                     =  {Del}; # {Right}"$1l";
+Kill Back [1]                             =  {Left}{Del};
+Kill <1to30> Chars                        =  {Del_$1};
+Kill Back <1to30>                         =  {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
 
 ### Words
-[One] Word                   = {Esc}"w";
-Back [One] Word              = {Esc}"b";
-<1to30> Words                    = {Esc}"$1w";
-Back <1to30> Words               = {Esc}"$1b";
-<edit_mode> Word             = {Esc}"$1w";
-<edit_mode> <1to30> Words        = {Esc}"$1$2w";
-<edit_mode> Back Word        = {Esc}"$1b";
-<edit_mode> Back <1to30> Words   = {Esc}"$1$2b";
-<edit_mode> Next Word        = {Esc}"w$1w";
+[One] Word                                =  {Esc}"w";
+Back [One] Word                           =  {Esc}"b";
+<1to30> Words                             =  {Esc}"$1w";
+Back <1to30> Words                        =  {Esc}"$1b";
+<edit_mode> Word                          =  {Esc}"$1w";
+<edit_mode> <1to30> Words                 =  {Esc}"$1$2w";
+<edit_mode> Back Word                     =  {Esc}"$1b";
+<edit_mode> Back <1to30> Words            =  {Esc}"$1$2b";
+<edit_mode> Next Word                     =  {Esc}"w$1w";
 
 ### Lines (modify behaviour for deleting lines forward and backward)
-Line <start_end>             = {Esc}$1;
-Insert [empty] line <location>                = {Esc}$1;
-Duplicate Line               = {Esc}"yyp";
-Swap Line               = {Esc}"ddp";
-<edit_mode> Here             = {Esc}$1"\$";
-<edit_mode> Back Here        = {Esc}$1"0";
-<edit_mode> Line             = {Esc}$1$1;
-<edit_mode> <1to30> Lines        = {Esc} Eval($2-1) "$1j";
-<edit_mode> Back Line        = {Esc}"$1k";
-<edit_mode> Back <1to30> Lines   = {Esc} {Up} Eval($2-1) "$1k";
-<edit_mode> Next Line        = {Esc}":+1$1"{Enter};
-Kill Back Line               = {Esc}":-1d"{Enter};
-Trunc Line                   = {Esc}"D";
-Copy Line To                = {Esc}":.co";
-Move Line To                = {Esc}":.m";
+Line <start_end>                      =  {Esc}$1;
+Insert [empty] line <location>        =  {Esc}$1;
+Duplicate Line                        =  {Esc}"yyp";
+Swap Line                             =  {Esc}"ddp";
+<edit_mode> Here                      =  {Esc}$1"\$";
+<edit_mode> Back Here                 =  {Esc}$1"0";
+<edit_mode> Line                      =  {Esc}$1$1;
+<edit_mode> <1to30> Lines             =  {Esc} Eval($2-1) "$1j";
+<edit_mode> Back Line                 =  {Esc}"$1k";
+<edit_mode> Back <1to30> Lines        =  {Esc} {Up} Eval($2-1) "$1k";
+<edit_mode> Next Line                 =  {Esc}":+1$1"{Enter};
+Kill Back Line                        =  {Esc}":-1d"{Enter};
+Trunc Line                            =  {Esc}"D";
+Copy Line To                          =  {Esc}":.co";
+Move Line To                          =  {Esc}":.m";
                    
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
-Flow (Start="gg" | End="G") <insert>                 = {Esc}"$1" Wait(20) "$2";
-<edit_mode> Flow Here        = {Esc}":.,\$$1"{Enter};
-<edit_mode> Flow All         = {Esc}":0,\$$1"{Enter};
-<edit_mode> Back Flow Here   = {Esc}":.,0$1"{Enter};
+Flow (Start="gg" | End="G") <insert>  =  {Esc}"$1" Wait(20) "$2";
+<edit_mode> Flow Here                 =  {Esc}":.,\$$1"{Enter};
+<edit_mode> Flow All                  =  {Esc}":0,\$$1"{Enter};
+<edit_mode> Back Flow Here            =  {Esc}":.,0$1"{Enter};
 
 ### Range
 Copy Range To            = {Esc}":co"{Left_2};
@@ -109,31 +109,31 @@ Blank line next                 = {Esc}"o"{up}{Esc};
 Change case                     = {Esc}"~";
 Change case <1to30>                 = {Esc} Repeat($1,"~");
 # TODO: could use absolute line numbering when entering a range, and relative otherwise
-(sub | substitute) line         = {Esc}":s///gc"Repeat(4, {Left});
-(sub | substitute) all          = {Esc}":%s///gc"Repeat(4, {Left});
-(sub | substitute) here 		= {Esc}":.,\$s///gc"Repeat(4, {Left});
-(sub | substitute) back here 		= {Esc}":0,.s///gc"Repeat(4, {Left});
-Paste                           = {Esc}p;
-Paste Back                      = {Esc}P;
-Insert                          = {ESC}"i";
-Insert start                    = {Esc}"I";
-Append                          = {Esc}"a";
-Append end                      = {Esc}"A";
-Substitute                      = {Esc}"s";
-Replace                         = {Esc}"R";
-Join Line                       = {Esc}"J";
+(sub | substitute) line       =  {Esc}":s///gc"Repeat(4, {Left});
+(sub | substitute) all        =  {Esc}":%s///gc"Repeat(4, {Left});
+(sub | substitute) here       =  {Esc}":.,\$s///gc"Repeat(4, {Left});
+(sub | substitute) back here  =  {Esc}":0,.s///gc"Repeat(4, {Left});
+Paste                         =  {Esc}p;
+Paste Back                    =  {Esc}P;
+Insert                        =  {ESC}"i";
+Insert start                  =  {Esc}"I";
+Append                        =  {Esc}"a";
+Append end                    =  {Esc}"A";
+Substitute                    =  {Esc}"s";
+Replace                       =  {Esc}"R";
+Join Line                     =  {Esc}"J";
 
 # standard actions
-Start macro                     = {Esc}"qz";
-Repeat macro                    = {Esc}"\@z"{Enter};
-Format                          = {Esc}"Q";
-Normal mode                     = {ESC};
-edit undo = {Esc} "u";
-edit undo <2to9>                      = {Esc} When($1, $1"u", 1"u");
-#undo vim <1to30>                    = {Esc}"$1u";
-edit redo = {Esc} {Ctrl+r};
-edit redo <2to9>                      = {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r});
-#edit redo                       = {Esc}{ctrl+r};
+Start macro                   =  {Esc}"qz";
+Repeat macro                  =  {Esc}"\@z"{Enter};
+Format                        =  {Esc}"Q";
+Normal mode                   =  {ESC};
+edit undo                     =  {Esc} "u";
+edit undo <2to9>              =  {Esc} When($1, $1"u", 1"u");
+#undo vim <1to30>             =  {Esc}"$1u";
+edit redo                     =  {Esc} {Ctrl+r};
+edit redo <2to9>              =  {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r});
+#edit redo                    =  {Esc}{ctrl+r};
 #bash history
 
 #hash insert aft
@@ -159,7 +159,6 @@ Scroll [to] middle              = {Esc}"zz";
 
 ## go to absolute line number $line:
 # jump to the line then  adjust the middle
-GotoLine(line) := {Esc}":$line"{Enter} Wait(1000) "zz";
 #GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
 #Go [to] line <0to9> = GotoLine($1);
 #Go [to] line <0to9> <0to9> = GotoLine($1$2);
@@ -175,12 +174,26 @@ GotoLine(line) := {Esc}":$line"{Enter} Wait(1000) "zz";
 #line <line_mod> <0to9> <0to9> <0to9>  = GotoLine4( 0, $2, $3, $4,$1);
 #line <line_mod> <0to9> <0to9> <0to9> <0to9>  = GotoLine4( $2,$3,$4,$5,$1);
 
+GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
 GotoLine4(thousands, hundreds, tens, ones) :=
 GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-number <0to9> = GotoLine($1);
-number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
-number <0to9> <0to9> <0to9> = GotoLine4( 0, $1, $2, $3);
-number <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
+go number <0to9>                      = GotoLine($1);
+go number <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
+go number <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
+go number <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
+go number one                         = GotoLine(1);
+go number <0to9> one                  = GotoLine4(0, 0, $1, 1);
+go number one <0to9>                  = GotoLine4(0, 0, 1, $1);
+go number one one                     = GotoLine4(0, 0, 1, 1);
+go number <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
+go number <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
+go number <0to9> one one              = GotoLine4( 0, $1, 1, 1);
+go number one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
+go number one <0to9> one              = GotoLine4( 0, 1, $1, 1);
+go number one one <0to9>              = GotoLine4( 0, 1, 1, $1);
+go number one one one                 = GotoLine4( 0, 1, 1, 1);
+go number one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
+
 #line number one = GotoLine(1);
 #line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
 #line number <0to9> <0to9> <0to9> = GotoLine4( 0, $1, $2, $3);
@@ -192,65 +205,65 @@ number <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
 #Line 1..999 insert              = {Esc}":$1 {Enter}i";
 
 
-Back till <key>                 = {Esc}"T$1";
-Till <key>                      = {Esc}"t$1";
-Till repeat                 = {Esc}";";
-Search <_anything>              = {Esc}"/\c$1";
-Search go <_anything>              = {Esc}"/\c$1"{enter};
-clear Search               = {Esc}"/zzz"{enter};
+Back till <key>                  =  {Esc}"T$1";
+Till <key>                       =  {Esc}"t$1";
+Till repeat                      =  {Esc}";";
+Search <_anything>               =  {Esc}"/\c$1";
+Search go <_anything>            =  {Esc}"/\c$1"{enter};
+clear Search                     =  {Esc}"/zzz"{enter};
 
 # commandline actions
-Make                            = {Esc}":make";
-Vim Update Tag File = {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
-List errors                     = {Esc}":clist";
-Next error                      = {Esc}":cn";
-Previous error                  = {Esc}":cp";
-Save file                       = {Esc}":w"{Enter};
-Close file                      = {Esc}":q"{Enter};
-Save and close file             = {Esc}":x"{Enter};
-#confirm force close definite   = {Esc}":q!";
-Previous command                = {Esc}":"{up};
-Edit another                    = {Esc}":e ";
-File browser                    = {Esc}":e."{Enter};
-Bundle command                  = "NeoBundle";
+Make                             =  {Esc}":make";
+Vim Update Tag File              =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+List errors                      =  {Esc}":clist";
+Next error                       =  {Esc}":cn";
+Previous error                   =  {Esc}":cp";
+Save file                        =  {Esc}":w"{Enter};
+Close file                       =  {Esc}":q"{Enter};
+Save and close file              =  {Esc}":x"{Enter};
+#confirm force close definite    =  {Esc}":q!";
+Previous command                 =  {Esc}":"{up};
+Edit another                     =  {Esc}":e ";
+File browser                     =  {Esc}":e."{Enter};
+Bundle command                   =  "NeoBundle";
 
 # text shortcuts
-Def include                     = {Esc}"i#include ";
-Def Define                      = {Esc}"i#define ";
-#Equals                          = {Esc}i{right}= ";
-#Hash                            = {Esc}"i#"{esc};
-Insert space                    = {Esc}"i"{space}{esc};
-Insert space after                    = {Esc}"i"{Right}{space}{esc};
-Begin comment                   = {Esc}"i/* ";
-End comment                     = {Esc}"i */"{enter};
-Begin long comment              = {Esc}"i#"{esc}"ib"{space};
-End long comment                = {Esc}"i#"{esc}"ie"{enter};
-Insert line break               = {Esc}"i"{enter};
-Line comment                    = {Esc}"i#"{esc}"il"{enter};
-Double slash backslash          = {Esc}"\/\/";
-reference = "->";
-Function definition             = {Esc}{Right}"idef ():" {Left_3};
-Function definition <_anything> = {Esc}{Right}"idef $1():" {Left_2};
-Show Help                       = {Esc}":help ";
-Set setting                       = {Esc}":set ";
+Def include                      =  {Esc}"i#include ";
+Def Define                       =  {Esc}"i#define ";
+#Equals                          =  {Esc}i{right}= ";
+#Hash                            =  {Esc}"i#"{esc};
+Insert space                     =  {Esc}"i"{space}{esc};
+Insert space after               =  {Esc}"i"{Right}{space}{esc};
+Begin comment                    =  {Esc}"i/* ";
+End comment                      =  {Esc}"i */"{enter};
+Begin long comment               =  {Esc}"i#"{esc}"ib"{space};
+End long comment                 =  {Esc}"i#"{esc}"ie"{enter};
+Insert line break                =  {Esc}"i"{enter};
+Line comment                     =  {Esc}"i#"{esc}"il"{enter};
+Double slash backslash           =  {Esc}"\/\/";
+reference                        =  "->";
+Function definition              =  {Esc}{Right}"idef ():" {Left_3};
+Function definition <_anything>  =  {Esc}{Right}"idef $1():" {Left_2};
+Show Help                        =  {Esc}":help ";
+Set setting                      =  {Esc}":set ";
 
 # window navigation
-Split vertical                  = {Esc}":vsp"{Enter};
-Vim Window left                 = {Ctrl+w}"h";
-Vim Window right                = {Ctrl+w}"l";
-Vim Window up                   = {Ctrl+w}"k";
-Vim Window down                 = {Ctrl+w}"j";
-Vim Window next                = {Ctrl+w}"w";
-Vim Window close                = {ESC}{Ctrl+w}"c";
-Vim Window crop                = {Esc}":only"{Enter};
+Split vertical                   =  {Esc}":vsp"{Enter};
+Vim Window left                  =  {Ctrl+w}"h";
+Vim Window right                 =  {Ctrl+w}"l";
+Vim Window up                    =  {Ctrl+w}"k";
+Vim Window down                  =  {Ctrl+w}"j";
+Vim Window next                  =  {Ctrl+w}"w";
+Vim Window close                 =  {ESC}{Ctrl+w}"c";
+Vim Window crop                  =  {Esc}":only"{Enter};
 
 # buffer navigation
-Previous buffer                 = {Esc}":bp"{Enter};
-Close buffer                   = {Esc}":bd"{Enter};
-Next buffer                     = {Esc}":bn"{Enter};
-Switch buffer                   = {Esc}":b#"{Enter};
-Show buffers                    = {Esc}":buffers"{enter};
-numbered buffer <1to30>        = {Esc}":b$1"{enter};
+Previous buffer                  =  {Esc}":bp"{Enter};
+Close buffer                     =  {Esc}":bd"{Enter};
+Next buffer                      =  {Esc}":bn"{Enter};
+Switch buffer                    =  {Esc}":b#"{Enter};
+Show buffers                     =  {Esc}":buffers"{enter};
+numbered buffer <1to30>          =  {Esc}":b$1"{enter};
 
 # tab navigation
 <tab_actions> := (Previous=p | Close=c | Next=n | List=s | Last=l | First=fir);
@@ -262,26 +275,26 @@ switch tab <1to30>                   = {Esc}":tabn $1"{enter};
 #                  Match=":ts{enter}" | Return="{Ctrl+t}" | Stack=":tags{enter}");
 vim Tag Previous=":tN{enter}";
 vim Tag Jump="{Ctrl+]}";
-vim Tag Next=":tn{enter}"; 
+vim Tag Next=":tn{enter}";
 Vim Tag Match=":ts{enter}";
 Vim Tag Return="{Ctrl+t}";
 Vim Tag Stack=":tags{enter}";
-#Vim Tag <tab_actions> = {Esc}$1;
+#Vim Tag <tab_actions>               =  {Esc}$1;
 
 # plug-in actions
-Vim Folds                       = {Esc}{ctrl+f};
-Vim show Taglist                     = {Esc}""{ctrl+g};
-Vim Align                       = {Esc}":Align ";
-Vim Align <key>                      = {Esc}":Align $1"{Left_7};
+Vim Folds                            =  {Esc}{ctrl+f};
+Vim show Taglist                     =  {Esc}""{ctrl+g};
+Vim Align                            =  {Esc}":Align ";
+Vim Align <key>                      =  {Esc}":Align $1"{Left_7};
 ## omnicomplete
-complete = {ctrl+x}{ctrl+o};
-local complete = {ctrl+p};
+complete                             =  {ctrl+x}{ctrl+o};
+local complete                       =  {ctrl+p};
 # UNITE plug-in, mappings in .vimrc
-#Vim Unite                       = {Esc}":Unite file_rec buffer"{enter};
-Unite files = {Esc}"\f";
-Unite files recursive = {Esc}"\t";
-Unite recent = {Esc}"\m";
-#Unite outline = {Esc}"\o";
+#Vim Unite                           =  {Esc}":Unite file_rec buffer"{enter};
+Unite files                          =  {Esc}"\f";
+Unite files recursive                =  {Esc}"\t";
+Unite recent                         =  {Esc}"\m";
+#Unite outline                       =  {Esc}"\o";
 Unite history = {Esc}"\y";
 Unite buffer = {Esc}"\e";
 
