@@ -26,7 +26,7 @@
 # vim versions of text editing Mappings established in vocola general commands
 # ---------------------------------------------------------------------------
 # Text Editing
-
+#
 <direction>             := Left | Right | Up | Down;
 <left_right>            := (Left={b} | Right={w});
 <start_end>             := (Start={Home} | End={End});
@@ -62,7 +62,7 @@ Back <1to30> Words               = {Esc}"$1b";
 <edit_mode> Back <1to30> Words   = {Esc}"$1$2b";
 <edit_mode> Next Word        = {Esc}"w$1w";
 
-### Lines
+### Lines (modify behaviour for deleting lines forward and backward)
 Line <start_end>             = {Esc}$1;
 Insert [empty] line <location>                = {Esc}$1;
 Duplicate Line               = {Esc}"yyp";
@@ -70,9 +70,9 @@ Swap Line               = {Esc}"ddp";
 <edit_mode> Here             = {Esc}$1"\$";
 <edit_mode> Back Here        = {Esc}$1"0";
 <edit_mode> Line             = {Esc}$1$1;
-<edit_mode> <1to30> Lines        = {Esc}$2$1j;
+<edit_mode> <1to30> Lines        = {Esc} Eval($2-1) "$1j";
 <edit_mode> Back Line        = {Esc}"$1k";
-<edit_mode> Back <1to30> Lines   = {Esc}"$2$1k";
+<edit_mode> Back <1to30> Lines   = {Esc} {Up} Eval($2-1) "$1k";
 <edit_mode> Next Line        = {Esc}":+1$1"{Enter};
 Kill Back Line               = {Esc}":-1d"{Enter};
 Trunc Line                   = {Esc}"D";
@@ -127,9 +127,9 @@ Start macro                     = {Esc}"qz";
 Repeat macro                    = {Esc}"\@z"{Enter};
 Format                          = {Esc}"Q";
 Normal mode                     = {ESC};
-edit undo <1to9>                      = {Esc} When($1, "$1u", "u");
+edit undo <1to9>                      = {Esc} When($1, $1"u", 1"u";
 #undo vim <1to30>                    = {Esc}"$1u";
-edit redo <1to9>                      = {Esc} When($1, "$1{Ctrl+r}", "{Ctrl+r}");
+edit redo <1to9>                      = {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r);
 #edit redo                       = {Esc}{ctrl+r};
 #bash history
 
@@ -157,11 +157,11 @@ Scroll [to] middle              = {Esc}"zz";
 ## go to absolute line number $line:
 # jump to the line then  adjust the middle
 #GotoLine(line) := {Esc}":$line {Enter}" Wait(1000) "zz";
-GotoLine(line) := {Esc}"i:$line " Wait(1000) "zz";
-go line <1to9> = Gotogo line($1);
-go line <1to9> <1to9> = Gotogo line($1$2);
-go line <1to9> <1to9> <1to9> = Gotogo line($1$2$3);
-go line <1to9> <1to9> <1to9> <1to9> = Gotogo line($1$2$3$4);
+GotoLine(line) := {Esc} Wait(20) ":$line" Wait(20) {Enter} Wait(1000) "zz";
+go line <1to9> = GotoLine($1);
+go line <1to9> <1to9> = GotoLine($1$2);
+go line <1to9> <1to9> <1to9> = GotoLine($1$2$3);
+go line <1to9> <1to9> <1to9> <1to9> = GotoLine($1$2$3$4);
 
 ##<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
 #GotoLineMod(line, mod) := {Esc}":$line$mod {Enter}" Wait(1000) "zz";
@@ -291,4 +291,4 @@ pattern match history = {Esc}"q/";
 ##### surplus for reference     -credit neon?
 #### Can be used instead of unimacro "brackets" if ^X characters become a problem
 ###<surround> := ( par = "()" | bar = "||" | quote = "" );
-###Surround <surround> = $1{Left};
+##Surround <surround> = $1{Left};
