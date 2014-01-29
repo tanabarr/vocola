@@ -31,8 +31,9 @@
 <direction>             := Left | Right | Up | Down;
 <left_right>            := (Left={b} | Right={w});
 <start_end>             := (Start={Home} | End={End});
-<compass>               := (North={Shift+h} | South={Shift+l} |
-                            East={'$'} | West={0});
+<top_bottom>             := (Top={Shift+h} | Bottom={Shift+l} | Middle={Shift+m});
+#<compass>               := (North={Shift+h} | South={Shift+l} |
+#                            East={'$'} | West={0});
 <edit_mode>             := (Change={c} | Kill={d} | Copy={y});
 <location>              := (Here="i{enter}" | Next="o" | Back="O" |
                             Copy="yyp");
@@ -82,7 +83,7 @@ Move Line To                          =  {Esc}":.m";
                    
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
-Flow (Start="gg" | End="G") <insert>  =  {Esc}"$1" Wait(20) "$2";
+Flow (Start="gg" | End="G") [<insert>]  =  {Esc}"$1" Wait(20) "$2";
 <edit_mode> Flow Here                 =  {Esc}":.,\$$1"{Enter};
 <edit_mode> Flow All                  =  {Esc}":0,\$$1"{Enter};
 <edit_mode> Back Flow Here            =  {Esc}":.,0$1"{Enter};
@@ -95,7 +96,7 @@ Un Indent Range          = {Esc}":<"{Left};
 <edit_mode> Range        = {Esc}":$1"{Left};
 (sub | substitute) range = {Esc}":s///gc"Repeat(6, {Left});
 comment (in="#/" | out="^/#") python range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
-comment (in="\/\/ /" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
+comment (in="\/\//" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
 = {Esc}":s/$1/" $2; # c style 
 
 #*-------------------------------------------- */ 
@@ -103,7 +104,8 @@ comment (in="\/\/ /" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})
 include keys.vch;
 
 # text editing
-<compass>                       = {Esc}$1; # NSEW screen navigation
+# obsolete?
+#<compass>                       = {Esc}$1; # NSEW screen navigation
 Blank line previous             = {Esc}"O"{down}{Esc};
 Blank line next                 = {Esc}"o"{up}{Esc};
 Change case                     = {Esc}"~";
@@ -152,6 +154,8 @@ Match bracket                   = {Esc}"%";
 Scroll [to] bottom              = {Esc}"zb";
 Scroll [to] top                 = {Esc}"zt";
 Scroll [to] middle              = {Esc}"zz";
+Halfpage [(Up="u" | Down="d")]  = {Esc} When($1, {Ctrl+$1}, {Ctrl+d});
+Page <top_bottom>               = {Esc}$1;
 
 ##
 ### Jump to start of absolute line number L (directly up to 99,999):
@@ -177,22 +181,22 @@ Scroll [to] middle              = {Esc}"zz";
 GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
 GotoLine4(thousands, hundreds, tens, ones) :=
 GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-go number <0to9>                      = GotoLine($1);
-go number <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
-go number <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
-go number <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
-go number one                         = GotoLine(1);
-go number <0to9> one                  = GotoLine4(0, 0, $1, 1);
-go number one <0to9>                  = GotoLine4(0, 0, 1, $1);
-go number one one                     = GotoLine4(0, 0, 1, 1);
-go number <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
-go number <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
-go number <0to9> one one              = GotoLine4( 0, $1, 1, 1);
-go number one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
-go number one <0to9> one              = GotoLine4( 0, 1, $1, 1);
-go number one one <0to9>              = GotoLine4( 0, 1, 1, $1);
-go number one one one                 = GotoLine4( 0, 1, 1, 1);
-go number one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
+go line <0to9>                      = GotoLine($1);
+go line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
+go line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
+go line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
+go line one                         = GotoLine(1);
+go line <0to9> one                  = GotoLine4(0, 0, $1, 1);
+go line one <0to9>                  = GotoLine4(0, 0, 1, $1);
+go line one one                     = GotoLine4(0, 0, 1, 1);
+go line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
+go line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
+go line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
+go line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
+go line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
+go line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
+go line one one one                 = GotoLine4( 0, 1, 1, 1);
+go line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
 
 #line number one = GotoLine(1);
 #line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
@@ -205,50 +209,53 @@ go number one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
 #Line 1..999 insert              = {Esc}":$1 {Enter}i";
 
 
-Back till <key>                  =  {Esc}"T$1";
-Till <key>                       =  {Esc}"t$1";
-Till repeat                      =  {Esc}";";
-Search <_anything>               =  {Esc}"/\c$1";
-Search go <_anything>            =  {Esc}"/\c$1"{enter};
-clear Search                     =  {Esc}"/zzz"{enter};
+Back till <key>                            =  {Esc}"T$1";
+Till <key>                                 =  {Esc}"t$1";
+Till repeat                                =  {Esc}";";
+Search <_anything>                         =  {Esc}"/\c$1";
+Search go <_anything>                      =  {Esc}"/\c$1"{enter};
+clear Search                               =  {Esc}"/zzz"{enter};
 
 # commandline actions
-Make                             =  {Esc}":make";
-Vim Update Tag File              =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
-List errors                      =  {Esc}":clist";
-Next error                       =  {Esc}":cn";
-Previous error                   =  {Esc}":cp";
-Save file                        =  {Esc}":w"{Enter};
-Close file                       =  {Esc}":q"{Enter};
-Save and close file              =  {Esc}":x"{Enter};
-#confirm force close definite    =  {Esc}":q!";
-Previous command                 =  {Esc}":"{up};
-Edit another                     =  {Esc}":e ";
-File browser                     =  {Esc}":e."{Enter};
-Bundle command                   =  "NeoBundle";
+Make                                       =  {Esc}":make";
+Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+List errors                                =  {Esc}":clist";
+Next error                                 =  {Esc}":cn";
+Previous error                             =  {Esc}":cp";
+Save file                                  =  {Esc}":w"{Enter};
+Close file                                 =  {Esc}":q"{Enter};
+Save and close file                        =  {Esc}":x"{Enter};
+#confirm force close definite              =  {Esc}":q!";
+Previous command                           =  {Esc}":"{up};
+Edit another                               =  {Esc}":e ";
+File browser                               =  {Esc}":e."{Enter};
+Bundle command                             =  "NeoBundle";
 
 # text shortcuts
-Def include                      =  {Esc}"i#include ";
-Def Define                       =  {Esc}"i#define ";
-#Equals                          =  {Esc}i{right}= ";
-#Hash                            =  {Esc}"i#"{esc};
-Insert space                     =  {Esc}"i"{space}{esc};
-Insert space after               =  {Esc}"i"{Right}{space}{esc};
-Begin comment                    =  {Esc}"i/* ";
-End comment                      =  {Esc}"i */"{enter};
-Begin long comment               =  {Esc}"i#"{esc}"ib"{space};
-End long comment                 =  {Esc}"i#"{esc}"ie"{enter};
-Insert line break                =  {Esc}"i"{enter};
-Line comment                     =  {Esc}"i#"{esc}"il"{enter};
-Double slash backslash           =  {Esc}"\/\/";
-reference                        =  "->";
-Function definition              =  {Esc}{Right}"idef ():" {Left_3};
-Function definition <_anything>  =  {Esc}{Right}"idef $1():" {Left_2};
-Show Help                        =  {Esc}":help ";
-Set setting                      =  {Esc}":set ";
+Def include                                =  {Esc}"i#include ";
+Def Define                                 =  {Esc}"i#define ";
+#Equals                                    =  {Esc}i{right}= ";
+#Hash                                      =  {Esc}"i#"{esc};
+Insert space                               =  {Esc}"i"{space}{esc};
+Insert comment (escape={Esc} | insert="")  =  {Esc}"i// "$1;
+Insert space after                         =  {Esc}"i"{Right}{space}{esc};
+Begin comment                              =  {Esc}"i/* ";
+End comment                                =  {Esc}"i */"{enter};
+Begin long comment                         =  {Esc}"i#"{esc}"ib"{space};
+End long comment                           =  {Esc}"i#"{esc}"ie"{enter};
+Insert line break                          =  {Esc}"i"{enter};
+Line comment                               =  {Esc}"i#"{esc}"il"{enter};
+Double slash backslash                     =  {Esc}"\/\/";
+reference                                  =  "->";
+Function definition                        =  {Esc}{Right}"idef ():" {Left_3};
+Function definition <_anything>            =  {Esc}{Right}"idef $1():" {Left_2};
+Show Help                                  =  {Esc}":help ";
+Set setting                                =  {Esc}":set ";
 
 # window navigation
-Split vertical                   =  {Esc}":vsp"{Enter};
+## move created split one page up, return to top of original page in the right split
+Split vertical                   =  {Esc}":vsp"{Enter}{Shift+h}{PgUp}
+                                    {Ctrl+w}"l";
 Vim Window left                  =  {Ctrl+w}"h";
 Vim Window right                 =  {Ctrl+w}"l";
 Vim Window up                    =  {Ctrl+w}"k";
