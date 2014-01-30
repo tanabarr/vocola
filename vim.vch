@@ -1,7 +1,7 @@
 # Voice mappings for vim (enabled applications )
 # 051213: tan modified
 # vim.vch
- 
+$set numbers 0;
 ##symbols
 #slap  = {enter};
 #back  = {backspace};
@@ -181,22 +181,22 @@ Page <top_bottom>               = {Esc}$1;
 GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
 GotoLine4(thousands, hundreds, tens, ones) :=
 GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-go line <0to9>                      = GotoLine($1);
-go line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
-go line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
-go line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
-go line one                         = GotoLine(1);
-go line <0to9> one                  = GotoLine4(0, 0, $1, 1);
-go line one <0to9>                  = GotoLine4(0, 0, 1, $1);
-go line one one                     = GotoLine4(0, 0, 1, 1);
-go line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
-go line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
-go line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
-go line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
-go line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
-go line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
-go line one one one                 = GotoLine4( 0, 1, 1, 1);
-go line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
+line <0to9>                      = GotoLine($1);
+line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
+line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
+line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
+#go line one                         = GotoLine(1);
+#go line <0to9> one                  = GotoLine4(0, 0, $1, 1);
+#go line one <0to9>                  = GotoLine4(0, 0, 1, $1);
+#go line one one                     = GotoLine4(0, 0, 1, 1);
+#go line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
+#go line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
+#go line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
+#go line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
+#go line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
+#go line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
+#go line one one one                 = GotoLine4( 0, 1, 1, 1);
+#go line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
 
 #line number one = GotoLine(1);
 #line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
