@@ -211,9 +211,9 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 #
 # Tan custom commands
 
-controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(500) {enter}
+controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(500) {enter_2}
                   WaitForWindow("");
-soundControl() := controlPanel()  Wait(1000) "s" {enter} WaitForWindow("Sound");
+soundControl() := controlPanel()  Wait(100) {Right_2} Wait(500) {s} {enter} WaitForWindow("Sound");
 #levelAdjust(deviceindex) := soundControl() Wait(500) {Down_$deviceindex} Wait(50)
 levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} Wait(50)
                             {Alt+p} Wait(50) {Ctrl+Tab};
@@ -224,7 +224,7 @@ levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} Wait(50)
 
 Control Panel           = controlPanel();
 Sound controls          = soundControl();
-Sound to <sound_device> = soundControl() Wait(500) {Down_$1} 
+Sound to <sound_device> = soundControl() Wait(100) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
                           Wait(50) {Tab_3} Wait(50) {enter}
                           {Alt+f4};

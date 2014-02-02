@@ -1,7 +1,7 @@
 # Voice mappings for vim (enabled applications )
 # 051213: tan modified
 # vim.vch
-$set numbers 0;
+ 
 ##symbols
 #slap  = {enter};
 #back  = {backspace};
@@ -46,12 +46,12 @@ $set numbers 0;
 #<edit_mode> Back <1to30>                 =  {Esc}{Right}"$2$1h";
 (Change={c} | Copy={y}) (Char | 1 | One)  =  {Esc}{Right}"$1l";
 (Change={c} | Copy={y}) Back [1]          =  {Esc}{Right}"$1h";
-(Change={c} | Copy={y}) <1to30> Chars     =  {Esc}{Right}"$2$1l";
-(Change={c} | Copy={y}) Back <1to30>      =  {Esc}{Right}"$2$1h";
+(Change={c} | Copy={y}) <1to30> [Chars]     =  {Esc}{Right}"$2$1l";
+(Change={c} | Copy={y}) Back <1to30> [Chars]     =  {Esc}{Right}"$2$1h";
 Kill (Char | 1 | One)                     =  {Del}; # {Right}"$1l";
 Kill Back [1]                             =  {Left}{Del};
-Kill <1to30> Chars                        =  {Del_$1};
-Kill Back <1to30>                         =  {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
+Kill <1to30> [Chars]                      =  {Del_$1};
+Kill Back <1to30> [Chars]                 =  {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
 
 ### Words
 [One] Word                                =  {Esc}"w";
@@ -71,6 +71,7 @@ Duplicate Line                        =  {Esc}"yyp";
 Swap Line                             =  {Esc}"ddp";
 <edit_mode> Here                      =  {Esc}$1"\$";
 <edit_mode> Back Here                 =  {Esc}$1"0";
+<edit_mode> Start Here                 =  {Esc}$1"^";
 <edit_mode> Line                      =  {Esc}$1$1;
 <edit_mode> <1to30> Lines             =  {Esc} Eval($2-1) "$1j";
 <edit_mode> Back Line                 =  {Esc}"$1k";
@@ -106,7 +107,7 @@ include keys.vch;
 # text editing
 # obsolete?
 #<compass>                       = {Esc}$1; # NSEW screen navigation
-Blank line previous             = {Esc}"O"{down}{Esc};
+Blank line back                  = {Esc}"O"{down}{Esc};
 Blank line next                 = {Esc}"o"{up}{Esc};
 Change case                     = {Esc}"~";
 Change case <1to30>                 = {Esc} Repeat($1,"~");
@@ -157,46 +158,53 @@ Scroll [to] middle              = {Esc}"zz";
 Halfpage [(Up="u" | Down="d")]  = {Esc} When($1, {Ctrl+$1}, {Ctrl+d});
 Page <top_bottom>               = {Esc}$1;
 
-##
+
+###
 ### Jump to start of absolute line number L (directly up to 99,999):
 ###
 
+# stop 1 being recognised as "one" in Vocola
+$set numbers 0;
+
 ## go to absolute line number $line:
-# jump to the line then  adjust the middle
+
+<line_mod> := (Go={enter} Wait(500) "zz" | Insert={enter} Wait(500) "zz"{I} 
+               | Change={c}{enter} | Kill={d}{enter} | Copy={y}{enter} 
+               | Append={enter} Wait(500) "zz"{A});
+GotoLineMod(line, mod) := {Esc}":$line$mod";
+# When(Eval($mod).startswith("{enter}")), "$mod", {enter} Wait(500) "zz");
+GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
+    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+line <line_mod> <0to9>  = GotoLineMod($2,$1);
+line <line_mod> <0to9> <0to9>  = GotoLine4Mod(0, 0, $2, $3,$1);
+line <line_mod> <0to9> <0to9> <0to9>  = GotoLine4Mod( 0, $2, $3, $4,$1);
+line <line_mod> <0to9> <0to9> <0to9> <0to9>  = GotoLine4Mod( $2,$3,$4,$5,$1);
+
 #GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
 #Go [to] line <0to9> = GotoLine($1);
 #Go [to] line <0to9> <0to9> = GotoLine($1$2);
 #Go [to] line <0to9> <0to9> <0to9> = GotoLine($1$2$3);
 #Go [to] line <0to9> <0to9> <0to9> <0to9> = GotoLine($1$2$3$4);
 
-##<line_mod> := (Go="" | Change={c} | Kill={d} | Copy={y});
-#GotoLineMod(line, mod) := {Esc}":$line$mod {Enter}" Wait(1000) "zz";
-#GotoLine4(thousands, hundreds, tens, ones, mod) :=
-#    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
-#line <line_mod> <0to9>  = GotoLineMod($2,$1);
-#line <line_mod> <0to9> <0to9>  = GotoLine4(0, 0, $2, $3,$1);
-#line <line_mod> <0to9> <0to9> <0to9>  = GotoLine4( 0, $2, $3, $4,$1);
-#line <line_mod> <0to9> <0to9> <0to9> <0to9>  = GotoLine4( $2,$3,$4,$5,$1);
-
-GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
-GotoLine4(thousands, hundreds, tens, ones) :=
-GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-line <0to9>                      = GotoLine($1);
-line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
-line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
-line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
-#go line one                         = GotoLine(1);
-#go line <0to9> one                  = GotoLine4(0, 0, $1, 1);
-#go line one <0to9>                  = GotoLine4(0, 0, 1, $1);
-#go line one one                     = GotoLine4(0, 0, 1, 1);
-#go line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
-#go line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
-#go line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
-#go line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
-#go line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
-#go line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
-#go line one one one                 = GotoLine4( 0, 1, 1, 1);
-#go line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
+#GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
+#GotoLine4(thousands, hundreds, tens, ones) :=
+#GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
+#line <0to9>                      = GotoLine($1);
+#line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
+#line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
+#line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
+#line one                         = GotoLine(1);
+#line <0to9> one                  = GotoLine4(0, 0, $1, 1)
+#line one <0to9>                  = GotoLine4(0, 0, 1, $1);
+#line one one                     = GotoLine4(0, 0, 1, 1);
+#line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
+#line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
+#line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
+#line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
+#line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
+#line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
+#line one one one                 = GotoLine4( 0, 1, 1, 1);
+#line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
 
 #line number one = GotoLine(1);
 #line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
@@ -234,10 +242,11 @@ Bundle command                             =  "NeoBundle";
 # text shortcuts
 Def include                                =  {Esc}"i#include ";
 Def Define                                 =  {Esc}"i#define ";
+Def ifdef                                  =  {Esc}"\pid"{enter};
 #Equals                                    =  {Esc}i{right}= ";
 #Hash                                      =  {Esc}"i#"{esc};
 Insert space                               =  {Esc}"i"{space}{esc};
-Insert comment (escape={Esc} | insert="")  =  {Esc}"i// "$1;
+Insert comment [(escape={Esc} | insert="")]  =  {Esc}"i// "$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
 Begin comment                              =  {Esc}"i/* ";
 End comment                                =  {Esc}"i */"{enter};
@@ -256,13 +265,15 @@ Set setting                                =  {Esc}":set ";
 ## move created split one page up, return to top of original page in the right split
 Split vertical                   =  {Esc}":vsp"{Enter}{Shift+h}{PgUp}
                                     {Ctrl+w}"l";
-Vim Window left                  =  {Ctrl+w}"h";
-Vim Window right                 =  {Ctrl+w}"l";
-Vim Window up                    =  {Ctrl+w}"k";
-Vim Window down                  =  {Ctrl+w}"j";
-Vim Window next                  =  {Ctrl+w}"w";
+Vim Window left                  =  {esc}{ctrl+w}"h";
+Vim Window right                 =  {esc}{ctrl+w}"l";
+Vim Window up                    =  {esc}{ctrl+w}"k";
+Vim Window down                  =  {esc}{ctrl+w}"j";
+Vim Window next                  =  {esc}{ctrl+w}"w";
 Vim Window close                 =  {ESC}{Ctrl+w}"c";
 Vim Window crop                  =  {Esc}":only"{Enter};
+Vim Window make fat              =  {esc}":vertical resize +15"{enter};
+Vim Window make thin             =  {esc}":vertical resize -15"{enter};
 
 # buffer navigation
 Previous buffer                  =  {Esc}":bp"{Enter};
@@ -280,12 +291,12 @@ switch tab <1to30>                   = {Esc}":tabn $1"{enter};
 # tab navigation
 #<tag_actions> := (Previous=":tN{enter}" | Jump="{Ctrl+]}" | Next=":tn{enter}" | 
 #                  Match=":ts{enter}" | Return="{Ctrl+t}" | Stack=":tags{enter}");
-vim Tag Previous=":tN{enter}";
-vim Tag Jump="{Ctrl+]}";
-vim Tag Next=":tn{enter}";
-Vim Tag Match=":ts{enter}";
-Vim Tag Return="{Ctrl+t}";
-Vim Tag Stack=":tags{enter}";
+vim Tag Previous={esc}":tN{enter}";
+vim Tag Jump={esc}"{Ctrl+]}";
+vim Tag Next={esc}":tn{enter}";
+Vim Tag Match={esc}":ts{enter}";
+Vim Tag Return={esc}"{Ctrl+t}";
+Vim Tag Stack={esc}":tags{enter}";
 #Vim Tag <tab_actions>               =  {Esc}$1;
 
 # plug-in actions

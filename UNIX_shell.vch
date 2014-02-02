@@ -26,6 +26,7 @@ change mode               = "chmod -R 755 ";
 home root                 = "~/";
 enter list                = "{enter}ls{enter}";
 change absolute directory = "cd -P .{enter}";
+present working directory = "pwd";  
 
 ##
 ## Directory information/listing commands
