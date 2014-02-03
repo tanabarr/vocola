@@ -128,7 +128,7 @@ Join Line                     =  {Esc}"J";
 
 # standard actions
 Start macro                   =  {Esc}"qz";
-Repeat macro                  =  {Esc}"\@z"{Enter};
+Repeat macro                  =  {Esc}"@z"{Enter};
 Format                        =  {Esc}"Q";
 Normal mode                   =  {ESC};
 edit undo                     =  {Esc} "u";
