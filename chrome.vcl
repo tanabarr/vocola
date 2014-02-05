@@ -4,8 +4,8 @@
 include Unimacro.vch;
 
 <n> := 0..9;
-zoom in = {Ctrl+plus};
-zoom out = {Ctrl+minus};
+zoom (in=plus | out=minus) [<n>] = 
+    When($2, Repeat($2, {Ctrl+$1} Wait(100)), Repeat(1, {Ctrl+$1} Wait(100)));
 save = {Ctrl+s};
 new = {Ctrl+t};
 last = {Ctrl+T};

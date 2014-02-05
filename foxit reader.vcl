@@ -3,8 +3,8 @@
 #include Unimacro.vch;
 <n> := 0..9;
 recent files = {Alt+f}r;
-zoom in <n> = Repeat($1, {Ctrl+equals});
-zoom out <n> = Repeat($1, {Ctrl+hyphen});
+zoom in [<n>] = When($1, Repeat($1, {Ctrl+equals}),  Repeat($1, {Ctrl+equals}));
+zoom out [<n>] = When($1, Repeat($1, {Ctrl+minus}),  Repeat($1, {Ctrl+minus}));
 #zoom [one] hundred = {Ctrl+1};
 #zoom [whole | full] page = {Ctrl+2};
 #zoom [page] width = {Ctrl+3};
@@ -27,5 +27,5 @@ navigation window = {Ctrl+b}{enter}{del};
 reading window = Repeat(2, {Ctrl+Alt+Shift});
 close navigation window = f4;
 next = {Ctrl+tab};
-previous = cs-tab;
+previous = {ctrl+shift+tab};
 close = {Ctrl+w};
