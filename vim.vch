@@ -74,7 +74,7 @@ Swap Line                             =  {Esc}"ddp";
 <edit_mode> Start Here                 =  {Esc}$1"^";
 <edit_mode> Line                      =  {Esc}$1$1;
 <edit_mode> <1to30> Lines             =  {Esc} Eval($2-1) "$1j";
-<edit_mode> Back Line                 =  {Esc}"$1k";
+(Change={c} | Copy={y) Back Line                 =  {Esc}"$1k";
 <edit_mode> Back <1to30> Lines        =  {Esc} {Up} Eval($2-1) "$1k";
 <edit_mode> Next Line                 =  {Esc}":+1$1"{Enter};
 Kill Back Line                        =  {Esc}":-1d"{Enter};
@@ -171,14 +171,15 @@ $set numbers 0;
 <line_mod> := (Go={enter} Wait(500) "zz" | Insert={enter} Wait(500) "zz"{I} 
                | Change={c}{enter} | Kill={d}{enter} | Copy={y}{enter} 
                | Append={enter} Wait(500) "zz"{A});
+#GotoLineMod(line, mod) := {Esc}":$line" When($mod, "$mod", {enter});
 GotoLineMod(line, mod) := {Esc}":$line$mod";
 # When(Eval($mod).startswith("{enter}")), "$mod", {enter} Wait(500) "zz");
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
-line <line_mod> <0to9>  = GotoLineMod($2,$1);
-line <line_mod> <0to9> <0to9>  = GotoLine4Mod(0, 0, $2, $3,$1);
-line <line_mod> <0to9> <0to9> <0to9>  = GotoLine4Mod( 0, $2, $3, $4,$1);
-line <line_mod> <0to9> <0to9> <0to9> <0to9>  = GotoLine4Mod( $2,$3,$4,$5,$1);
+line [<line_mod>] <0to9>  = GotoLineMod($2,$1);
+line [<line_mod>] <0to9> <0to9>  = GotoLine4Mod(0, 0, $2, $3,$1);
+line [<line_mod>] <0to9> <0to9> <0to9>  = GotoLine4Mod( 0, $2, $3, $4,$1);
+line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = GotoLine4Mod( $2,$3,$4,$5,$1);
 
 #GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
 #Go [to] line <0to9> = GotoLine($1);
@@ -226,7 +227,7 @@ clear Search                               =  {Esc}"/zzz"{enter};
 
 # commandline actions
 Make                                       =  {Esc}":make";
-Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+pl --fields=+iaS --extra=+q ."{Enter};
 List errors                                =  {Esc}":clist";
 Next error                                 =  {Esc}":cn";
 Previous error                             =  {Esc}":cp";
@@ -247,7 +248,7 @@ file Printf                                  =  {Esc}"i"{Right}"fprintf(,);" {Le
 #Equals                                    =  {Esc}i{right}= ";
 #Hash                                      =  {Esc}"i#"{esc};
 Insert space                               =  {Esc}"i"{space}{esc};
-Insert comment [(escape={Esc} | insert="")]  =  {Esc}"i// "$1;
+Insert comment [(escape={Esc} | insert="")]  =  {Esc}":TComment "$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
 Begin comment                              =  {Esc}"i/* ";
 End comment                                =  {Esc}"i */"{enter};
