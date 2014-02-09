@@ -54,15 +54,15 @@ Kill <1to30> [Chars]                      =  {Del_$1};
 Kill Back <1to30> [Chars]                 =  {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
 
 ### Words
-[One] Word                                =  {Esc}"w";
-Back [One] Word                           =  {Esc}"b";
-<1to30> Words                             =  {Esc}"$1w";
-Back <1to30> Words                        =  {Esc}"$1b";
-<edit_mode> Word                          =  {Esc}"$1w";
-<edit_mode> <1to30> Words                 =  {Esc}"$1$2w";
-<edit_mode> Back Word                     =  {Esc}"$1b";
-<edit_mode> Back <1to30> Words            =  {Esc}"$1$2b";
-<edit_mode> Next Word                     =  {Esc}"w$1w";
+[One] Word                                =  {Esc}{Right}"w";
+Back [One] Word                           =  {Esc}{Right}"b";
+<1to30> Words                             =  {Esc}{Right}"$1w";
+Back <1to30> Words                        =  {Esc}{Right}"$1b";
+<edit_mode> Word                          =  {Esc}{Right}"$1w";
+<edit_mode> <1to30> Words                 =  {Esc}{Right}"$1$2w";
+<edit_mode> Back Word                     =  {Esc}{Right}"$1b";
+<edit_mode> Back <1to30> Words            =  {Esc}{Right}"$1$2b";
+<edit_mode> Next Word                     =  {Esc}{Right}"w$1w";
 
 ### Lines (modify behaviour for deleting lines forward and backward)
 Line <start_end>                      =  {Esc}$1;
@@ -97,8 +97,8 @@ Un Indent Range          = {Esc}":<"{Left};
 <edit_mode> Range        = {Esc}":$1"{Left};
 (sub | substitute) range = {Esc}":s///gc"Repeat(6, {Left});
 comment (in="#/" | out="^/#") python range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
-comment (in="\/\//" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
-= {Esc}":s/$1/" $2; # c style 
+#comment (in="\/\//" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
+#= {Esc}":s/$1/" $2; # c style 
 
 #*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
@@ -171,15 +171,15 @@ $set numbers 0;
 <line_mod> := (Go={enter} Wait(500) "zz" | Insert={enter} Wait(500) "zz"{I} 
                | Change={c}{enter} | Kill={d}{enter} | Copy={y}{enter} 
                | Append={enter} Wait(500) "zz"{A});
-#GotoLineMod(line, mod) := {Esc}":$line" When($mod, "$mod", {enter});
+#GotoLineMod(line, mod) := {Esc} When($mod, ":$line$mod", ":$line"{enter});
 GotoLineMod(line, mod) := {Esc}":$line$mod";
 # When(Eval($mod).startswith("{enter}")), "$mod", {enter} Wait(500) "zz");
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
-line [<line_mod>] <0to9>  = GotoLineMod($2,$1);
-line [<line_mod>] <0to9> <0to9>  = GotoLine4Mod(0, 0, $2, $3,$1);
-line [<line_mod>] <0to9> <0to9> <0to9>  = GotoLine4Mod( 0, $2, $3, $4,$1);
-line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = GotoLine4Mod( $2,$3,$4,$5,$1);
+line [<line_mod>] <0to9>  = If($1, GotoLineMod($2,$1), GotoLineMod($2,"{enter}"));
+line [<line_mod>] <0to9> <0to9>  = If($1, GotoLine4Mod(0, 0, $2, $3,$1), GotoLine4Mod(0, 0, $2, $3,"{enter}"));
+line [<line_mod>] <0to9> <0to9> <0to9>  = If($1, GotoLine4Mod( 0, $2, $3, $4,$1), GotoLine4Mod( 0, $2, $3, $4,"{enter}"));
+line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = If($1, GotoLine4Mod( $2,$3,$4,$5,$1), GotoLine4Mod( $2,$3,$4,$5,"{enter}"));
 
 #GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
 #Go [to] line <0to9> = GotoLine($1);
@@ -220,7 +220,7 @@ line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = GotoLine4Mod( $2,$3,$4,$5,$1);
 
 Back till <key>                            =  {Esc}"T$1";
 Till <key>                                 =  {Esc}"t$1";
-Till repeat                                =  {Esc}";";
+Till next                                =  {Esc}";";
 Search <_anything>                         =  {Esc}"/\c$1";
 Search go <_anything>                      =  {Esc}"/\c$1"{enter};
 clear Search                               =  {Esc}"/zzz"{enter};
@@ -248,7 +248,7 @@ file Printf                                  =  {Esc}"i"{Right}"fprintf(,);" {Le
 #Equals                                    =  {Esc}i{right}= ";
 #Hash                                      =  {Esc}"i#"{esc};
 Insert space                               =  {Esc}"i"{space}{esc};
-Insert comment [(escape={Esc} | insert="")]  =  {Esc}":TComment "$1;
+insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":TComment "{enter}$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
 Begin comment                              =  {Esc}"i/* ";
 End comment                                =  {Esc}"i */"{enter};
@@ -317,6 +317,22 @@ Unite recent                         =  {Esc}"\m";
 #Unite outline                       =  {Esc}"\o";
 Unite history = {Esc}"\y";
 Unite buffer = {Esc}"\e";
+Unite insert = {tab} {Down_3} {enter};
+# TComment, note: could also be done with csupport
+comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;       
+# csupport (hotkey sections: comment, statements, preprocessor, idioms, 
+#           snippets, c++, run)
+<comment_type> := (frame="fr" | function="fu" | method="me" | class="cl" | 
+                   implementation="fdi" | header="fdh" | source section="cs" |
+                   header section="hs" | keyword="kc" | special="sc" | 
+                   date="d" | time="t" | toggle type="x");
+<comment_type> comment = "\c"$1;
+<statement_type> := (do="d" | for="fo" | if="if" | if else="ife" | else="e" | 
+                     while="wh" | switch="s" | case="c"); 
+<statement_type> statement = "\s"$1;
+<idiom_type> := (function="f" | static="sf" | main="m" | for increment="0" | 
+                 print="p" | file print="fp"); 
+<idiom_type> idiom = "\i"$1;
 
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";

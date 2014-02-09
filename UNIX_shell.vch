@@ -16,8 +16,12 @@ edit vim config              = {Esc}"ivim ~/.vimrc"{Enter};
 <common_actions> bash config = {Esc}"i$1 ~/.bashrc"{Enter};
 bash history                 = {Ctrl+r};
 break                        = {Esc}{Ctrl+c};
+escape process         = {esc}{ctrl+z};
+(foreground="fg" | background="bg") process =
+    $1{enter};
 double dash                  = "--";
-Bash Tag File Update         = "ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+Bash Tag File Update         =
+    "ctags -R --c++-kinds=+pl --fields=+iaS --extra=+q ."{Enter};
 make tar                     = "tar -cf ";
 extract tar                  = "tar -xf ";
 confirm force remove file = "rm -r";

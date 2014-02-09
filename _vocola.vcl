@@ -214,7 +214,7 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(500) {enter_2}
                   WaitForWindow("*Control Panel*","", 2000);
 soundControl() := 
-    controlPanel() Wait(200) {Right_2} Wait(500) {s} {enter} WaitForWindow("Sound","",2000);
+    controlPanel() Wait(500) {Right_2} Wait(500) {s} {enter} WaitForWindow("Sound","",2000);
 #levelAdjust(deviceindex) := soundControl() Wait(500) {Down_$deviceindex} Wait(50)
 levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} Wait(50)
                             {Alt+p} Wait(50) {Ctrl+Tab};
