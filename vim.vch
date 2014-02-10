@@ -125,21 +125,15 @@ Append end                    =  {Esc}"A";
 Substitute                    =  {Esc}"s";
 Replace                       =  {Esc}"R";
 Join Line                     =  {Esc}"J";
+diff (push=dp | pull=po)      =  {esc}"$1";
 
 # standard actions
 Start macro                   =  {Esc}"qz";
 Repeat macro                  =  {Esc}"@z"{Enter};
 Format                        =  {Esc}"Q";
 Normal mode                   =  {ESC};
-edit undo                     =  {Esc} "u";
-edit undo <2to9>              =  {Esc} When($1, $1"u", 1"u");
-#undo vim <1to30>             =  {Esc}"$1u";
-edit redo                     =  {Esc} {Ctrl+r};
-edit redo <2to9>              =  {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r});
-#edit redo                    =  {Esc}{ctrl+r};
-#bash history
-
-#hash insert aft
+edit undo [<2to9>]            =  {Esc} When($1, $1"u", 1"u");
+edit redo [<2to9>]            =  {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r});
 
 # special navigation actions
 List changes                    = {Esc}":changes";
@@ -168,44 +162,34 @@ $set numbers 0;
 
 ## go to absolute line number $line:
 
-<line_mod> := (Go={enter} Wait(500) "zz" | Insert={enter} Wait(500) "zz"{I} 
-               | Change={c}{enter} | Kill={d}{enter} | Copy={y}{enter} 
-               | Append={enter} Wait(500) "zz"{A});
-#GotoLineMod(line, mod) := {Esc} When($mod, ":$line$mod", ":$line"{enter});
-GotoLineMod(line, mod) := {Esc}":$line$mod";
-# When(Eval($mod).startswith("{enter}")), "$mod", {enter} Wait(500) "zz");
+GotoLineMod(line, mod) := {Esc}":$line"{enter} Wait(500) "$mod"; 
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
-line [<line_mod>] <0to9>  = If($1, GotoLineMod($2,$1), GotoLineMod($2,"{enter}"));
-line [<line_mod>] <0to9> <0to9>  = If($1, GotoLine4Mod(0, 0, $2, $3,$1), GotoLine4Mod(0, 0, $2, $3,"{enter}"));
-line [<line_mod>] <0to9> <0to9> <0to9>  = If($1, GotoLine4Mod( 0, $2, $3, $4,$1), GotoLine4Mod( 0, $2, $3, $4,"{enter}"));
-line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = If($1, GotoLine4Mod( $2,$3,$4,$5,$1), GotoLine4Mod( $2,$3,$4,$5,"{enter}"));
+<line_mod> := (Go="zz" | Insert="zzI" | Append="zzA"
+    # For the following commands we want to perform actions in place, 
+    # IE. returns to original line.
+    | Change=":.c{enter}g,zz" | Kill=":.d{enter}g,zz" | Copy=":.y{enter}g,zz");
+line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
+line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
+line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
+line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1);
+
+#GotoLineMod(line, mod) := {Esc} When($mod, ":$line$mod", ":$line"{enter});
+#GotoLineMod(line, mod) := {Esc}":$line" If(Eval('$mod == "zz\{I\}"'), Wait(500) "$mod", "$mod");
+#line [<line_mod>] <0to9>  = 
+#    If($1, GotoLineMod($2,$1), GotoLineMod($2,"{enter}"));
+#line [<line_mod>] <0to9> <0to9>  = 
+#    If($1, GotoLine4Mod(0, 0, $2, $3,$1), GotoLine4Mod(0, 0, $2, $3,"{enter}"));
+#line [<line_mod>] <0to9> <0to9> <0to9>  = 
+#    If($1, GotoLine4Mod( 0, $2, $3, $4,$1), GotoLine4Mod( 0, $2, $3, $4,"{enter}"));
+#line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = 
+#    If($1, GotoLine4Mod( $2,$3,$4,$5,$1), GotoLine4Mod( $2,$3,$4,$5,"{enter}"));
 
 #GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
 #Go [to] line <0to9> = GotoLine($1);
 #Go [to] line <0to9> <0to9> = GotoLine($1$2);
 #Go [to] line <0to9> <0to9> <0to9> = GotoLine($1$2$3);
 #Go [to] line <0to9> <0to9> <0to9> <0to9> = GotoLine($1$2$3$4);
-
-#GotoLine(line) := {Esc}":$line"{Enter} Wait(500) "zz";
-#GotoLine4(thousands, hundreds, tens, ones) :=
-#GotoLine(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones));
-#line <0to9>                      = GotoLine($1);
-#line <0to9> <0to9>               = GotoLine4(0, 0, $1, $2);
-#line <0to9> <0to9> <0to9>        = GotoLine4( 0, $1, $2, $3);
-#line <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
-#line one                         = GotoLine(1);
-#line <0to9> one                  = GotoLine4(0, 0, $1, 1)
-#line one <0to9>                  = GotoLine4(0, 0, 1, $1);
-#line one one                     = GotoLine4(0, 0, 1, 1);
-#line <0to9> <0to9> one           = GotoLine4( 0, 1, $1, $2);
-#line <0to9> one <0to9>           = GotoLine4( 0, $1, 1, $2);
-#line <0to9> one one              = GotoLine4( 0, $1, 1, 1);
-#line one <0to9> <0to9>           = GotoLine4( 0, 1, $1, $2);
-#line one <0to9> one              = GotoLine4( 0, 1, $1, 1);
-#line one one <0to9>              = GotoLine4( 0, 1, 1, $1);
-#line one one one                 = GotoLine4( 0, 1, 1, 1);
-#line one <0to9> <0to9> <0to9>    = GotoLine4( 1,$1,$2,$3);
 
 #line number one = GotoLine(1);
 #line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
@@ -239,6 +223,7 @@ Previous command                           =  {Esc}":"{up};
 Edit another                               =  {Esc}":e ";
 File browser                               =  {Esc}":e."{Enter};
 Bundle command                             =  "NeoBundle";
+vim diff split  = {esc}":vert diffsplit ";
 
 # text shortcuts
 Def include                                =  {Esc}"i#include ";

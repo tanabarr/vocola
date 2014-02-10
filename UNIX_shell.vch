@@ -32,6 +32,7 @@ home root                 = "~/";
 enter list                = "{enter}ls{enter}";
 change absolute directory = "cd -P .{enter}";
 present working directory = "pwd";  
+vim diff = "vimdiff";
 
 ##
 ## Directory information/listing commands
