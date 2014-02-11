@@ -211,7 +211,7 @@ clear Search                               =  {Esc}"/zzz"{enter};
 
 # commandline actions
 Make                                       =  {Esc}":make";
-Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+pl --fields=+iaS --extra=+q ."{Enter};
+Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
 List errors                                =  {Esc}":clist";
 Next error                                 =  {Esc}":cn";
 Previous error                             =  {Esc}":cp";
