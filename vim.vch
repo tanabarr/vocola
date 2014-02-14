@@ -161,14 +161,15 @@ Page <top_bottom>               = {Esc}$1;
 $set numbers 0;
 
 ## go to absolute line number $line:
-
-GotoLineMod(line, mod) := {Esc}":$line"{enter} Wait(500) "$mod"; 
+## vim mark line "v" incase we want to return to the original line
+GotoLineMod(line, mod) := {Esc}"mv" ":$line"{enter} Wait(500) "$mod"; 
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
 <line_mod> := (Go="zz" | Insert="zzI" | Append="zzA"
     # For the following commands we want to perform actions in place, 
-    # IE. returns to original line.
-    | Change=":.c{enter}g,zz" | Kill=":.d{enter}g,zz" | Copy=":.y{enter}g,zz");
+    # IE. returns to original line (mark "v").
+    | Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" 
+    | Copy=":.y{enter}" "'v");
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
 line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
 line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
@@ -247,6 +248,8 @@ Function definition                        =  {Esc}{Right}"idef ():" {Left_3};
 Function definition <_anything>            =  {Esc}{Right}"idef $1():" {Left_2};
 Show Help                                  =  {Esc}":help ";
 Set setting                                =  {Esc}":set ";
+Set dark background =  {Esc}":set bg=dark"{enter};
+Set light background =  {Esc}":set bg=light"{enter};
 
 # window navigation
 ## move created split one page up, return to top of original page in the right split

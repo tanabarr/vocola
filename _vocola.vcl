@@ -1,4 +1,4 @@
-### Global voice commands
+## Global voice commands
 
 #  When overriding ensure commands have the same case and spelling
 #  overrid in application-specific command files
@@ -70,7 +70,8 @@ Drag <n> <leftRight> = dragBy($2$1, 0);
 <ns> := 0..10;
 Window move <direction> = SendSystemKeys({Win+$1});
 Window move <direction> <ns> = Repeat($2, SendSystemKeys({Win+$1}));
-
+Window maximise (swap | left | right) = SendSystemKeys({Win+Up}) 
+    Repeat(2, SendSystemKeys({Win+Right})) SendSystemKeys({Win+Up});
 #<edge> := (Top=n | Bottom=s | Left=w | Right=e);
 #
 #[Move] Window <n> <upDown>    = moveNearEdge(n,0,1) dragBy(0, $2$1);
@@ -239,3 +240,7 @@ volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
                                            #Wait(50) {Alt+p} Wait(50) {Ctrl+Tab} {$1_$2}
                                            #Repeat(3, {Alt+f4} Wait(100));
 
+# ---------------------------------------------------------------------------
+# global text shortcuts
+
+Short date separator = "----{enter}14" Repeat(2,{Left});
