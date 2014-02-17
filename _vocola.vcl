@@ -229,7 +229,7 @@ Sound controls          = soundControl();
 Sound to <sound_device> = soundControl() Wait(100) {Down_$1} 
                           Wait(50) {Tab_2} Wait(50) {enter}
                           Wait(50) {Tab_3} Wait(50) {enter}
-                          {Alt+f4};
+                          Wait(50) {Alt+f4};
 volume <up_down> <adjust_amount> <sound_device> = levelAdjust($3) {$1_$2}
                                                   Repeat(3, {Alt+f4} Wait(100));
 volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}

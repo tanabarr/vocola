@@ -13,7 +13,7 @@ zoom out [<n>] = When($1, Repeat($1, {Ctrl+minus}),  Repeat(1, {Ctrl+minus}));
 #+ Key("f3"),;
 #find next = f3;
 #;
-#go to page <int> = {Ctrl+g}") + Text("%(int)d\n;
+go to page [<n> [<n> [<n>]]] = {Ctrl+g} Wait(100) When($1,$1$2$3{enter}); #When($1, "$1$2$3"{enter}, ""));
 #;
 #print file = {Ctrl+p};
 #print setup = a-f, r;
