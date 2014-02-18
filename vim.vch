@@ -65,38 +65,38 @@ Back <1to30> Words                        =  {Esc}{Right}"$1b";
 <edit_mode> Next Word                     =  {Esc}{Right}"w$1w";
 
 ### Lines (modify behaviour for deleting lines forward and backward)
-Line <start_end>                      =  {Esc}$1;
-Insert [empty] line <location>        =  {Esc}$1;
-Duplicate Line                        =  {Esc}"yyp";
-Swap Line                             =  {Esc}"ddp";
-<edit_mode> Here                      =  {Esc}$1"\$";
-<edit_mode> Back Here                 =  {Esc}$1"0";
-<edit_mode> Start Here                 =  {Esc}$1"^";
-<edit_mode> Line                      =  {Esc}$1$1;
-<edit_mode> <1to30> Lines             =  {Esc} Eval($2-1) "$1j";
-(Change={c} | Copy={y) Back Line                 =  {Esc}"$1k";
-<edit_mode> Back <1to30> Lines        =  {Esc} {Up} Eval($2-1) "$1k";
-<edit_mode> Next Line                 =  {Esc}":+1$1"{Enter};
-Kill Back Line                        =  {Esc}":-1d"{Enter};
-Trunc Line                            =  {Esc}"D";
-Copy Line To                          =  {Esc}":.co";
-Move Line To                          =  {Esc}":.m";
+Line <start_end>                                            =  {Esc}$1;
+Insert [empty] line <location>                              =  {Esc}$1;
+Duplicate Line                                              =  {Esc}"yyp";
+Swap Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}, "") "ddp";
+<edit_mode> Here                                            =  {Esc}$1"\$";
+<edit_mode> Back Here                                       =  {Esc}$1"0";
+<edit_mode> Start Here                                      =  {Esc}$1"^";
+<edit_mode> Line                                            =  {Esc}$1$1;
+<edit_mode> <1to30> Lines                                   =  {Esc} Eval($2-1) "$1j";
+(Change={c} | Copy={y) Back Line                            =  {Esc}"$1k";
+<edit_mode> Back <1to30> Lines                              =  {Esc} {Up} Eval($2-1) "$1k";
+<edit_mode> Next Line                                       =  {Esc}":+1$1"{Enter};
+Kill Back Line                                              =  {Esc}":-1d"{Enter};
+Trunc Line                                                  =  {Esc}"D";
+Copy Line To                                                =  {Esc}":.co";
+Move Line To                                                =  {Esc}":.m";
                    
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
-Flow (Start="gg" | End="G") [<insert>]  =  {Esc}"$1" Wait(20) "$2";
-<edit_mode> Flow Here                 =  {Esc}":.,\$$1"{Enter};
-<edit_mode> Flow All                  =  {Esc}":0,\$$1"{Enter};
-<edit_mode> Back Flow Here            =  {Esc}":.,0$1"{Enter};
+Flow (Start="gg" | End="G") [<insert>]                      =  {Esc}"$1" Wait(20) "$2";
+<edit_mode> Flow Here                                       =  {Esc}":.,\$$1"{Enter};
+<edit_mode> Flow All                                        =  {Esc}":0,\$$1"{Enter};
+<edit_mode> Back Flow Here                                  =  {Esc}":.,0$1"{Enter};
 
 ### Range
-Copy Range To            = {Esc}":co"{Left_2};
-Move Range               = {Esc}":m"{Left};
-Indent Range             = {Esc}":>"{Left};
-Un Indent Range          = {Esc}":<"{Left};
-<edit_mode> Range        = {Esc}":$1"{Left};
-(sub | substitute) range = {Esc}":s///gc"Repeat(6, {Left});
-comment (in="#/" | out="^/#") python range         = {Esc}":s/$1/"Repeat(9, {Left}); # python style 
+Copy Range To                                               =  {Esc}":co"{Left_2};
+Move Range                                                  =  {Esc}":m"{Left};
+(Indent=">" | Indent Back="<") (Line={enter} | Range={Left})  =  {Esc}":$1"$2;
+<edit_mode> Range                                           =  {Esc}":$1"{Left};
+(sub | substitute) range                                    =  {Esc}":s///gc"Repeat(6, {Left});
+# python style
+comment (in="#/" | out="^/#") python range                  =  {Esc}":s/$1/"Repeat(9, {Left}); 
 #comment (in="\/\//" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
 #= {Esc}":s/$1/" $2; # c style 
 
@@ -124,7 +124,7 @@ Append                        =  {Esc}"a";
 Append end                    =  {Esc}"A";
 Substitute                    =  {Esc}"s";
 Replace                       =  {Esc}"R";
-Join Line                     =  {Esc}"J";
+Join Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}) "J";
 diff (push=dp | pull=po)      =  {esc}"$1";
 
 # standard actions
@@ -220,7 +220,7 @@ Save file                                  =  {Esc}":w"{Enter};
 Close file                                 =  {Esc}":q"{Enter};
 Save and close file                        =  {Esc}":x"{Enter};
 #confirm force close definite              =  {Esc}":q!";
-Previous command                           =  {Esc}":"{up};
+Previous command [<2to9>]                  =  When($1, Repeat($1, {Esc}":"{up}{enter}), {Esc}":"{up});
 Edit another                               =  {Esc}":e ";
 File browser                               =  {Esc}":e."{Enter};
 Bundle command                             =  "NeoBundle";
