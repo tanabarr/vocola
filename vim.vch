@@ -223,7 +223,6 @@ Save and close file                        =  {Esc}":x"{Enter};
 Previous command [<2to9>]                  =  When($1, Repeat($1, {Esc}":"{up}{enter}), {Esc}":"{up});
 Edit another                               =  {Esc}":e ";
 File browser                               =  {Esc}":e."{Enter};
-Bundle command                             =  "NeoBundle";
 vim diff split  = {esc}":vert diffsplit ";
 
 # text shortcuts
@@ -321,7 +320,8 @@ comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;
 <idiom_type> := (function="f" | static="sf" | main="m" | for increment="0" | 
                  print="p" | file print="fp"); 
 <idiom_type> idiom = "\i"$1;
-
+# NeoBundle
+Bundle command (Install | Clean | List)            =  {esc}":NeoBundle$1"{enter};
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";
 setting based                        = "{Esc}:set paste{enter}";
