@@ -33,6 +33,7 @@ enter list                = "{enter}ls{enter}";
 change absolute directory = "cd -P .{enter}";
 present working directory = "pwd";  
 vim diff = "vimdiff";
+cygwin password = "^2A";
 
 ##
 ## Directory information/listing commands
