@@ -296,6 +296,7 @@ Vim Align <key>                      =  {Esc}":Align $1"{Left_7};
 ## omnicomplete
 complete                             =  {ctrl+x}{ctrl+o};
 local complete                       =  {ctrl+p};
+Remove preview = {esc}{ctrl+w}{Up}":q{enter}";
 # UNITE plug-in, mappings in .vimrc
 #Vim Unite                           =  {Esc}":Unite file_rec buffer"{enter};
 Unite files                          =  {Esc}"\f";
