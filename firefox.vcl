@@ -38,5 +38,55 @@ back page={backspace};
 
 # Add torrent for download on web UI
 #<local_remote> := (local="192.168.1.194:8112" | remote="");
-#add deluge torrent <local_remote> = <Ctrl+t> Wait(1000) $1 Wait(100) "siemens{enter}";
+#aadd deluge torrent <local_remote> = <Ctrl+t> Wait(1000) $1 Wait(100) "siemens{enter}";
+## 
+## Clicking links/gizmos:
+## 
+
+# 
+# These commands require the mouseless browsing extension.
+# 
+# Plug-in configuration:
+# 
+# General->not execute automatically without pressing enter
+# ID-types->all modifiers = Ctrl+alt
+## Keys->Postfix key to open link in new tab = MULTIPLY (press num pad star)
+# Keys->blur active element = ctrl+DIVIDE 
+# (press control num pad slash)
+#
+# Also, remove Dragon's use of MULTIPLY and DIVIDE
+# 
+
+Blur() := {ctrl+NumKey/};
+Toggle() := {NumKey.};
+
+<pick> := ( pick = {shift}{enter} 
+| drop pick = {shift}{enter}{alt+down}
+| go pick = {shift}
+| push pick = {shift}{ctrl+enter} # stay but open new tab w/ link
+| tab pick = {shift}{ctrl+shift+enter}
+| window pick = {shift}{shift+enter}
+| menu pick = {shift}{shift+f10}
+| save pick = {shift}{shift+f10} Wait(100) k
+| copy pick = {shift}{shift+f10} Wait(100) a # copy URL of link
+);
+
+<pick> 0..9 = Blur() {alt+ctrl+$2} $1;
+<pick> 0..9 0..9 = Blur() {alt+ctrl+$2}{alt+ctrl+$3} $1;
+<pick> 0..9 0..9 0..9 = Blur() {alt+ctrl+$2}{alt+ctrl+$3}{alt+ctrl+$4} $1;
+<pick> 0..9 0..9 0..9 0..9 = Blur() {alt+ctrl+$2}{alt+ctrl+$3}{alt+ctrl+$4}
+{alt+ctrl+$5} $1;
+
+show numbers = Blur() Toggle();
+refresh numbers = Blur() Toggle() Toggle();
+blur me = {ctrl+NumKey/};
+
+
+# 
+# These commands use the built-in quick find link:
+# 
+
+link <_anything> = Blur() "'$1" {enter};
+new link <_anything> = Blur() "'$1" {ctrl+enter};
+window link <_anything> = Blur() "'$1" {shift+enter};
 #add deluge torrent  = <Ctrl+t>; #/Wait(1000) $1 Wait(100) "siemens{enter}";

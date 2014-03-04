@@ -2,22 +2,6 @@
 # 051213: tan modified
 # vim.vch
  
-##symbols
-#slap  = {enter};
-#back  = {backspace};
-#hat   = "^";
-#clam  = "!";
-#lat   = "@";
-#numb  = "#";
-#lace  = "{";
-#race  = "}";
-#score = "_";
-#eke   = "=";
-#dall  = "$";
-#pipe  = "|";
-#laip  = "(";
-#rye   = ")";
-
 # common ranges
 <0to9> := 0..9;
 <2to9> := 2..9;
@@ -30,7 +14,7 @@
 #
 <direction>             := Left | Right | Up | Down;
 <left_right>            := (Left={b} | Right={w});
-<start_end>             := (Start={Home} | End={End});
+<start_end>             := (Start=\^ | End=\$);
 <top_bottom>             := (Top={Shift+h} | Bottom={Shift+l} | Middle={Shift+m});
 #<compass>               := (North={Shift+h} | South={Shift+l} |
 #                            East={'$'} | West={0});
@@ -66,6 +50,7 @@ Back <1to30> Words                        =  {Esc}{Right}"$1b";
 
 ### Lines (modify behaviour for deleting lines forward and backward)
 Line <start_end>                                            =  {Esc}$1;
+Line (Trunc=D | Append=A | Insert=I | Duplicate=yyp)            =  {Esc}$1;
 Insert [empty] line <location>                              =  {Esc}$1;
 Duplicate Line                                              =  {Esc}"yyp";
 Swap Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}, "") "ddp";
@@ -74,11 +59,10 @@ Swap Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}, "") "ddp
 <edit_mode> Start Here                                      =  {Esc}$1"^";
 <edit_mode> Line                                            =  {Esc}$1$1;
 <edit_mode> <1to30> Lines                                   =  {Esc} Eval($2-1) "$1j";
-(Change={c} | Copy={y) Back Line                            =  {Esc}"$1k";
 <edit_mode> Back <1to30> Lines                              =  {Esc} {Up} Eval($2-1) "$1k";
 <edit_mode> Next Line                                       =  {Esc}":+1$1"{Enter};
+(Change={c} | Copy={y) Back Line                            =  {Esc}"$1k";
 Kill Back Line                                              =  {Esc}":-1d"{Enter};
-Trunc Line                                                  =  {Esc}"D";
 Copy Line To                                                =  {Esc}":.co";
 Move Line To                                                =  {Esc}":.m";
                    
@@ -95,62 +79,44 @@ Move Range                                                  =  {Esc}":m"{Left};
 (Indent=">" | Indent Back="<") (Line={enter} | Range={Left})  =  {Esc}":$1"$2;
 <edit_mode> Range                                           =  {Esc}":$1"{Left};
 (sub | substitute) range                                    =  {Esc}":s///gc"Repeat(6, {Left});
-# python style
-comment (in="#/" | out="^/#") python range                  =  {Esc}":s/$1/"Repeat(9, {Left}); 
-#comment (in="\/\//" | out="^/\/\/") (range=Repeat(9, {Left}) | line={enter})        
-#= {Esc}":s/$1/" $2; # c style 
 
 #*-------------------------------------------- */ 
 # keyboard mapping for vim commands (distinct global vocola text editing set)
 include keys.vch;
 
 # text editing
-# obsolete?
-#<compass>                       = {Esc}$1; # NSEW screen navigation
-Blank line back                  = {Esc}"O"{down}{Esc};
-Blank line next                 = {Esc}"o"{up}{Esc};
-Change case                     = {Esc}"~";
-Change case <1to30>                 = {Esc} Repeat($1,"~");
-# TODO: could use absolute line numbering when entering a range, and relative otherwise
-(sub | substitute) line       =  {Esc}":s///gc"Repeat(4, {Left});
-(sub | substitute) all        =  {Esc}":%s///gc"Repeat(4, {Left});
-(sub | substitute) here       =  {Esc}":.,\$s///gc"Repeat(4, {Left});
-(sub | substitute) back here  =  {Esc}":0,.s///gc"Repeat(4, {Left});
-Paste                         =  {Esc}p;
-Paste Back                    =  {Esc}P;
-Insert                        =  {ESC}"i";
-Insert start                  =  {Esc}"I";
-Append                        =  {Esc}"a";
-Append end                    =  {Esc}"A";
-Substitute                    =  {Esc}"s";
-Replace                       =  {Esc}"R";
+Blank line (back=O{down} | next=o{up}) = {esc}$1{esc};
+Change case <1to30> = {Esc} Repeat($1,"~");
 Join Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}) "J";
-diff (push=dp | pull=po)      =  {esc}"$1";
+
+<sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
+(sub | substitute) <sub_action>       =  {Esc}":$2///gc"Repeat(4, {Left});
+
+<text_actions> := (
+    Paste=p | Paste Back=P | Insert=i | Append=a | Substitute=s | Replace=R | 
+    diff push=dp | diff pull=do | change case=~
+);
+<text_actions> = {esc}$1;
 
 # standard actions
-Start macro                   =  {Esc}"qz";
-Repeat macro                  =  {Esc}"@z"{Enter};
-Format                        =  {Esc}"Q";
-Normal mode                   =  {ESC};
-edit undo [<2to9>]            =  {Esc} When($1, $1"u", 1"u");
-edit redo [<2to9>]            =  {Esc} When($1, $1{Ctrl+r}, 1{Ctrl+r});
+<standard_actions> := (
+    Start macro=qz | Repeat macro=@z{Enter} | Format=Q | Normal mode= | 
+    visual mode={ctrl+v} 
+);
+<standard_actions> = {esc}$1;
+edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, $2$1, 1$1);
 
 # special navigation actions
-List changes                    = {Esc}":changes";
-Previous change                 = {Esc}"g;";
-##next change                   = {Esc}"g,";
-Undo jump                       = {Esc}"``";
-Return from                     = {Esc}"''";
-Set mark                        = {Esc}"mz";
-Goto mark                       = {Esc}"'zi";
-Beginning previous              = {Esc}"-";
-Beginning next                  = {Esc}"+";
-Match bracket                   = {Esc}"%";
-Scroll [to] bottom              = {Esc}"zb";
-Scroll [to] top                 = {Esc}"zt";
-Scroll [to] middle              = {Esc}"zz";
+<navigation_actions> := (
+    List changes=":changes" | Previous change="g;" | Undo jump="``" | 
+    Return from="''" | Set mark="mz" | Goto mark="'zi" | 
+    Beginning previous="-" | Beginning next="+" | Match bracket="%" |
+    Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz"
+);
+<navigation_actions> = {esc}$1;
 Halfpage [(Up="u" | Down="d")]  = {Esc} When($1, {Ctrl+$1}, {Ctrl+d});
 Page <top_bottom>               = {Esc}$1;
+##next change="g," 
 
 
 ###
@@ -169,39 +135,11 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     # For the following commands we want to perform actions in place, 
     # IE. returns to original line (mark "v").
     | Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" 
-    | Copy=":.y{enter}" "'v");
+    | Copy=":.y{enter}" "'v" | beginning="20l" | middle="40l" | end="60l");
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
 line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
 line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
 line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1);
-
-#GotoLineMod(line, mod) := {Esc} When($mod, ":$line$mod", ":$line"{enter});
-#GotoLineMod(line, mod) := {Esc}":$line" If(Eval('$mod == "zz\{I\}"'), Wait(500) "$mod", "$mod");
-#line [<line_mod>] <0to9>  = 
-#    If($1, GotoLineMod($2,$1), GotoLineMod($2,"{enter}"));
-#line [<line_mod>] <0to9> <0to9>  = 
-#    If($1, GotoLine4Mod(0, 0, $2, $3,$1), GotoLine4Mod(0, 0, $2, $3,"{enter}"));
-#line [<line_mod>] <0to9> <0to9> <0to9>  = 
-#    If($1, GotoLine4Mod( 0, $2, $3, $4,$1), GotoLine4Mod( 0, $2, $3, $4,"{enter}"));
-#line [<line_mod>] <0to9> <0to9> <0to9> <0to9>  = 
-#    If($1, GotoLine4Mod( $2,$3,$4,$5,$1), GotoLine4Mod( $2,$3,$4,$5,"{enter}"));
-
-#GotoLine(line) := "i" Wait(20) ":"$line Wait(20) {Enter} Wait(1000) "zz";
-#Go [to] line <0to9> = GotoLine($1);
-#Go [to] line <0to9> <0to9> = GotoLine($1$2);
-#Go [to] line <0to9> <0to9> <0to9> = GotoLine($1$2$3);
-#Go [to] line <0to9> <0to9> <0to9> <0to9> = GotoLine($1$2$3$4);
-
-#line number one = GotoLine(1);
-#line number <0to9> <0to9> = GotoLine4(0, 0, $1, $2);
-#line number <0to9> <0to9> <0to9> = GotoLine4( 0, $1, $2, $3);
-#line number <0to9> <0to9> <0to9> <0to9> = GotoLine4( $1,$2,$3,$4);
-
-##line <0to9> <0to9> <0to9> = "{Esc}:$1$2$3" Wait(200) "{Enter}{Esc}" Wait(200) "zz";
-#line <0to9> [<0to9> [<0to9> [<0to9>]]] 
-#    = {Esc}":$1$2$3$4"{Enter} Wait(500) "zz";
-#Line 1..999 insert              = {Esc}":$1 {Enter}i";
-
 
 Back till <key>                            =  {Esc}"T$1";
 Till <key>                                 =  {Esc}"t$1";
@@ -226,19 +164,19 @@ File browser                               =  {Esc}":e."{Enter};
 vim diff split  = {esc}":vert diffsplit ";
 
 # text shortcuts
-Def include                                =  {Esc}"i#include ";
-Def Define                                 =  {Esc}"i#define ";
-Def ifdef                                  =  {Esc}"\pid"{enter};
-file Printf                                  =  {Esc}"i"{Right}"fprintf(,);" {Left_3};
+#Def include                                =  {Esc}"i#include ";
+#Def Define                                 =  {Esc}"i#define ";
+#Def ifdef                                  =  {Esc}"\pid"{enter};
+#file Printf                                  =  {Esc}"i"{Right}"fprintf(,);" {Left_3};
 #Equals                                    =  {Esc}i{right}= ";
 #Hash                                      =  {Esc}"i#"{esc};
 Insert space                               =  {Esc}"i"{space}{esc};
-insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":TComment "{enter}$1;
+#insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":TComment "{enter}$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
-Begin comment                              =  {Esc}"i/* ";
+#Begin comment                              =  {Esc}"i/* ";
 End comment                                =  {Esc}"i */"{enter};
-Begin long comment                         =  {Esc}"i#"{esc}"ib"{space};
-End long comment                           =  {Esc}"i#"{esc}"ie"{enter};
+#Begin long comment                         =  {Esc}"i#"{esc}"ib"{space};
+#End long comment                           =  {Esc}"i#"{esc}"ie"{enter};
 Insert line break                          =  {Esc}"i"{enter};
 Line comment                               =  {Esc}"i#"{esc}"il"{enter};
 Double slash backslash                     =  {Esc}"\/\/";
@@ -254,15 +192,11 @@ Set light background =  {Esc}":set bg=light"{enter};
 ## move created split one page up, return to top of original page in the right split
 Split vertical                   =  {Esc}":vsp"{Enter}{Shift+h}{PgUp}
                                     {Ctrl+w}"l";
-Vim Window left                  =  {esc}{ctrl+w}"h";
-Vim Window right                 =  {esc}{ctrl+w}"l";
-Vim Window up                    =  {esc}{ctrl+w}"k";
-Vim Window down                  =  {esc}{ctrl+w}"j";
-Vim Window next                  =  {esc}{ctrl+w}"w";
-Vim Window close                 =  {ESC}{Ctrl+w}"c";
-Vim Window crop                  =  {Esc}":only"{Enter};
-Vim Window make fat              =  {esc}":vertical resize +15"{enter};
-Vim Window make thin             =  {esc}":vertical resize -15"{enter};
+<window_action> := (left=h | right=l | up=k | down=j | next=w | close=c );
+Vim Window <window_action> = {esc}{ctrl+w}"$1";
+Vim Window crop            = {Esc}":only"{Enter};
+Vim Window make fat        = {esc}":vertical resize +15"{enter};
+Vim Window make thin       = {esc}":vertical resize -15"{enter};
 
 # buffer navigation
 Previous buffer                  =  {Esc}":bp"{Enter};
@@ -306,21 +240,38 @@ Unite recent                         =  {Esc}"\m";
 Unite history = {Esc}"\y";
 Unite buffer = {Esc}"\e";
 Unite insert = {tab} {Down_3} {enter};
+
 # TComment, note: could also be done with csupport
 comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;       
 # csupport (hotkey sections: comment, statements, preprocessor, idioms, 
 #           snippets, c++, run)
-<comment_type> := (frame="fr" | function="fu" | method="me" | class="cl" | 
-                   implementation="fdi" | header="fdh" | source section="cs" |
-                   header section="hs" | keyword="kc" | special="sc" | 
-                   date="d" | time="t" | toggle type="x");
-<comment_type> comment = "\c"$1;
-<statement_type> := (do="d" | for="fo" | if="if" | if else="ife" | else="e" | 
-                     while="wh" | switch="s" | case="c"); 
-<statement_type> statement = "\s"$1;
-<idiom_type> := (function="f" | static="sf" | main="m" | for increment="0" | 
-                 print="p" | file print="fp"); 
-<idiom_type> idiom = "\i"$1;
+<comment_type> := (
+    frame=fr | function=fu | method=me | class=cl | 
+    implementation=fdi | header=fdh | source section=cs |
+    header section=hs | keyword=kc | special=sc | date=d | 
+    time=t | toggle type=x
+);
+<comment_type> comment = \c$1;
+
+<statement_type> := (
+    do=d | for=fo | if=if | if else=ife | else=e | while=wh | 
+    switch=s | case=c
+); 
+<statement_type> statement = \s$1;
+
+<idiom_type> := (
+    function=f | static=sf | main=m | for increment=0 | print=p | 
+    file print=fp
+); 
+<idiom_type> idiom = \i$1;
+
+start (brace="{{enter}" | comment="/*") [(block={enter})] = {esc}{i}"$1$2";
+
+<preprocessor_type> := (
+    include header=ih | include global=g | include local=l | define=d 
+); 
+#<idiom_type> idiom = \i$1;
+
 # NeoBundle
 Bundle command (Install | Clean | List)            =  {esc}":NeoBundle$1"{enter};
 # editor settings
