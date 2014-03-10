@@ -14,20 +14,10 @@
 #
 <direction>             := Left | Right | Up | Down;
 <left_right>            := (Left={b} | Right={w});
-<start_end>             := (Start=\^ | End=\$);
 <top_bottom>             := (Top={Shift+h} | Bottom={Shift+l} | Middle={Shift+m});
-#<compass>               := (North={Shift+h} | South={Shift+l} |
-#                            East={'$'} | West={0});
-<edit_mode>             := (Change={c} | Kill={d} | Copy={y});
-<location>              := (Here="i{enter}" | Next="o" | Back="O" |
-                            Copy="yyp");
 
 ### Characters ( assumes we are in insert mode when calling)
 <1to30> <direction>                       =  {$2_$1};
-#<edit_mode> (Char | 1 | One)             =  {Esc}{Right}"$1l";
-#<edit_mode> Back [1]                     =  {Esc}{Right}"$1h";
-#<edit_mode> <1to30> Chars                =  {Esc}{Right}"$2$1l";
-#<edit_mode> Back <1to30>                 =  {Esc}{Right}"$2$1h";
 (Change={c} | Copy={y}) (Char | 1 | One)  =  {Esc}{Right}"$1l";
 (Change={c} | Copy={y}) Back [1]          =  {Esc}{Right}"$1h";
 (Change={c} | Copy={y}) <1to30> [Chars]     =  {Esc}{Right}"$2$1l";
@@ -36,6 +26,7 @@ Kill (Char | 1 | One)                     =  {Del}; # {Right}"$1l";
 Kill Back [1]                             =  {Left}{Del};
 Kill <1to30> [Chars]                      =  {Del_$1};
 Kill Back <1to30> [Chars]                 =  {Left_$1}{Del_$1}; #{Esc}{Right}"$2$1h";
+Change case [(back=1)] [<1to30>] = {Esc} When($1, When($2, {Left_$2}, {Left})) When($2, $2~, ~);
 
 ### Words
 [One] Word                                =  {Esc}{Right}"w";
@@ -48,24 +39,42 @@ Back <1to30> Words                        =  {Esc}{Right}"$1b";
 <edit_mode> Back <1to30> Words            =  {Esc}{Right}"$1$2b";
 <edit_mode> Next Word                     =  {Esc}{Right}"w$1w";
 
-### Lines (modify behaviour for deleting lines forward and backward)
-Line <start_end>                                            =  {Esc}$1;
-Line (Trunc=D | Append=A | Insert=I | Duplicate=yyp)            =  {Esc}$1;
-Insert [empty] line <location>                              =  {Esc}$1;
-Duplicate Line                                              =  {Esc}"yyp";
-Swap Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}, "") "ddp";
-<edit_mode> Here                                            =  {Esc}$1"\$";
-<edit_mode> Back Here                                       =  {Esc}$1"0";
-<edit_mode> Start Here                                      =  {Esc}$1"^";
-<edit_mode> Line                                            =  {Esc}$1$1;
-<edit_mode> <1to30> Lines                                   =  {Esc} Eval($2-1) "$1j";
-<edit_mode> Back <1to30> Lines                              =  {Esc} {Up} Eval($2-1) "$1k";
-<edit_mode> Next Line                                       =  {Esc}":+1$1"{Enter};
-(Change={c} | Copy={y) Back Line                            =  {Esc}"$1k";
-Kill Back Line                                              =  {Esc}":-1d"{Enter};
-Copy Line To                                                =  {Esc}":.co";
-Move Line To                                                =  {Esc}":.m";
-                   
+### Lines (modify parts of/whole lines)
+<line_actions> := (
+    Move to=":.m" | Copy to=":.co" | Change="C" | Kill="dd" | Copy="yy" | 
+    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^" | End="\$" | 
+    beginning="20li" | middle="40li" | near the end="60li" | 
+    New Here="i{enter}" | New Next="o" | New Back="O"
+);
+<edit_mode>             := (Change={c} | Kill={d} | Copy={y}); # Indent= | Comment=
+
+# current line action (no line number specified)
+Line <line_actions>                                             =  {Esc}$1;
+Line Swap [(Back=Up | Next=Space)]                              =  {esc} When($1, {$1}, "") "ddp";
+Line <edit_mode> (Next="+" | Back="-")                          =  {Esc}":"$2"1$1"{Enter};
+Line <edit_mode> (Beginning="0" | Start="^" | End="\$") [Here]  =  {Esc}$1 When($2, $2,  "\$");
+Blank line (back=O{down} | next=o{up})                          =  {esc}$1{esc};
+Join Line [(Back=Up | Next=Space)]                              =  {esc} When($1, {$1}) "J";
+
+# multiple line action (relative range specified)
+<relative_range_actions> := (
+    Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
+    Sub="s///" | copy here="co." | indent=">" | indent back="<"
+);
+<relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+$2$1"; # Eval($2-1) "$1j";
+<relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":.,-$2$1"; # Eval($2-1) "$1j";
+#<edit_mode> Back 2..30 Lines                              =  {Esc} {Up} Eval($2-1) "$1k";
+
+# multiple line action with range specified
+### Range
+<range_actions> := (
+    Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
+    Sub="s///" | copy here="co." 
+);
+Range <range_actions> = {esc}":$1"{Home};
+
+(Line={enter} | Range={Left}) (Indent=">" | Indent Back="<") [1..9] = When($3, Repeat($3, {Esc}":$2"$1), {esc}":$2"$1);
+
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
 Flow (Start="gg" | End="G") [<insert>]                      =  {Esc}"$1" Wait(20) "$2";
@@ -73,28 +82,42 @@ Flow (Start="gg" | End="G") [<insert>]                      =  {Esc}"$1" Wait(20
 <edit_mode> Flow All                                        =  {Esc}":0,\$$1"{Enter};
 <edit_mode> Back Flow Here                                  =  {Esc}":.,0$1"{Enter};
 
-### Range
-Copy Range To                                               =  {Esc}":co"{Left_2};
-Move Range                                                  =  {Esc}":m"{Left};
-(Indent=">" | Indent Back="<") (Line={enter} | Range={Left})  =  {Esc}":$1"$2;
-<edit_mode> Range                                           =  {Esc}":$1"{Left};
-(sub | substitute) range                                    =  {Esc}":s///gc"Repeat(6, {Left});
-
 #*-------------------------------------------- */ 
-# keyboard mapping for vim commands (distinct global vocola text editing set)
+#  navigation specific commands
+
+###
+### Jump to start of absolute line number L (directly up to 99,999):
+###
+
+# stop 1 being recognised as "one" in Vocola
+$set numbers 0;
+
+## go to absolute line number $line:
+## vim mark line "v" incase we want to return to the original line
+GotoLineMod(line, mod) := {Esc}"mv" ":$line"{enter} Wait(500) "$mod"; 
+GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
+    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+# TODO: line number scrawling, line number indentation
+<line_mod> := (Go="zz" | Insert="zzI" | Append="zzA" | Sub=":s///" 
+    # For the following commands we want to perform actions in place, 
+    # IE. returns to original line (mark "v").
+    | Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" 
+    | Copy=":.y{enter}" "'v" | beginning="20l" | middle="40l" | end="60l");
+line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
+line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
+line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
+line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1);
+
 include keys.vch;
 
-# text editing
-Blank line (back=O{down} | next=o{up}) = {esc}$1{esc};
-Change case <1to30> = {Esc} Repeat($1,"~");
-Join Line [(Back=Up | Next=Space)]              =  {esc} When($1, {$1}) "J";
+# misc text editing
 
 <sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
 (sub | substitute) <sub_action>       =  {Esc}":$2///gc"Repeat(4, {Left});
 
 <text_actions> := (
     Paste=p | Paste Back=P | Insert=i | Append=a | Substitute=s | Replace=R | 
-    diff push=dp | diff pull=do | change case=~
+    diff push=dp | diff pull=do | diff next="\]c" | diff previous="\[c" 
 );
 <text_actions> = {esc}$1;
 
@@ -118,29 +141,6 @@ Halfpage [(Up="u" | Down="d")]  = {Esc} When($1, {Ctrl+$1}, {Ctrl+d});
 Page <top_bottom>               = {Esc}$1;
 ##next change="g," 
 
-
-###
-### Jump to start of absolute line number L (directly up to 99,999):
-###
-
-# stop 1 being recognised as "one" in Vocola
-$set numbers 0;
-
-## go to absolute line number $line:
-## vim mark line "v" incase we want to return to the original line
-GotoLineMod(line, mod) := {Esc}"mv" ":$line"{enter} Wait(500) "$mod"; 
-GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
-    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
-<line_mod> := (Go="zz" | Insert="zzI" | Append="zzA"
-    # For the following commands we want to perform actions in place, 
-    # IE. returns to original line (mark "v").
-    | Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" 
-    | Copy=":.y{enter}" "'v" | beginning="20l" | middle="40l" | end="60l");
-line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
-line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
-line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
-line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1);
-
 Back till <key>                            =  {Esc}"T$1";
 Till <key>                                 =  {Esc}"t$1";
 Till next                                =  {Esc}";";
@@ -158,7 +158,7 @@ Save file                                  =  {Esc}":w"{Enter};
 Close file                                 =  {Esc}":q"{Enter};
 Save and close file                        =  {Esc}":x"{Enter};
 #confirm force close definite              =  {Esc}":q!";
-Previous command [<2to9>]                  =  When($1, Repeat($1, {Esc}":"{up}{enter}), {Esc}":"{up});
+Previous command [1..9]                  =  When($1, Repeat($1, {Esc}":"{up}{enter}), {Esc}":"{up});
 Edit another                               =  {Esc}":e ";
 File browser                               =  {Esc}":e."{Enter};
 vim diff split  = {esc}":vert diffsplit ";
@@ -268,9 +268,9 @@ comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;
 start (brace="{{enter}" | comment="/*") [(block={enter})] = {esc}{i}"$1$2";
 
 <preprocessor_type> := (
-    include header=ih | include global=g | include local=l | define=d 
+    include header=ih | include global=< | include local='"' | define=d 
 ); 
-#<idiom_type> idiom = \i$1;
+<preprocessor_type> preprocessor = \p$1;
 
 # NeoBundle
 Bundle command (Install | Clean | List)            =  {esc}":NeoBundle$1"{enter};
@@ -288,3 +288,8 @@ pattern match history = {Esc}"q/";
 #### Can be used instead of unimacro "brackets" if ^X characters become a problem
 ###<surround> := ( par = "()" | bar = "||" | quote = "" );
 ##Surround <surround> = $1{Left};
+
+## temporary project specific macros
+histogram debug = {esc}'i#ifdef DEBUG{enter}fsp_log_debug(shared_data_p->config_p->prog_name_p, {enter}"%s: \n", __FUNCTION__);{enter}#endif' {Up}{End} Repeat(19,{Left});
+ifdef (debug="DEBUG" | trace="TRACE")                                 =  {Esc}"ddi#ifdef $1"{enter};
+ifdef end                                                       = {esc}"o#endif"{enter};

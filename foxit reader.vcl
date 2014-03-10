@@ -24,7 +24,7 @@ previous page = {Ctrl+pgup};
 ## bookmark.when wanting to return to Reading window, create and/or;
 ## focuses start tab. Then switch to tab next (assume is only one tab;
 navigation window = {Ctrl+b}{enter}{del};
-reading window = Repeat(2, {Ctrl+Alt+Shift});
+reading window = Repeat(2, {Ctrl+Alt+s});
 close navigation window = {f4};
 next = {Ctrl+tab};
 previous = {ctrl+shift+tab};
