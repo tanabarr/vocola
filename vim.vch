@@ -49,31 +49,31 @@ Back <1to30> Words                        =  {Esc}{Right}"$1b";
 <edit_mode>             := (Change={c} | Kill={d} | Copy={y}); # Indent= | Comment=
 
 # current line action (no line number specified)
-Line <line_actions>                                             =  {Esc}$1;
-Line Swap [(Back=Up | Next=Space)]                              =  {esc} When($1, {$1}, "") "ddp";
-Line <edit_mode> (Next="+" | Back="-")                          =  {Esc}":"$2"1$1"{Enter};
-Line <edit_mode> (Beginning="0" | Start="^" | End="\$") [Here]  =  {Esc}$1 When($2, $2,  "\$");
-Blank line (back=O{down} | next=o{up})                          =  {esc}$1{esc};
-Join Line [(Back=Up | Next=Space)]                              =  {esc} When($1, {$1}) "J";
+<line_actions> Line                                             =  {Esc}$1;
+Swap [(Back=Up | Next=Space)] Line                              =  {esc} When($1, {$1}, "") "ddp";
+<edit_mode> (Next="+" | Back="-") Line                          =  {Esc}":"$2"1$1"{Enter};
+<edit_mode> (Beginning="0" | Start="^" | End="\$") Line [Here]  =  {Esc}$1 When($2, $2,  "\$");
+Blank (back=O{down} | next=o{up}) Line                         =  {esc}$1{esc};
+Join [(Back=Up | Next=Space)] Line                             =  {esc} When($1, {$1}) "J";
 
 # multiple line action (relative range specified)
 <relative_range_actions> := (
-    Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
-    Sub="s///" | copy here="co." | indent=">" | indent back="<"
+    Move to="m" | Copy to="co" | Change="c{enter}" | Kill="d{enter}" | Copy="y{enter}" | 
+    Sub="s///" | copy here="co-1{enter}" | indent=">{enter}" | indent back="<{enter}"
 );
 <relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+$2$1"; # Eval($2-1) "$1j";
-<relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":.,-$2$1"; # Eval($2-1) "$1j";
+<relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":-$2,.$1"; # Eval($2-1) "$1j";
 #<edit_mode> Back 2..30 Lines                              =  {Esc} {Up} Eval($2-1) "$1k";
 
 # multiple line action with range specified
 ### Range
 <range_actions> := (
     Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
-    Sub="s///" | copy here="co." 
+    Sub="s///" | copy here="co." | comment="TComment"
 );
-Range <range_actions> = {esc}":$1"{Home};
+<range_actions> Range = {esc}":$1"{Home};
 
-(Line={enter} | Range={Left}) (Indent=">" | Indent Back="<") [1..9] = When($3, Repeat($3, {Esc}":$2"$1), {esc}":$2"$1);
+(Indent=">" | Indent Back="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":$2"$1), {esc}":$2"$1);
 
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
