@@ -43,7 +43,7 @@ Back <1to30> Words                        =  {Esc}"$1b";
 
 ### Lines (modify parts of/whole lines)
 <line_actions> := (
-    Move to=":.m" | Copy to=":.co" | Change="C" | Kill="dd" | Copy="yy" | 
+    Move to=":.m" | Copy to=":.co" | Change="cc" | Kill="dd" | Copy="yy" | 
     Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^" | End="\$" | 
     beginning="20li" | middle="40li" | near the end="60li" | 
     New Here="i{enter}" | New insert="o" | New Back="O" | End semicolon="\$i;" 
@@ -62,7 +62,7 @@ Join [(Back=Up | Next=Space)] Line                             =  {esc} When($1,
     Change="c{enter}" | Kill="d{enter}" | Copy="y{enter}" | 
     Move to="m" | Copy to="co" | copy here="co-1{enter}" | 
     Duplicate="yyp{enter}" | Start="\^{enter}" | End="\${enter}" | 
-    indent=">{enter}" | indent back="<{enter}" | Sub="s///gc{Left_4}" | 
+    indent=">{enter}" | reverse indent="<{enter}" | Sub="s///gc{Left_4}" | 
     Comment="TComment{enter}"
 );
 <relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc}":"$2"1$1";
@@ -82,7 +82,7 @@ Flow (Start="gg" | End="G") [<insert>]                      =  {Esc}"$1" Wait(20
 <edit_mode> (Flow Here=".,\$" | Flow All="0,\$" | Back Flow Here="0,.")   =  {Esc}":$2$1"{Enter};
 
 # other rule specifications for text editing
-(Indent=">" | Indent Back="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":$2"$1), {esc}":$2"$1);
+(Indent=">" | reverse indent="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":$1"$2), {esc}":$1"$2);
 
 <sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
 (sub | substitute) <sub_action>       =  {Esc}":$2///gc"Repeat(4, {Left});
@@ -122,7 +122,7 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" |
     Copy=":.y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
     Move to=":.m" | Copy to=":.co" | copy here=":.y{enter}" "'v" "p" | 
-    indent=">{enter}" "'v"| indent back="<{enter}" "'v"| 
+    indent=":>{enter}" "'v"| reverse indent=":<{enter}" "'v"| 
     Comment="TComment{enter}" "'v"
 );
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);

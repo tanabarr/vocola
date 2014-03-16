@@ -21,7 +21,7 @@ escape process         = {esc}{ctrl+z};
     $1{enter};
 double dash                  = "--";
 Bash Tag File Update         =
-    "ctags -R --c++-kinds=+pl --fields=+iaS --extra=+q ."{Enter};
+    "ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
 make tar                     = "tar -cf ";
 extract tar                  = "tar -xf ";
 confirm force remove file = "rm -r";
