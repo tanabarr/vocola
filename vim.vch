@@ -44,9 +44,9 @@ Back <1to30> Words                        =  {Esc}"$1b";
 ### Lines (modify parts of/whole lines)
 <line_actions> := (
     Move to=":.m" | Copy to=":.co" | Change="cc" | Kill="dd" | Copy="yy" | 
-    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^" | End="\$" | 
+    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="\$i" | 
     beginning="20li" | middle="40li" | near the end="60li" | 
-    New Here="i{enter}" | New insert="o" | New Back="O" | End semicolon="\$i;" 
+    New Here="i{enter}" | New insert="o" | New Back="O" | Append semicolon="\$i;" 
 );
 <edit_mode>             := (Change={c} | Kill={d} | Copy={y}); # Indent= | Comment=
 
@@ -54,16 +54,15 @@ Back <1to30> Words                        =  {Esc}"$1b";
 <line_actions> Line                                             =  {Esc}$1;
 Swap [(Back=Up | Next=Space)] Line                              =  {esc} When($1, {$1}, "") "ddp";
 <edit_mode> (Beginning="0" | Start="^" | End="\$") [Line] [Here]  =  {Esc}$1 When($2, $2,  "\$");
-Blank (back=O{down} | next=o{up}) Line                         =  {esc}$1{esc};
+Blank (back=O{down} | insert=o{up}) Line                         =  {esc}$1{esc};
 Join [(Back=Up | Next=Space)] Line                             =  {esc} When($1, {$1}) "J";
 
 # multiple line action (relative range specified)
 <relative_range_actions> := (
     Change="c{enter}" | Kill="d{enter}" | Copy="y{enter}" | 
     Move to="m" | Copy to="co" | copy here="co-1{enter}" | 
-    Duplicate="yyp{enter}" | Start="\^{enter}" | End="\${enter}" | 
-    indent=">{enter}" | reverse indent="<{enter}" | Sub="s///gc{Left_4}" | 
-    Comment="TComment{enter}"
+    Duplicate="yyp{enter}" | indent=">{enter}" | reverse indent="<{enter}" | 
+    Sub="s///gc{Left_4}" | Comment="TComment{enter}"
 );
 <relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc}":"$2"1$1";
 <relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+" Eval($2-1) "$1"; 
@@ -78,7 +77,7 @@ Join [(Back=Up | Next=Space)] Line                             =  {esc} When($1,
 
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
-Flow (Start="gg" | End="G") [<insert>]                      =  {Esc}"$1" Wait(20) "$2";
+Flow (Start="gg" | Append="G") [<insert>]                      =  {Esc}"$1" Wait(20) "$2";
 <edit_mode> (Flow Here=".,\$" | Flow All="0,\$" | Back Flow Here="0,.")   =  {Esc}":$2$1"{Enter};
 
 # other rule specifications for text editing
@@ -116,14 +115,16 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
 <line_mod> := (
     Insert="zzI" | Append="zzA" | Sub=":s///{Left_2}" |
     Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz" |
-    beginning="20l" | middle="40l" | end="60l" |
+    beginning="20li" | middlie="40li" | end="60li" |
+    insert back="zzO" | insert="zzo" | 
     # For the following commands we want to perform actions in place, 
     # IE. returns to original line (mark "v").
     Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" |
     Copy=":.y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
     Move to=":.m" | Copy to=":.co" | copy here=":.y{enter}" "'v" "p" | 
     indent=":>{enter}" "'v"| reverse indent=":<{enter}" "'v"| 
-    Comment="TComment{enter}" "'v"
+    Comment=":TComment{enter}" "'v" |
+    Blank back="O{esc}" "'v" | Blank insert="o{esc}" "'v"
 );
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
 line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
@@ -178,7 +179,7 @@ Insert space                               =  {Esc}"i"{space}{esc};
 #insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":TComment "{enter}$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
 #Begin comment                              =  {Esc}"i/* ";
-End comment                                =  {Esc}"i */"{enter};
+Append comment                                =  {Esc}"i */"{enter};
 #Begin long comment                         =  {Esc}"i#"{esc}"ib"{space};
 #End long comment                           =  {Esc}"i#"{esc}"ie"{enter};
 Insert line break                          =  {Esc}"i"{enter};
