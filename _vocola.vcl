@@ -212,15 +212,17 @@ launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 #
 # Tan custom commands
 
-#controlPanel() := SendSystemKeys({Win}) "Control Panel" Wait(500) {enter_2}
+# bring up Control Panel main menu, select from start menu using directional keys
+# rather than typing because timing is more reliable
 controlPanel() := SendSystemKeys({Win}) {Right} {Up_4} {enter}
                   WaitForWindow("*Control Panel*","", 7000);
+# selects sound option from Control Panel main menu, select first item beginning
+# with "s". long wait after bringing up Control Panel to allow items to display.
 soundControl() := 
-    #controlPanel() Wait(200) {Right_2} Wait(200) {s} {enter} WaitForWindow("Sound","",5000);
-    controlPanel() Wait(2000) {s} {enter} WaitForWindow("Sound","",7000);
-#levelAdjust(deviceindex) := soundControl() Wait(500) {Down_$deviceindex} Wait(50)
-levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} Wait(50)
-                            {Alt+p} Wait(50) {Ctrl+Tab};
+    controlPanel() Wait(1000) {s} {enter} WaitForWindow("Sound","",7000);
+
+# bring up volume control of the specified device
+levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} {Alt+p} {Ctrl+Tab};
 
 <sound_device> := (headset=1 | car=2 | laptop=3);
 <up_down> := (Up="Right" | Down="Left");
@@ -228,14 +230,11 @@ levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} Wait(50)
 
 Control Panel           = controlPanel();
 Sound controls          = soundControl();
-Sound to <sound_device> = soundControl() Wait(100) {Down_$1} 
-                          Wait(50) {Tab_2} Wait(50) {enter}
-                          Wait(50) {Tab_3} Wait(50) {enter}
-                          Wait(50) {Alt+f4};
+Sound to <sound_device> = soundControl() {Down_$1} {Alt+s} Repeat(2, {Alt+f4});
 volume <up_down> <adjust_amount> <sound_device> = levelAdjust($3) {$1_$2}
-                                                  Repeat(3, {Alt+f4} Wait(100));
+                                                  Repeat(3, {Alt+f4});
 volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
-                                        Repeat(3, {Alt+f4} Wait(100));
+                                        Repeat(3, {Alt+f4});
 
 #soundControl() Wait(500) {Down_$3} 
 #volume <up_down> <sound_device> = soundControl() Wait(500) {down_$2}

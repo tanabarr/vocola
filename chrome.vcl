@@ -21,11 +21,11 @@ reload={f5};
 back page={backspace};
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} Wait(20) $1;
 # Vimium
-text box = {Esc}gi;
-show links = {Esc}f;
+text box = gi;
+show links = f;
 #address copy = y Wait(10){y};
 #address go = {Alt+d};
-copy links = {Esc}yf;
+copy links = yf;
 
 
 #             save [file] = {Ctrl+s}
