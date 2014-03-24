@@ -44,7 +44,7 @@ Back <1to30> Words                        =  {Esc}"$1b";
 ### Lines (modify parts of/whole lines)
 <line_actions> := (
     Move to=":.m" | Copy to=":.co" | Change="cc" | Kill="dd" | Copy="yy" | 
-    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="\$i" | 
+    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="i{end}{{Left}{Del}" | 
     beginning="20li" | middle="40li" | near the end="60li" | 
     New Here="i{enter}" | New insert="o" | New Back="O" | Append semicolon="\$i;" 
 );
@@ -52,10 +52,10 @@ Back <1to30> Words                        =  {Esc}"$1b";
 
 # current line action (no line number specified)
 <line_actions> Line                                             =  {Esc}$1;
-Swap [(Back=Up | Next=Space)] Line                              =  {esc} When($1, {$1}, "") "ddp";
+Swap [(Back=Up | Next=Space)] [Line]                              =  {esc} When($1, {$1}, "") "ddp";
 <edit_mode> (Beginning="0" | Start="^" | End="\$") [Line] [Here]  =  {Esc}$1 When($2, $2,  "\$");
-Blank (back=O{down} | insert=o{up}) Line                         =  {esc}$1{esc};
-Join [(Back=Up | Next=Space)] Line                             =  {esc} When($1, {$1}) "J";
+Blank (back=O{down} | insert=o{up}) [Line]                         =  {esc}$1{esc};
+Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($1, {$1}) "J";
 
 # multiple line action (relative range specified)
 <relative_range_actions> := (
@@ -113,7 +113,7 @@ GotoLineMod(line, mod) := {Esc}"mv" ":$line"{enter} Wait(500) "$mod";
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
 <line_mod> := (
-    Insert="zzI" | Append="zzA" | Sub=":s///{Left_2}" |
+    Start="zzI" | Append="zzA" | Sub=":s///{Left_2}" |
     Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz" |
     beginning="20li" | middlie="40li" | end="60li" |
     insert back="zzO" | insert="zzo" | 
@@ -136,9 +136,9 @@ line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1)
 # special navigation actions
 <navigation_actions> := (
     List changes=":changes" | back change="g;" | Undo jump="``" | 
-    Return from="''" | Set mark="mz" | Goto mark="'zi" | 
-    Append back="-\$i" | Append next="+\$i" | Beginning back="-i" | 
-    Beginning next="+i" | Match bracket="%" |
+    Return from="''" | Set mark="mz" | Goto mark="'zi" |
+    Append back="-i{end}{{Left}{Del}" | Append next="+i{end}{{Left}{Del}" |
+    Start back="-i" | Start next="+i" | Match bracket="%" |
     Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz"
 );
 <navigation_actions> = {esc}$1;
@@ -183,7 +183,7 @@ Append comment                                =  {Esc}"i */"{enter};
 #Begin long comment                         =  {Esc}"i#"{esc}"ib"{space};
 #End long comment                           =  {Esc}"i#"{esc}"ie"{enter};
 Insert line break                          =  {Esc}"i"{enter};
-Line comment                               =  {Esc}"i#"{esc}"il"{enter};
+insert comment                               =  {Esc}"i#"{esc}"il"{enter};
 Double slash backslash                     =  {Esc}"\/\/";
 reference                                  =  "-" Wait(500) ">";
 Function definition                        =  {Esc}{Right}"idef ():" {Left_3};
@@ -253,7 +253,7 @@ comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;
 <comment_type> := (
     frame=fr | function=fu | method=me | class=cl | 
     implementation=fdi | header=fdh | source section=cs |
-    header section=hs | keyword=kc | special=sc | date=d | 
+    header section=hs | keyword=kc | special=sc | date=d |
     time=t | toggle type=x
 );
 <comment_type> comment = \c$1;
