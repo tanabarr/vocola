@@ -50,14 +50,14 @@ Hit Double       = ButtonClick(1,2);
 (Shift           = 1 | Control                   = 2 | Alt = 3) Click = ShiftKey($1) ButtonClick();
 Hit Start [Menu] = SendSystemKeys( {Ctrl+Esc} );
 
-### Straight mouse grid commands. (See documentation in utilities.vch)
+## Straight mouse grid commands. (See documentation in utilities.vch)
 
 include utilities.vch;
 <n> := 0..30;
 
-#<n> <n> Go    = moveTo($2, $1);
-#<n> <n> Touch =  touch($2, $1);
-#<n> <n> Drag  = dragTo($2, $1);
+<n> <n> Go    = moveTo($2, $1);
+<n> <n> Touch =  touch($2, $1);
+<n> <n> Drag  = dragTo($2, $1);
 #<n> <n> Paste =  touch($2, $1) {Ctrl+v};
 
 <upDown>    := (  Up='-' |  Down='');
@@ -244,4 +244,5 @@ volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
 # ---------------------------------------------------------------------------
 # global text shortcuts
 
+(vim | bash) config                   = ".$1rc";
 Short date separator = "----{enter}14" Repeat(2,{Left});
