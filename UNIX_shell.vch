@@ -11,10 +11,10 @@ SHELL(pathname) := Replace($pathname, " ", "\ ");
 ##
 <common_actions> := (edit="vim" | source="source");
 
-<common_actions> (vim | bash) config              = {Esc}"i$1 ~/.$2rc"{Enter};
+<common_actions> (vim | bash) config              = "$1 ~/.$2rc"{Enter};
 bash history                 = {Ctrl+r};
-break                        = {Esc}{Ctrl+c};
-break end of file                        = {Esc}{Ctrl+d};
+break                        = {Ctrl+c};
+break end of file                        = {Ctrl+d};
 escape process         = {esc}{ctrl+z};
 (foreground="fg" | background="bg") process =
     $1{enter};
