@@ -44,7 +44,7 @@ Back <1to30> Words                        =  {Esc}"$1b";
 ### Lines (modify parts of/whole lines)
 <line_actions> := (
     Move to=":.m" | Copy to=":.co" | Change="cc" | Kill="dd" | Copy="yy" | 
-    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="i{end}{{Left}{Del}" | 
+    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="i{end}{Left}{Del}" | 
     beginning="20li" | middle="40li" | near the end="60li" | 
     New Here="i{enter}" | New insert="o" | New Back="O" | Append semicolon="\$i;" 
 );
@@ -60,12 +60,12 @@ Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($
 # multiple line action (relative range specified)
 <relative_range_actions> := (
     Change="c{enter}" | Kill="d{enter}" | Copy="y{enter}" | 
-    Move to="m" | Copy to="co" | copy here="co-1{enter}" | 
+    Move to="m" | Copy to="co" | copy here="co-1{enter}" |
     Duplicate="yyp{enter}" | indent=">{enter}" | reverse indent="<{enter}" | 
     Sub="s///gc{Left_4}" | Comment="TComment{enter}"
 );
 <relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc}":"$2"1$1";
-<relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+" Eval($2-1) "$1"; 
+<relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+" Eval($2-1) "$1";
 <relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":-$2,-1$1"; 
 
 # multiple line action with range specified
@@ -116,7 +116,7 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     Start="zzI" | Append="zzA" | Sub=":s///{Left_2}" |
     Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz" |
     beginning="20li" | middlie="40li" | end="60li" |
-    insert back="zzO" | insert="zzo" | 
+    New back="zzO" | insert="zzo" | 
     # For the following commands we want to perform actions in place, 
     # IE. returns to original line (mark "v").
     Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" |
