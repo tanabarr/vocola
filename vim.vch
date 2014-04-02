@@ -61,7 +61,7 @@ Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($
 <relative_range_actions> := (
     Change="c{enter}" | Kill="d{enter}" | Copy="y{enter}" | 
     Move to="m" | Copy to="co" | copy here="co-1{enter}" |
-    Duplicate="yyp{enter}" | indent=">{enter}" | reverse indent="<{enter}" |
+    Duplicate="yyp{enter}" | indent=">{enter}g;" | reverse indent="<{enter}g;" |
     Sub="s///gc{Left_4}" | Comment="TComment{enter}" |
     Start="{enter}i" | Append="{enter}i{end}" 
 );
