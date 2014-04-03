@@ -246,3 +246,4 @@ volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
 
 (vim | bash) config                   = ".$1rc";
 Short date separator = "----{enter}14" Repeat(2,{Left});
+python extension = ".py ";

@@ -190,7 +190,7 @@ reference                                  =  "-" Wait(500) ">";
 Function definition                        =  {Esc}{Right}"idef ():" {Left_3};
 Function definition <_anything>            =  {Esc}{Right}"idef $1():" {Left_2};
 Show Help                                  =  {Esc}":help ";
-Set setting                                =  {Esc}":set ";
+Set setting [(paste="paste{enter}")]                                =  {Esc}":set $1";
 Set dark background =  {Esc}":set bg=dark"{enter};
 Set light background =  {Esc}":set bg=light"{enter};
 reload vim config = {esc}":source ~/.vimrc"{enter};
