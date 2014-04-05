@@ -210,7 +210,7 @@ back buffer                  =  {Esc}":bp"{Enter};
 Close buffer                     =  {Esc}":bd"{Enter};
 Next buffer                      =  {Esc}":bn"{Enter};
 Switch buffer                    =  {Esc}":b#"{Enter};
-Show buffers                     =  {Esc}":buffers"{enter};
+List buffers                     =  {Esc}":buffers"{enter};
 numbered buffer <1to30>          =  {Esc}":b$1"{enter};
 
 # tab navigation
