@@ -11,3 +11,4 @@ Search for <_anything>	= {Ctrl+l} $1 {Enter};
 #When($1, {Ctrl+$1}, {Ctrl+Right});
 (play | pause) =  " ";
 volume (Up | Down) = {Ctrl+$1};
+large artwork toggle = {alt+v}l;
