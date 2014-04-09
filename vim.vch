@@ -53,7 +53,7 @@ Back <1to30> Words                        =  {Esc}"$1b";
 # current line action (no line number specified)
 <line_actions> Line                                             =  {Esc}$1;
 Swap [(Back=Up | Next=Space)] [Line]                              =  {esc} When($1, {$1}, "") "ddp";
-<edit_mode> (Beginning="0" | Start="^" | End="\$") [Line] [Here]  =  {Esc}$1 When($2, $2,  "\$");
+<edit_mode> (Beginning="0" | Start="^" | End="\$") [Line] [Here]  =  {Esc}{Right}$1 When($2, $2,  "\$");
 Blank (back=O{down} | insert=o{up}) [Line]                         =  {esc}$1{esc};
 Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($1, {$1}) "J";
 
