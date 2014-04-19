@@ -19,7 +19,7 @@ escape process         = {esc}{ctrl+z};
 (foreground="fg" | background="bg") process =
     $1{enter};
 double dash                  = "--";
-Bash Tag File Update         =
+Bash Update Tag File         =
     "ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
 make tar                     = "tar -cf ";
 extract tar                  = "tar -xf ";
@@ -40,6 +40,7 @@ Django (sink=syncdb|run=runserver) = "python manage.py $1{enter}";
 pip (freeze|completion|install|list|help) = "pip $1";
 pip option (bash|upgrade|outdated|local|no index="no-index"|find links="find-links") = " --$1 ";
 change to (home="~/"|root="/") = "cd $1{enter}";
+network stats = "netstat -nl{enter}";
 
 ##
 ## Directory information/listing commands

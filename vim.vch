@@ -194,6 +194,7 @@ Set setting [(paste="paste{enter}")]                                =  {Esc}":se
 Set dark background =  {Esc}":set bg=dark"{enter};
 Set light background =  {Esc}":set bg=light"{enter};
 reload vim config = {esc}":source ~/.vimrc"{enter};
+run this [(now={enter})] = {esc}":!./% $1";
 
 # window navigation
 ## move created split one page up, return to top of original page in the right split
