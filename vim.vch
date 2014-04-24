@@ -231,7 +231,7 @@ Vim Tag Stack={esc}":tags{enter}";
 #Vim Tag <tab_actions>               =  {Esc}$1;
 
 # plug-in actions
-Vim Folds                            =  {Esc}{ctrl+f};
+Vim Folds (open=ctrl|close=shift)    =  {Esc}{$1+f};
 Vim show Taglist                     =  {Esc}""{ctrl+g};
 Vim Align                            =  {Esc}":Align ";
 Vim Align <key>                      =  {Esc}":Align $1"{Left_7};
