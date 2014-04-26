@@ -1,5 +1,10 @@
 # Voice mappings for vim (enabled applications )
 # 051213: tan modified
+# 260414: tan - changes for compatibility with intellij IDEA vim plug-in
+#               : inserting "Wait(200)" between ":" and Ex cmds
+#               : using "Repeat(..)" for multiple undo/redo actions instead of the action prefixed
+#                 with a number of repeats
+#               : keep core vim 7 commands and move plug-in commands to separate header file
 # vim.vch
 
 include keys.vch;
@@ -43,8 +48,8 @@ Back <1to30> Words                        =  {Esc}"$1b";
 
 ### Lines (modify parts of/whole lines)
 <line_actions> := (
-    Move to=":.m" | Copy to=":.co" | Change="cc" | Kill="dd" | Copy="yy" | 
-    Sub=":.s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="i{end}" | 
+    Move to=":" Wait(200) ".m" | Copy to=":" Wait(200) ".co" | Change="cc" | Kill="dd" | Copy="yy" | 
+    Sub=":" Wait(200) ".s///{Left_2}" | Duplicate="yyp" | Start="\^i" | Append="i{end}" | 
     beginning="20li" | middle="40li" | near the end="60li" | 
     New Here="i{enter}" | New insert="o" | New Back="O" | Append semicolon="\$i;" 
 );
@@ -65,41 +70,43 @@ Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($
     Sub="s///gc{Left_4}" | Comment="TComment{enter}" |
     Start="{enter}i" | Append="{enter}i{end}" 
 );
-<relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc}":"$2"1$1";
-<relative_range_actions> 2..30 Lines                                   =  {Esc} ":.,+" Eval($2-1) "$1";
-<relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":-$2,-1$1"; 
+<relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc}":" Wait(200) ""$2"1$1";
+<relative_range_actions> 2..30 Lines                                   =  {Esc} ":" Wait(200) ".,+" Eval($2-1) "$1";
+<relative_range_actions> Back 2..30 Lines                                   =  {Esc} ":" Wait(200) "-$2,-1$1"; 
 
 # multiple line action with range specified
 <range_actions> := (
     Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
     Sub="s///" | copy here="co." | comment="TComment"
 );
-<range_actions> Range = {esc}":$1"{Home};
+<range_actions> Range = {esc}":" Wait(200) "$1"{Home};
 
 ### Entire "Flow"
 <insert> := (insert=I | append=A);
 Flow (Start="gg" | Append="G") [<insert>]                      =  {Esc}"$1" Wait(20) "$2";
-<edit_mode> (Flow Here=".,\$" | Flow All="0,\$" | Back Flow Here="0,.")   =  {Esc}":$2$1"{Enter};
+<edit_mode> (Flow Here=".,\$" | Flow All="0,\$" | Back Flow Here="0,.")   =  {Esc}":" Wait(200) "$2$1"{Enter};
 
-# other rule specifications for text editing
-(Indent=">" | reverse indent="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":$1"$2), {esc}":$1"$2);
+# other grammar macro specifications for text editing commands
+(Indent=">" | reverse indent="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":" Wait(200) "$1"$2), {esc}":" Wait(200) "$1"$2);
 
 <sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
-(sub | substitute) <sub_action>       =  {Esc}":$2///gc"Repeat(4, {Left});
+(sub | substitute) <sub_action>       =  {Esc}":" Wait(200) "$2///gc"Repeat(4, {Left});
+
+edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, Repeat($2,"$1"), $1);
+
+#(change=v) (inner=i|outer=a) (brackets="(") = {esc}"0T$3{Right_2}" "vi$3");
+
+# using macro storage register "z"
+Start macro = {esc}qz;
+Repeat macro [1..9 times] = {esc}"@z";
 
 <text_actions> := (
     Paste=p | Paste Back=P | Insert=i | Append=a | Substitute=s | Replace=R | 
-    diff push=dp | diff pull=do | diff next="\]c" | diff back="\[c" 
+    diff push=dp | diff pull=do | diff next="\]c" | diff back="\[c" |
+    Format=Q | Normal mode= | visual mode={ctrl+v} 
 );
 <text_actions> = {esc}$1;
 
-# standard actions
-<standard_actions> := (
-    Start macro=qz | Repeat macro=@z{Enter} | Format=Q | Normal mode= | 
-    visual mode={ctrl+v} 
-);
-<standard_actions> = {esc}$1;
-edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, $2$1, 1$1);
 
 #*-------------------------------------------- */ 
 #  navigation specific commands
@@ -110,21 +117,25 @@ edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, $2$1, 1$1);
 $set numbers 0;
 ## go to absolute line number $line:
 ## vim mark line "v" incase we want to return to the original line
-GotoLineMod(line, mod) := {Esc}"mv" ":$line"{enter} Wait(500) "$mod"; 
+###test
+test line <0to9> = {esc} ":"  Wait(200) "$1" {enter};
+
+
+GotoLineMod(line, mod) := {Esc}"mv" ":" Wait(200) "$line"{enter} Wait(200) "$mod"; 
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
 <line_mod> := (
-    Start="zzI" | Append="zzA" | Sub=":s///{Left_2}" |
+    Start="zzI" | Append="zzA" | Sub=":" Wait(200) "s///{Left_2}" |
     Scroll [to] bottom="zb" | Scroll [to] top="zt" | Scroll [to] middle="zz" |
     beginning="20li" | middlie="40li" | end="60li" |
     New back="zzO" | insert="zzo" | 
     # For the following commands we want to perform actions in place, 
     # IE. returns to original line (mark "v").
-    Change=":.c{enter}" "'v" | Kill=":.d{enter}" "'v" |
-    Copy=":.y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
-    Move to=":.m" | Copy to=":.co" | copy here=":.y{enter}" "'v" "p" | 
-    indent=":>{enter}" "'v"| reverse indent=":<{enter}" "'v"| 
-    Comment=":TComment{enter}" "'v" |
+    Change=":" Wait(200) ".c{enter}" "'v" | Kill=":" Wait(200) ".d{enter}" "'v" |
+    Copy=":" Wait(200) ".y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
+    Move to=":" Wait(200) ".m" | Copy to=":" Wait(200) ".co" | copy here=":" Wait(200) ".y{enter}" "'v" "p" | 
+    indent=":" Wait(200) ">{enter}" "'v"| reverse indent=":" Wait(200) "<{enter}" "'v"| 
+    Comment=":" Wait(200) "TComment{enter}" "'v" |
     Blank back="O{esc}" "'v" | Blank insert="o{esc}" "'v"
 );
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
@@ -136,7 +147,7 @@ line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1)
 
 # special navigation actions
 <navigation_actions> := (
-    List changes=":changes" | back change="g;" | Undo jump="``" | 
+    List changes=":" Wait(200) "changes" | back change="g;" | Undo jump="``" | 
     Return from="''" | Set mark="mz" | Goto mark="'zi" |
     Append back="-i{end}{{Left}{Del}" | Append next="+i{end}{{Left}{Del}" |
     Start back="-i" | Start next="+i" | Match bracket="%" |
@@ -155,19 +166,19 @@ Search go <_anything>                      =  {Esc}"/\c$1"{enter};
 clear Search                               =  {Esc}"/zzz"{enter};
 
 # commandline actions
-Make                                       =  {Esc}":make";
-Vim Update Tag File                        =  {Esc}":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
-List errors                                =  {Esc}":clist";
-Next error                                 =  {Esc}":cn";
-back error                             =  {Esc}":cp";
-Save file                                  =  {Esc}":w"{Enter};
-Close file                                 =  {Esc}":q"{Enter};
-Save and close file                        =  {Esc}":x"{Enter};
-#confirm force close definite              =  {Esc}":q!";
-back command [1..9]                  =  When($1, Repeat($1, {Esc}":"{up}{enter}), {Esc}":"{up});
-Edit another                               =  {Esc}":e ";
-File browser                               =  {Esc}":e."{Enter};
-vim diff split  = {esc}":vert diffsplit ";
+Make                                       =  {Esc}":" Wait(200) "make";
+Vim Update Tag File                        =  {Esc}":" Wait(200) "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+List errors                                =  {Esc}":" Wait(200) "clist";
+Next error                                 =  {Esc}":" Wait(200) "cn";
+back error                             =  {Esc}":" Wait(200) "cp";
+Save file                                  =  {Esc}":" Wait(200) "w"{Enter};
+Close file                                 =  {Esc}":" Wait(200) "q"{Enter};
+Save and close file                        =  {Esc}":" Wait(200) "x"{Enter};
+#confirm force close definite              =  {Esc}":" Wait(200) "q!";
+back command [1..9]                  =  When($1, Repeat($1, {Esc}":" Wait(200) ""{up}{enter}), {Esc}":" Wait(200) ""{up});
+Edit another                               =  {Esc}":" Wait(200) "e ";
+File browser                               =  {Esc}":" Wait(200) "e."{Enter};
+vim diff split  = {esc}":" Wait(200) "vert diffsplit ";
 
 # text shortcuts
 #Def include                                =  {Esc}"i#include ";
@@ -177,7 +188,7 @@ vim diff split  = {esc}":vert diffsplit ";
 #Equals                                    =  {Esc}i{right}= ";
 #Hash                                      =  {Esc}"i#"{esc};
 Insert space                               =  {Esc}"i"{space}{esc};
-#insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":TComment "{enter}$1;
+#insert comment [(escape={Esc} | insert="i" | todo="iTODO: ")]  =  {Esc}":" Wait(200) "TComment "{enter}$1;
 Insert space after                         =  {Esc}"i"{Right}{space}{esc};
 #Begin comment                              =  {Esc}"i/* ";
 Append comment                                =  {Esc}"i */"{enter};
@@ -189,58 +200,58 @@ Double slash backslash                     =  {Esc}"\/\/";
 reference                                  =  "-" Wait(500) ">";
 Function definition                        =  {Esc}{Right}"idef ():" {Left_3};
 Function definition <_anything>            =  {Esc}{Right}"idef $1():" {Left_2};
-Show Help                                  =  {Esc}":help ";
-Set setting [(paste="paste{enter}")]                                =  {Esc}":set $1";
-Set dark background =  {Esc}":set bg=dark"{enter};
-Set light background =  {Esc}":set bg=light"{enter};
-reload vim config = {esc}":source ~/.vimrc"{enter};
-run this [(now={enter})] = {esc}":!./% $1";
+Show Help                                  =  {Esc}":" Wait(200) "help ";
+Set setting [(paste="paste{enter}")]                                =  {Esc}":" Wait(200) "set $1";
+Set dark background =  {Esc}":" Wait(200) "set bg=dark"{enter};
+Set light background =  {Esc}":" Wait(200) "set bg=light"{enter};
+reload vim config = {esc}":" Wait(200) "source ~/.vimrc"{enter};
+run this [(now={enter})] = {esc}":" Wait(200) "!./% $1";
 
 # window navigation
 ## move created split one page up, return to top of original page in the right split
-Split vertical                   =  {Esc}":vsp"{Enter}{Shift+h}{PgUp}
+Split vertical                   =  {Esc}":" Wait(200) "vsp"{Enter}{Shift+h}{PgUp}
                                     {Ctrl+w}"l";
 <window_action> := (left=h | right=l | up=k | down=j | next=w | close=c );
 Vim Window <window_action> = {esc}{ctrl+w}"$1";
-Vim Window crop            = {Esc}":only"{Enter};
-Vim Window make fat        = {esc}":vertical resize +15"{enter};
-Vim Window make thin       = {esc}":vertical resize -15"{enter};
+Vim Window crop            = {Esc}":" Wait(200) "only"{Enter};
+Vim Window make fat        = {esc}":" Wait(200) "vertical resize +15"{enter};
+Vim Window make thin       = {esc}":" Wait(200) "vertical resize -15"{enter};
 
 # buffer navigation
-back buffer                  =  {Esc}":bp"{Enter};
-Close buffer                     =  {Esc}":bd"{Enter};
-Next buffer                      =  {Esc}":bn"{Enter};
-Switch buffer                    =  {Esc}":b#"{Enter};
-List buffers                     =  {Esc}":buffers"{enter};
-numbered buffer <1to30>          =  {Esc}":b$1"{enter};
+back buffer                  =  {Esc}":" Wait(200) "bp"{Enter};
+Close buffer                     =  {Esc}":" Wait(200) "bd"{Enter};
+Next buffer                      =  {Esc}":" Wait(200) "bn"{Enter};
+Switch buffer                    =  {Esc}":" Wait(200) "b#"{Enter};
+List buffers                     =  {Esc}":" Wait(200) "buffers"{enter};
+numbered buffer <1to30>          =  {Esc}":" Wait(200) "b$1"{enter};
 
 # tab navigation
 <tab_actions> := (back=p | Close=c | Next=n | List=s | Last=l | First=fir);
-<tab_actions> tab                 = {Esc}":tab$1"{Enter};
-switch tab <1to30>                   = {Esc}":tabn $1"{enter};
+<tab_actions> tab                 = {Esc}":" Wait(200) "tab$1"{Enter};
+switch tab <1to30>                   = {Esc}":" Wait(200) "tabn $1"{enter};
 
 # tab navigation
-#<tag_actions> := (back=":tN{enter}" | Jump="{Ctrl+]}" | Next=":tn{enter}" | 
-#                  Match=":ts{enter}" | Return="{Ctrl+t}" | Stack=":tags{enter}");
-vim Tag back={esc}":tN{enter}";
+#<tag_actions> := (back=":" Wait(200) "tN{enter}" | Jump="{Ctrl+]}" | Next=":" Wait(200) "tn{enter}" | 
+#                  Match=":" Wait(200) "ts{enter}" | Return="{Ctrl+t}" | Stack=":" Wait(200) "tags{enter}");
+vim Tag back={esc}":" Wait(200) "tN{enter}";
 vim Tag Jump={esc}"{Ctrl+]}";
-vim Tag Next={esc}":tn{enter}";
-Vim Tag Match={esc}":ts{enter}";
+vim Tag Next={esc}":" Wait(200) "tn{enter}";
+Vim Tag Match={esc}":" Wait(200) "ts{enter}";
 Vim Tag Return={esc}"{Ctrl+t}";
-Vim Tag Stack={esc}":tags{enter}";
+Vim Tag Stack={esc}":" Wait(200) "tags{enter}";
 #Vim Tag <tab_actions>               =  {Esc}$1;
 
 # plug-in actions
 Vim Folds (open=ctrl|close=shift)    =  {Esc}{$1+f};
 Vim show Taglist                     =  {Esc}""{ctrl+g};
-Vim Align                            =  {Esc}":Align ";
-Vim Align <key>                      =  {Esc}":Align $1"{Left_7};
+Vim Align                            =  {Esc}":" Wait(200) "Align ";
+Vim Align <key>                      =  {Esc}":" Wait(200) "Align $1"{Left_7};
 ## omnicomplete
 complete                             =  {ctrl+x}{ctrl+o};
 local complete                       =  {ctrl+p};
-Remove preview = {esc}{ctrl+w}{Up}":q{enter}";
+Remove preview = {esc}{ctrl+w}{Up}":" Wait(200) "q{enter}";
 # UNITE plug-in, mappings in .vimrc
-#Vim Unite                           =  {Esc}":Unite file_rec buffer"{enter};
+#Vim Unite                           =  {Esc}":" Wait(200) "Unite file_rec buffer"{enter};
 Unite files                          =  {Esc}"\f";
 Unite files recursive                =  {Esc}"\t";
 Unite recent                         =  {Esc}"\m";
@@ -250,7 +261,7 @@ Unite buffer = {Esc}"\e";
 Unite insert = {tab} {Down_3} {enter};
 
 # TComment, note: could also be done with csupport
-comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":TComment" $1;       
+comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":" Wait(200) "TComment" $1;       
 # csupport (hotkey sections: comment, statements, preprocessor, idioms, 
 #           snippets, c++, run)
 <comment_type> := (
@@ -281,12 +292,12 @@ start (brace="{{enter}" | comment="/*") [(block={enter})] = {esc}{i}"$1$2";
 <preprocessor_type> preprocessor = \p$1;
 
 # NeoBundle
-Bundle command (Install | Clean | List)            =  {esc}":NeoBundle$1"{enter};
+Bundle command (Install | Clean | List)            =  {esc}":" Wait(200) "NeoBundle$1"{enter};
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";
 setting based                        = "{Esc}:set paste{enter}";
-Edit vim RC                     = {Esc} ":e ~\.vimrc" {Enter};
-Reload                          = {Esc} ":source \$MYVIMRC" {Enter};
+Edit vim RC                     = {Esc} ":" Wait(200) "e ~\.vimrc" {Enter};
+Reload                          = {Esc} ":" Wait(200) "source \$MYVIMRC" {Enter};
 
 # histories
 command history = {Esc}"q:";
