@@ -12,7 +12,6 @@ include keys.vch;
 # common ranges
 <0to9> := 0..9;
 <2to9> := 2..9;
-<1to20> := 1..20;
 <1to30> := 1..30;
 
 # vim versions of text editing Mappings established in vocola general commands
@@ -94,11 +93,12 @@ Flow (Start="gg" | Append="G") [<insert>]                      =  {Esc}"$1" Wait
 
 edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, Repeat($2,"$1"), $1);
 
-#(change=v) (inner=i|outer=a) (brackets="(") = {esc}"0T$3{Right_2}" "vi$3");
+(change=v) (inner=i|outer=a) (brackets="(") = {esc}"0T$3{Right_2}" "vi$3";
 
 # using macro storage register "z"
 Start macro = {esc}qz;
-Repeat macro [1..9 times] = {esc}"@z";
+# hack to produce "@" symbol
+Repeat macro [1..9 times] = $1{shift+"'"}z;
 
 <text_actions> := (
     Paste=p | Paste Back=P | Insert=i | Append=a | Substitute=s | Replace=R | 
@@ -118,8 +118,6 @@ $set numbers 0;
 ## go to absolute line number $line:
 ## vim mark line "v" incase we want to return to the original line
 ###test
-test line <0to9> = {esc} ":"  Wait(200) "$1" {enter};
-
 
 GotoLineMod(line, mod) := {Esc}"mv" ":" Wait(200) "$line"{enter} Wait(200) "$mod"; 
 GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
@@ -167,7 +165,7 @@ clear Search                               =  {Esc}"/zzz"{enter};
 
 # commandline actions
 Make                                       =  {Esc}":" Wait(200) "make";
-Vim Update Tag File                        =  {Esc}":" Wait(200) "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."{Enter};
+Vim Update Tag File                        =  {Esc}":" Wait(200) "!ctags -R --c++-kinds=+pl --fields=+iaS --extra=+q ."{Enter};
 List errors                                =  {Esc}":" Wait(200) "clist";
 Next error                                 =  {Esc}":" Wait(200) "cn";
 back error                             =  {Esc}":" Wait(200) "cp";
@@ -241,58 +239,10 @@ Vim Tag Return={esc}"{Ctrl+t}";
 Vim Tag Stack={esc}":" Wait(200) "tags{enter}";
 #Vim Tag <tab_actions>               =  {Esc}$1;
 
-# plug-in actions
 Vim Folds (open=ctrl|close=shift)    =  {Esc}{$1+f};
-Vim show Taglist                     =  {Esc}""{ctrl+g};
-Vim Align                            =  {Esc}":" Wait(200) "Align ";
-Vim Align <key>                      =  {Esc}":" Wait(200) "Align $1"{Left_7};
-## omnicomplete
-complete                             =  {ctrl+x}{ctrl+o};
-local complete                       =  {ctrl+p};
-Remove preview = {esc}{ctrl+w}{Up}":" Wait(200) "q{enter}";
-# UNITE plug-in, mappings in .vimrc
-#Vim Unite                           =  {Esc}":" Wait(200) "Unite file_rec buffer"{enter};
-Unite files                          =  {Esc}"\f";
-Unite files recursive                =  {Esc}"\t";
-Unite recent                         =  {Esc}"\m";
-#Unite outline                       =  {Esc}"\o";
-Unite history = {Esc}"\y";
-Unite buffer = {Esc}"\e";
-Unite insert = {tab} {Down_3} {enter};
 
-# TComment, note: could also be done with csupport
-comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":" Wait(200) "TComment" $1;       
-# csupport (hotkey sections: comment, statements, preprocessor, idioms, 
-#           snippets, c++, run)
-<comment_type> := (
-    frame=fr | function=fu | method=me | class=cl | 
-    implementation=fdi | header=fdh | source section=cs |
-    header section=hs | keyword=kc | special=sc | date=d |
-    time=t | toggle type=x
-);
-<comment_type> comment = \c$1;
+### end of core vim commands ###
 
-<statement_type> := (
-    do=d | for=fo | if=if | if else=ife | else=e | while=wh | 
-    switch=s | case=c
-); 
-<statement_type> statement = \s$1;
-
-<idiom_type> := (
-    function=f | static=sf | main=m | for increment=0 | print=p | 
-    file print=fp
-); 
-<idiom_type> idiom = \i$1;
-
-start (brace="{{enter}" | comment="/*") [(block={enter})] = {esc}{i}"$1$2";
-
-<preprocessor_type> := (
-    include header=ih | include global=< | include local='"' | define=d 
-); 
-<preprocessor_type> preprocessor = \p$1;
-
-# NeoBundle
-Bundle command (Install | Clean | List)            =  {esc}":" Wait(200) "NeoBundle$1"{enter};
 # editor settings
 Nowrap                          = "{Esc}:set nowrap{enter}";
 setting based                        = "{Esc}:set paste{enter}";
@@ -303,11 +253,6 @@ Reload                          = {Esc} ":" Wait(200) "source \$MYVIMRC" {Enter}
 command history = {Esc}"q:";
 pattern match history = {Esc}"q/";
 #
-##### surplus for reference     -credit neon?
-#### Can be used instead of unimacro "brackets" if ^X characters become a problem
-###<surround> := ( par = "()" | bar = "||" | quote = "" );
-##Surround <surround> = $1{Left};
-
 ## temporary project specific macros
 histogram debug = {esc}'i#ifdef DEBUG{enter}fsp_log_debug(shared_data_p->config_p->prog_name_p, {enter}"%s: \n", __FUNCTION__);{enter}#endif' {Up}{End} Repeat(19,{Left});
 ifdef (debug="DEBUG" | trace="TRACE")                                 =  {Esc}"ddi#ifdef $1"{enter};

@@ -1,0 +1,60 @@
+### non-standard key mappings for plug-ins (installed using neobundle in .vimrc), include vim.vch first.
+# vim_plugins.vch
+
+# plug-in actions
+Vim show Taglist                     =  {Esc}""{ctrl+g};
+Vim Align                            =  {Esc}":" Wait(200) "Align ";
+Vim Align <key>                      =  {Esc}":" Wait(200) "Align $1"{Left_7};
+## omnicomplete
+complete                             =  {ctrl+x}{ctrl+o};
+local complete                       =  {ctrl+p};
+Remove preview = {esc}{ctrl+w}{Up}":" Wait(200) "q{enter}";
+# UNITE plug-in, mappings in .vimrc
+#Vim Unite                           =  {Esc}":" Wait(200) "Unite file_rec buffer"{enter};
+Unite files                          =  {Esc}"\f";
+Unite files recursive                =  {Esc}"\t";
+Unite recent                         =  {Esc}"\m";
+#Unite outline                       =  {Esc}"\o";
+Unite history = {Esc}"\y";
+Unite buffer = {Esc}"\e";
+Unite insert = {tab} {Down_3} {enter};
+
+# TComment, note: could also be done with csupport
+comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":" Wait(200) "TComment" $1;       
+# csupport (hotkey sections: comment, statements, preprocessor, idioms, 
+#           snippets, c++, run)
+<comment_type> := (
+    frame=fr | function=fu | method=me | class=cl | 
+    implementation=fdi | header=fdh | source section=cs |
+    header section=hs | keyword=kc | special=sc | date=d |
+    time=t | toggle type=x
+);
+<comment_type> comment = \c$1;
+
+<statement_type> := (
+    do=d | for=fo | if=if | if else=ife | else=e | while=wh | 
+    switch=s | case=c
+); 
+<statement_type> statement = \s$1;
+
+<idiom_type> := (
+    function=f | static=sf | main=m | for increment=0 | print=p | 
+    file print=fp
+); 
+<idiom_type> idiom = \i$1;
+
+start (brace="{{enter}" | comment="/*") [(block={enter})] = {esc}{i}"$1$2";
+
+<preprocessor_type> := (
+    include header=ih | include global=< | include local='"' | define=d 
+); 
+<preprocessor_type> preprocessor = \p$1;
+
+# NeoBundle
+Bundle command (Install | Clean | List)            =  {esc}":" Wait(200) "NeoBundle$1"{enter};
+
+##### surplus for reference     -credit neon?
+#### Can be used instead of unimacro "brackets" if ^X characters become a problem
+###<surround> := ( par = "()" | bar = "||" | quote = "" );
+##Surround <surround> = $1{Left};
+
