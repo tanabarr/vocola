@@ -248,6 +248,7 @@ Nowrap                          = "{Esc}:set nowrap{enter}";
 setting based                        = "{Esc}:set paste{enter}";
 Edit vim RC                     = {Esc} ":" Wait(200) "e ~\.vimrc" {Enter};
 Reload                          = {Esc} ":" Wait(200) "source \$MYVIMRC" {Enter};
+all buffers     = {esc}":bufdo ";
 
 # histories
 command history = {Esc}"q:";
