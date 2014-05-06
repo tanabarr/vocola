@@ -248,3 +248,5 @@ volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
 Short date separator = "----{enter}14" Repeat(2,{Left});
 python extension = ".py ";
 insert signature = "{enter}{enter}Regards,{enter} -- Tom --";
+text website watch series = http://watchseries.lt/serie/game_of_thrones;
+
