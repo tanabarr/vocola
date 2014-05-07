@@ -15,21 +15,24 @@ go to (
     declaration = {Ctrl+b}|
     implementation = {Ctrl+Alt+b}|
     type declaration = {Ctrl+Shift+b}|
+    usages = {Ctrl+Alt+F7}|
     action={ctrl+shift+a}
 ) = {esc} $1;
+return from jump = {ctrl+u};
 Go to (next=Right|back=Left) tab = {Alt+$1};
+symbol preview = {ctrl+y};
 
 quick definition lookup = {Ctrl+Shift+i};
-Recent files popup = {Ctrl+e};
+Recent files popup = {Ctrl+shift+e};
 File structure popup = {Ctrl+F12};
 
+charm Switch tab [1..9] = When($1, {Ctrl+Tab_$1}, {ctrl+tab});
 Show navigation bar = {Alt+Home};
 Charm back change = {Ctrl+Shift+Backspace};
 Select current file or symbol = {Alt+F1};
-return from jump = {ctrl+u};
 Hide window = {Shift+Esc};
     
-(active="shift+"|window=) close = {ctrl+$1f4};
+(tool="shift+"|window=) close = {ctrl+$1f4};
 Toggle maximizing editor = {Ctrl+Shift+F12};
 project view = {alt+1};
 
@@ -42,7 +45,6 @@ Show bookmarks = {Shift+F11};
 Find usages = {Alt+f7};
 Find usages in file = {Ctrl+F7};
 Highlight usages in file = {Ctrl+Shift+F7};
-Show usages = {Ctrl+Alt+F7};
 Rename = {Shift+F6};
 
 charm (
@@ -58,7 +60,9 @@ charm (
 ) = $1;
 
 ### editing ###
+Show possible actions = {Alt+Enter};
 complete = {ctrl+" "};
+Show error description = {Ctrl+F1};
 
 (comment="/"|expand="+"|collapse="-") line = {ctrl+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
 comment 2..20 lines = Repeat($1, Wait(200) {ctrl+"/"});
@@ -69,8 +73,6 @@ Select successively increasing code blocks = {Ctrl+w};
 Decrease current selection to previous state = {Ctrl+Shift+w};
 Select till code block (end="]"|start="[") = {Ctrl+Shift+$1};
 
-Show intention actions = {Alt+Enter};
-Show error here = {Ctrl+F1};
 Save all = {Ctrl+s};
 Inspect file = {Alt+Shift+i};
 Optimize imports = {Ctrl+Alt+o};
@@ -115,7 +117,6 @@ Add to Favorites = {Alt+Shift+f};
 Quick switch current scheme = {Ctrl+"`"};
 add item = {alt+insert};
 search everywhere = {shift}{shift};
-charm Switch tab 1..9 = Repeat($1, {Ctrl+Tab});
 clean compile files = {ctrl+shift+"#"};
 #Charm Tab (back=Left|next=Right) = {Ctrl+Alt+$1};
 
