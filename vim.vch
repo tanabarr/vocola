@@ -98,9 +98,13 @@ Flow (Start="gg" | Append="G") [<insert>]                      =  {Esc}"$1" Wait
 <sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
 (sub | substitute) <sub_action>       =  {Esc}":" Wait(200) "$2///gc"Repeat(4, {Left});
 
+# command specific for vim undo buffer
 edit (undo=u | redo={ctrl+r}) [<2to9>] = {esc} When($2, Repeat($2,"$1"), $1);
 
-(change=v) (inner=i|outer=a) (brackets="(") = {esc}"0T$3{Right_2}" "vi$3";
+# change content between two encapsulating tokens
+(change=v) (inner=i|outer=a) (
+    brackets="("|braces="{"|square brackets="["
+) = {esc}"t$3{Right 2}" Wait(200) "vi$3";
 
 # using macro storage register "z"
 Start macro = {esc}qz;
