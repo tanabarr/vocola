@@ -15,6 +15,7 @@ Context Menu                         = {Alt+f}{Down};
 #Close Window                        = {Alt+Space}c;
 #Switch to Browser                   = AppBringUp(chrome);
 
+
 (Switch|Next) View     = {Ctrl+Tab};
 (Switch|Next) View <n> = {Ctrl+Tab_$2};
 Previous View          = {Ctrl+Shift+Tab};
@@ -25,6 +26,11 @@ Back Tab  <n> = {Shift+Tab_$1};
 Page          = {PgDn};
 Page <n>      = {PgDn_$1};
 #Escape        = {Esc};
+
+### use extension keyhold (Keys)
+
+(hold|release) (shift|control=ctrl|tab|alt) button = Keys.SendInput({$2_$1});
+menu (show=hold|select=release) = Keys.SendInput({ctrl_$1}{tab_$1});
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);

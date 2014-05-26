@@ -5,12 +5,14 @@ include UNIX_shell.vch;
 
 ### seems to be pressing alt+shift rather than just alt, configure key mappings? to take this into account
 
+menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{tab_$1});
 
 ### frequently used ###
 upload to default = {ctrl+alt+shift+p};
 
 ### Navigation ###
 go to (
+    project structure = {ctrl+shift+alt+s}|
     class = {Ctrl+n}|
     file = {Ctrl+Shift+n}|
     symbol = {Ctrl+Alt+Shift+n}|
@@ -25,8 +27,7 @@ symbol preview = {ctrl+y};
 
 Recent files popup = {Ctrl+shift+e};
 File structure popup = {Ctrl+F12};
-File structure view = {Alt+7};
-project view = {alt+1};
+(structure=7|project=1) view = {alt+$1};
 Show navigation bar = {Alt+Home};
 Hide window = {Shift+Esc};
 Toggle maximizing editor = {Ctrl+Shift+F12};
@@ -51,7 +52,7 @@ Rename = {Shift+F6};
 
 charm (
     hide tools={ctrl+shift+f12}|
-    settings={ctrl+shift+f11}|
+    settings={ctrl+alt+s}|
     run console={ctrl+shift+f2}|
     manage tasks={ctrl+shift+","}|
     last tool={f12}|
@@ -62,7 +63,7 @@ charm (
 ) = $1;
 
 ### editing ###
-Show possible actions = {Alt+Enter};
+Show possible actions = {Alt+Enter} Wait(200 ) {esc};
 complete = {ctrl+" "};
 Show error description = {Ctrl+F1};
 
