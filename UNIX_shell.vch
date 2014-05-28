@@ -33,7 +33,7 @@ change absolute directory = "cd -P .{enter}";
 present working directory = "pwd";  
 vim diff = "vimdiff";
 cygwin password = "^2A";
-(sub|SVM=svn) (checkout|diff|commit|update|remove|log=log_grep|start bug=start_bug|status) = "$1 $2 ";
+(sub|SVM=svn) (checkout|diff|commit|update|remove|checkout bug=co -b|log=log_grep|start bug=start_bug|status) = "$1 $2 ";
 start environment 1..5 = "source \$ENV$1/bin/activate{enter}";
 stop environment = "deactivate{enter}"; 
 Django (shell|database shell=dbshell|sink=syncdb|run=runserver) = "python manage.py $1{enter}";

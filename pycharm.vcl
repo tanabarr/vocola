@@ -3,16 +3,18 @@ include Unimacro.vch;
 include vim.vch;
 include UNIX_shell.vch;
 
-### seems to be pressing alt+shift rather than just alt, configure key mappings? to take this into account
+menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{tab_$1});
 
 
 ### frequently used ###
-upload to default = {ctrl+alt+shift+p};
+update [(from|to)] (version control="#"|default="p") = {ctrl+alt+shift+$2};
+commit [to] version control = {ctrl+alt+k};
 
 ### Navigation ###
 go to (
     class = {Ctrl+n}|
     file = {Ctrl+Shift+n}|
+    file structure = {Ctrl+Alt+Shift+s}|
     symbol = {Ctrl+Alt+Shift+n}|
     declaration = {Ctrl+b}|
     implementation = {Ctrl+Alt+b}|
@@ -20,16 +22,16 @@ go to (
     usages = {Ctrl+Alt+F7}|
     action={ctrl+shift+a}
 ) = {esc} $1;
-return from jump = {ctrl+u}; # ctrl+alt+left?
+return from jump = {ctrl+u};
 symbol preview = {ctrl+y};
 
 Recent files popup = {Ctrl+shift+e};
 File structure popup = {Ctrl+F12};
 File structure view = {Alt+7};
-project view = {alt+1};
+(project=1|structure=7) view = {alt+$1};
 Show navigation bar = {Alt+Home};
 Hide window = {Shift+Esc};
-Toggle maximizing editor = {Ctrl+Shift+F12};
+hide (all=a|side=s) tool Windows = {Ctrl+Shift+F12} {ctrl+$1};
 (tool="shift+"|window=) close = {ctrl+$1f4};
 quick definition lookup = {Ctrl+Shift+i};
 
@@ -66,8 +68,8 @@ Show possible actions = {Alt+Enter};
 complete = {ctrl+" "};
 Show error description = {Ctrl+F1};
 
-(comment="/"|expand="+"|collapse="-") line = {ctrl+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
-comment 2..20 lines = Repeat($1, Wait(200) {ctrl+"/"});
+(expand="+"|collapse="-") line = {ctrl+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
+comment [the] next 1..20 lines = Repeat($1, Wait(200) {ctrl+"/"});
 surround with = {ctrl+alt+t};
 (replace normal="ctrl+alt+shift+r"|find in path="ctrl+shift+F"|replace in path="ctrl+shift+R"|structure find=|structure replace=) = {$1};
 
@@ -130,7 +132,7 @@ External Doc = {Shift+F1};
 Generate code = {Alt+Insert};
 Override methods = {Ctrl+o};
 Reformat code = {Ctrl+Alt+l};
-Auto-indent line = {Ctrl+Alt+i};
+Auto indent line = {Ctrl+Alt+i};
 Copy to clipboard = {Ctrl+c};
 Paste from clipboard = {Ctrl+v};
 Paste from recent buffers = {Ctrl+Shift+v};

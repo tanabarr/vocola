@@ -70,7 +70,7 @@ Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($
     Duplicate="yyp" | indent=">>g;" | reverse indent="<<g;"
 );
 <relative_range_commands> := (
-    Sub="s///gc{Left_4}" | Comment="TComment" |
+    Sub="s///gc{Left_4}" | # Comment="TComment" |
     Start="{enter}i" | Append="{enter}i{end}" 
 );
 <relative_range_actions> (Next="+" | Back="-") Line                          =  {Esc} Wait(200) "$2" Wait(200) "$1";
@@ -83,7 +83,7 @@ Join [(Back=Up | Next=Space)] [Line]                             =  {esc} When($
 # multiple line action with range specified
 <range_actions> := (
     Move to="m" | Copy to="co" | Change="c" | Kill="d" | Copy="y" | 
-    Sub="s///" | copy here="co." | comment="TComment"
+    Sub="s///" | copy here="co." #| comment="TComment"
 );
 <range_actions> Range = {esc}":" Wait(200) "$1" Wait(200) {Home};
 
@@ -144,7 +144,7 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     Copy=":" Wait(200) ".y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
     Move to=":" Wait(200) ".m" | Copy to=":" Wait(200) ".co" | copy here=":" Wait(200) ".y{enter}" "'v" "p" | 
     indent=":" Wait(200) ">{enter}" "'v"| reverse indent=":" Wait(200) "<{enter}" "'v"| 
-    Comment=":" Wait(200) "TComment{enter}" "'v" |
+    #Comment=":" Wait(200) "TComment{enter}" "'v" |
     Blank back="O{esc}" "'v" | Blank insert="o{esc}" "'v"
 );
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
@@ -170,7 +170,7 @@ Page <top_bottom>               = {Esc}$1;
 Back till <key>                            =  {Esc}"T$1";
 Till <key>                                 =  {Esc}"t$1";
 Till next                                =  {Esc}";";
-Search <_anything>                         =  {Esc}"/\c$1";
+Search <_anything>                         =  {Esc}"/" Wait(200) "\c$1";
 Search go <_anything>                      =  {Esc}"/\c$1"{enter};
 clear Search                               =  {Esc}"/zzz"{enter};
 

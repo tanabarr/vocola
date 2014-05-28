@@ -21,6 +21,22 @@ Unite insert = {tab} {Down_3} {enter};
 
 # TComment, note: could also be done with csupport
 comment (range=Repeat(9, {Left}) | line={enter}) = {esc}":" Wait(200) "TComment" $1;       
+GotoLineMod(line, mod) := {Esc}"mv" ":" Wait(200) "$line"{enter} Wait(200) "$mod"; 
+GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
+    GotoLineMod(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+<line_mod> := (
+    Comment=":" Wait(200) "TComment{enter}" "'v" 
+);
+line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
+line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
+line [<line_mod>] <0to9> <0to9> <0to9>        = GotoLine4Mod(0, $2, $3, $4, $1);
+line [<line_mod>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Mod($2, $3, $4, $5, $1);
+<relative_range_commands> := (
+	Comment="TComment" 
+);
+<relative_range_commands> (Next="+" | Back="-") Line                          =  {Esc} Wait(200) "$2" Wait(200) ":$1";
+<relative_range_commands> 2..30 Lines                                   =  {Esc} Wait(200) ":.,+" Eval($2-1) "$1";
+<relative_range_commands> Back 2..30 Lines                                   =  {Esc} Wait(200) ":-$2,-1$1"; 
 # csupport (hotkey sections: comment, statements, preprocessor, idioms, 
 #           snippets, c++, run)
 <comment_type> := (

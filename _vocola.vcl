@@ -30,7 +30,6 @@ Page <n>      = {PgDn_$1};
 ### use extension keyhold (Keys)
 
 (hold|release) (shift|control=ctrl|tab|alt) button = Keys.SendInput({$2_$1});
-menu (show=hold|select=release) = Keys.SendInput({ctrl_$1}{tab_$1});
 
 # Open/Close a drop-down list
 (Expand={Alt+ExtDown} | Collapse={Alt+ExtUp}) That = SendSystemKeys($1);
