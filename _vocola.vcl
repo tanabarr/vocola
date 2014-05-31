@@ -71,6 +71,12 @@ include utilities.vch;
 Drag <n> <upDown>    = dragBy(0, $2$1);
 Drag <n> <leftRight> = dragBy($2$1, 0);
 
+# extension of mouse movement commands for greater range
+<mouse_range_adjust> := (20|30|40|50|60|70|80|90);
+# adjust pixel movement to seem more like the built-in "move mouse" grammars
+Mouse <upDown> <mouse_range_adjust>    = moveBy(0, $1 Eval($2/5));
+Mouse <leftRight> <mouse_range_adjust> = moveBy($1 Eval($2/5), 0);
+
 ### Move and resize windows
 <ns> := 0..10;
 Window move <direction> = SendSystemKeys({Win+$1});
@@ -187,8 +193,9 @@ taskBar()   := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab_2};
 launchBar() := SendSystemKeys({Ctrl+Esc}) {Esc}{Tab};
 <1to20> := 1..20;
 <launch_actions> := (Launch=" "  | launch Close=" {Alt+f4}");
-<launch_actions> <1to20> = launchBar() {Down_$2}{Up} $1;
-<launch_actions> <1to20> from bottom = launchBar() {Up_$2} $1;
+#<launch_actions> <1to20> = launchBar() {Down_$2}{Up} $1;
+<launch_actions> <1to20> [(from bottom)] [1..6 times] = When($4, Repeat($4, launchBar() When($3, {Up_$2}, {Down_$2}{Up}) $1), launchBar() When($3, {Up_$2}, {Down_$2}{Up}) $1);
+# launch close multiple consecutive taskbar items
 
 #Switch to <1to20> [Right] = taskBar() {Right_20}{Left_$1}{Right} " ";
 # interference
