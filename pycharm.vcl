@@ -4,17 +4,21 @@ include vim.vch;
 include UNIX_shell.vch;
 
 menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{tab_$1});
+#menu (show=hold|select=release) = Keys.SendInput({ctrl_$1}) Wait(500) {tab};
+##    Keys.SendInput({ctrl_release});
 
 
 ### frequently used ###
 update [(from|to)] (version control="#"|default="p") = {ctrl+alt+shift+$2};
 commit [to] version control = {ctrl+alt+k};
-
+#screen splitting
+(switch=n|close=x) split = {ctrl+w} $1;
 ### Navigation ###
 go to (
     class = {Ctrl+n}|
     file = {Ctrl+Shift+n}|
     file structure = {Ctrl+Alt+Shift+s}|
+    project settings = {Ctrl+Alt+Shift+s}|
     symbol = {Ctrl+Alt+Shift+n}|
     declaration = {Ctrl+b}|
     implementation = {Ctrl+Alt+b}|
@@ -31,7 +35,7 @@ File structure view = {Alt+7};
 (project=1|structure=7) view = {alt+$1};
 Show navigation bar = {Alt+Home};
 Hide window = {Shift+Esc};
-hide (all=a|side=s) tool Windows = {Ctrl+Shift+F12} {ctrl+$1};
+hide (all=a|side=s) tools = {Ctrl+Shift+F12} {ctrl+$1};
 (tool="shift+"|window=) close = {ctrl+$1f4};
 quick definition lookup = {Ctrl+Shift+i};
 
@@ -52,7 +56,6 @@ Highlight usages in file = {Ctrl+Shift+F7};
 Rename = {Shift+F6};
 
 charm (
-    hide tools={ctrl+shift+f12}|
     settings={ctrl+shift+f11}|
     run console={ctrl+shift+f2}|
     manage tasks={ctrl+shift+","}|
@@ -69,6 +72,7 @@ complete = {ctrl+" "};
 Show error description = {Ctrl+F1};
 
 (expand="+"|collapse="-") line = {ctrl+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
+comment line = Wait(200) {ctrl+"/"};
 comment [the] next 1..20 lines = Repeat($1, Wait(200) {ctrl+"/"});
 surround with = {ctrl+alt+t};
 (replace normal="ctrl+alt+shift+r"|find in path="ctrl+shift+F"|replace in path="ctrl+shift+R"|structure find=|structure replace=) = {$1};
