@@ -11,8 +11,13 @@ menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{t
 ### frequently used ###
 update [(from|to)] (version control="#"|default="p") = {ctrl+alt+shift+$2};
 commit [to] version control = {ctrl+alt+k};
+(next=Right|previous=Left) 1..9 = Repeat($2, {Alt+$1} Wait(200)) {esc};
+
 #screen splitting
 (switch=n|close=x) split = {ctrl+w} $1;
+charm split vertical={ctrl+shift+\};
+#split tools={shift+\};
+
 ### Navigation ###
 go to (
     class = {Ctrl+n}|
@@ -39,7 +44,7 @@ hide (all=a|side=s) tools = {Ctrl+Shift+F12} {ctrl+$1};
 (tool="shift+"|window=) close = {ctrl+$1f4};
 quick definition lookup = {Ctrl+Shift+i};
 
-Go to (next=Right|back=Left) tab = {Alt+$1};
+#TODO FIX
 charm Switch tab [1..9] = When($1, {Ctrl+Tab_$1}, {ctrl+tab});
 Charm back change = {Ctrl+Shift+Backspace};
 Select current file or symbol = {Alt+F1};
@@ -61,9 +66,7 @@ charm (
     manage tasks={ctrl+shift+","}|
     last tool={f12}|
     list tools={alt+Down}|
-    run program={shift+f10}|
-    split vertical={ctrl+shift+\}|
-    split tools={shift+\}
+    run program={shift+f10}
 ) = $1;
 
 ### editing ###
@@ -71,9 +74,10 @@ Show possible actions = {Alt+Enter};
 complete = {ctrl+" "};
 Show error description = {Ctrl+F1};
 
-(expand="+"|collapse="-") line = {ctrl+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
+(expand="="|collapse="-") [(all="+shift")] = {ctrl$2+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
 comment line = Wait(200) {ctrl+"/"};
-comment [the] next 1..20 lines = Repeat($1, Wait(200) {ctrl+"/"});
+(auto indent=alt+i|comment="/") [the] next 1..20 lines = Repeat($2, Wait(200) {ctrl+$1});
+
 surround with = {ctrl+alt+t};
 (replace normal="ctrl+alt+shift+r"|find in path="ctrl+shift+F"|replace in path="ctrl+shift+R"|structure find=|structure replace=) = {$1};
 
@@ -157,3 +161,17 @@ quick popup = {Alt+"`"}; #BackQuote (`)  ‘VCS’ quick popup
 ### +Live Templates+ i##
 Surround with Live Template = {Ctrl+Alt+j};
 Insert Live Template = {Ctrl+j};
+
+### action a specific line ###
+$set numbers 0;
+GotoLineModcharm(line, mod) := {Esc}"mv" ":" Wait(200) "$line"{enter} Wait(200) "$mod" "zz"; 
+GotoLine4Modcharm(thousands, hundreds, tens, ones, mod) :=
+    GotoLineModcharm(Eval($thousands*1000 + $hundreds*100 + $tens*10 + $ones), $mod);
+<line_modcharm> := (
+    expand={ctrl+"="}  | collapse={ctrl+"-"} |
+    comment={ctrl+"/"} | auto indent={ctrl+alt+i} 
+);
+charm line [<line_modcharm>] <0to9>                      = GotoLineModcharm($2,$1);
+charm line [<line_modcharm>] <0to9> <0to9>               = GotoLine4Modcharm(0, 0, $2, $3, $1);
+charm line [<line_modcharm>] <0to9> <0to9> <0to9>        = GotoLine4Modcharm(0, $2, $3, $4, $1);
+charm line [<line_modcharm>] <0to9> <0to9> <0to9> <0to9> = GotoLine4Modcharm($2, $3, $4, $5, $1);
