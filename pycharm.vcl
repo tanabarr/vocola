@@ -39,9 +39,6 @@ File structure popup = {Ctrl+F12};
 File structure view = {Alt+7};
 (project=1|structure=7) view = {alt+$1};
 Show navigation bar = {Alt+Home};
-Hide window = {Shift+Esc};
-hide (all=a|side=s) tools = {Ctrl+Shift+F12} {ctrl+$1};
-(tool="shift+"|window=) close = {ctrl+$1f4};
 quick definition lookup = {Ctrl+Shift+i};
 
 #TODO FIX
@@ -69,6 +66,11 @@ charm (
     run program={shift+f10}
 ) = $1;
 
+charm show tool 0..9 = {Alt+$1};
+Hide window = {Shift+Esc};
+(show|hide) (all=a|side=s) (tools|windows) = {Ctrl+Shift+F12} {ctrl+$2};
+(tool="shift+"|window=) close = {ctrl+$1f4};
+
 ### editing ###
 Show possible actions = {Alt+Enter};
 complete = {ctrl+" "};
@@ -76,7 +78,7 @@ Show error description = {Ctrl+F1};
 
 (expand="="|collapse="-") [(all="+shift")] = {ctrl$2+$1}; #}>(all="shift+"|line) = {ctrl+$2$1};
 comment line = Wait(200) {ctrl+"/"};
-(auto indent=alt+i|comment="/") [the] next 1..20 lines = Repeat($2, Wait(200) {ctrl+$1});
+(indent=">" Wait(200) ">"|auto indent=alt+i|comment="/") [the] next 1..20 lines = Repeat($2, Wait(200) {ctrl+$1});
 
 surround with = {ctrl+alt+t};
 (replace normal="ctrl+alt+shift+r"|find in path="ctrl+shift+F"|replace in path="ctrl+shift+R"|structure find=|structure replace=) = {$1};
@@ -123,7 +125,6 @@ Inline = {Ctrl+Alt+n};
 Extract (Method=M|Variable=V|Field=F|Constant=C|Parameter=P) = {Ctrl+Alt+$1};
 
 ### General ###
-Open tool window 0..9 = {Alt+$1};
 #Synchronize = {Ctrl+Alt+y};
 Add to Favorites = {Alt+Shift+f};
 Quick switch current scheme = {Ctrl+"`"};
