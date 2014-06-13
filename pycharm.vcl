@@ -10,6 +10,7 @@ menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{t
 
 ### frequently used ###
 update [(from|to)] (version control="#"|default="p") = {ctrl+alt+shift+$2};
+compare [file] with = {ctrl+alt+shift+f2};
 commit [to] version control = {ctrl+alt+k};
 (next=Right|previous=Left) 1..9 = Repeat($2, {Alt+$1} Wait(200)) {esc};
 
