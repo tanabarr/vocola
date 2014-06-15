@@ -98,7 +98,7 @@ Flow (Start="gg" | Append="G") [<insert>]                      =  {Esc}"$1" Wait
 # other grammar macro specifications for text editing commands
 (Indent=">" | reverse indent="<") (Line={enter} | Range={Left}) [1..9] = When($3, Repeat($3, {Esc}":" Wait(200) "$1"$2), {esc}":" Wait(200) "$1"$2);
 
-<sub_action> := (line="s" | all="%s" | here=".,\$s" | back here="0,.s");
+<sub_action> := (all="%s" | here=".,\$s" | back here="0,.s");
 (sub | substitute) <sub_action>       =  {Esc}":" Wait(200) "$2///gc"Repeat(4, {Left});
 
 # command specific for vim undo buffer
