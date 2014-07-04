@@ -10,13 +10,15 @@ menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{t
 
 ### frequently used ###
 update [(from|to)] (version control="#"|default="p") = {ctrl+alt+shift+$2};
-compare [file] with = {ctrl+alt+shift+f2};
+#compare [file] with = {ctrl+alt+shift+f2};
 commit [to] version control = {ctrl+alt+k};
 (next=Right|previous=Left) 1..9 = Repeat($2, {Alt+$1} Wait(200)) {esc};
 
 #screen splitting
 (switch=n|close=x) split = {ctrl+w} $1;
-charm split vertical={ctrl+shift+\};
+# compatible alias for vim command
+vim window (right|left|switch) = {ctrl+w}"n";
+[(charm|window)] split vertical={ctrl+shift+\};
 #split tools={shift+\};
 
 ### Navigation ###
@@ -35,6 +37,7 @@ go to (
 return from jump = {ctrl+u};
 symbol preview = {ctrl+y};
 
+version control popup = {Alt+`} Wait(200) {esc};
 Recent files popup = {Ctrl+shift+e};
 File structure popup = {Ctrl+F12};
 File structure view = {Alt+7};
@@ -73,7 +76,7 @@ Hide window = {Shift+Esc};
 (tool="shift+"|window=) close = {ctrl+$1f4};
 
 ### editing ###
-Show possible actions = {Alt+Enter};
+Show possible actions = {Alt+Enter} Wait(200) {esc};
 complete = {ctrl+" "};
 Show error description = {Ctrl+F1};
 
