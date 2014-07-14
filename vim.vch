@@ -145,10 +145,13 @@ GotoLine4Mod(thousands, hundreds, tens, ones, mod) :=
     # IE. returns to original line (mark "v").
     Change=":" Wait(200) ".c{enter}" "'v" | Kill=":" Wait(200) ".d{enter}" "'v" |
     Copy=":" Wait(200) ".y{enter}" "'v" | Paste="p" "'v" | Paste Back="P" "'v" | 
-    Move to=":" Wait(200) ".m" | Copy to=":" Wait(200) ".co" | copy here=":" Wait(200) ".y{enter}" "'v" "p" | 
+    Move to=":" Wait(200) ".m" | #Copy to=":" Wait(200) ".co" | 
+    copy here=":" Wait(200) ".y{enter}" "'v" "p" | 
     indent=":" Wait(200) ">{enter}" "'v"| reverse indent=":" Wait(200) "<{enter}" "'v"| 
-    Comment=":" Wait(200) "s/^/#/{enter}" "'v" | Remove Comment=":" Wait(200) "s/#//{enter}" "'v" |
-    Blank back="O{esc}" "'v" | Blank insert="o{esc}" "'v"
+    Comment=":" Wait(200) "s/^/#/{enter}" "'v" | 
+    Remove Comment=":" Wait(200) "s/#//{enter}" "'v" |
+    Blank back="O{esc}" "'v" | Blank insert="o{esc}" "'v" | 
+    touch="i" Wait(200) " " Wait(200) {Left} Wait(200) {Del} Wait(200) {esc} "'v" 
 );
 line [<line_mod>] <0to9>                      = GotoLineMod($2,$1);
 line [<line_mod>] <0to9> <0to9>               = GotoLine4Mod(0, 0, $2, $3, $1);
