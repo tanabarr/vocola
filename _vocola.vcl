@@ -253,6 +253,16 @@ volume (mute | unmute) <sound_device> = levelAdjust($2) {Tab} {Space}
                                            #Wait(50) {Alt+p} Wait(50) {Ctrl+Tab} {$1_$2}
                                            #Repeat(3, {Alt+f4} Wait(100));
 
+deviceControl() := 
+    controlPanel() Wait(1000) "dev" {right} {enter} WaitForWindow("Devices and Printers","",2000);
+
+massStorageEject() :=
+    deviceControl() Wait(2000) "Mass"  {Alt+f} {e};
+
+
+Device control      = deviceControl();
+eject mass storage = massStorageEject();
+
 # ---------------------------------------------------------------------------
 # global text shortcuts
 

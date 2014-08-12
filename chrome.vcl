@@ -26,7 +26,7 @@ show links = f;
 #address copy = y Wait(10){y};
 #address go = {Alt+d};
 copy links = yf;
-
+clear cash = {ctrl+shift+del};
 
 #             save [file] = {Ctrl+s}
 #             save [file] as = a-f, a

@@ -19,3 +19,4 @@ bookmark = {Ctrl+d};
 reload={f5};
 back page={backspace};
 (Copy={Ctrl+c} | Paste={Ctrl+v} | Go="") (Address|URL) = {Alt+d} Wait(20) $1;
+clear cash = {ctrl+shift+del};
