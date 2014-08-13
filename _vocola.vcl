@@ -236,7 +236,7 @@ soundControl() :=
 # bring up volume control of the specified device
 levelAdjust(deviceindex) := soundControl() {Down_$deviceindex} {Alt+p} {Ctrl+Tab};
 
-<sound_device> := (headset=1 | Bluetooth=2 | car=3 | laptop=4);
+<sound_device> := (headset=1 | Bluetooth=2 | car=2 | laptop=3);
 <up_down> := (Up="Right" | Down="Left");
 <adjust_amount> := (tiny=2 | small=5 | medium=10 | large=20 | massive=40);
 
