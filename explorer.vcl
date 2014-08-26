@@ -47,5 +47,6 @@ Paste Here = ButtonClick(1,1) {Ctrl+v};
 ### Misc extra
 
 open with = {Alt+f} Wait(20) h;
+open with vim = {Alt+f} Wait(20) v;
 file edit = {Alt+f}e;
 file options = {Alt+f};
