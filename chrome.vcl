@@ -2,6 +2,7 @@
 # chrome.vcl
 
 include Unimacro.vch;
+include keys.vch;
 
 <n> := 0..9;
 zoom (in=plus | out=minus) [<n>] = 

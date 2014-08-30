@@ -2,6 +2,7 @@
 include Unimacro.vch;
 include vim.vch;
 include UNIX_shell.vch;
+include keys.vch;
 
 menu (show=hold|select=release) [0..9] = $2 Wait(200) Keys.SendInput({ctrl_$1}{tab_$1});
 #menu (show=hold|select=release) = Keys.SendInput({ctrl_$1}) Wait(500) {tab};
@@ -95,23 +96,21 @@ Save all = {Ctrl+s};
 Inspect file = {Alt+Shift+i};
 Optimize imports = {Ctrl+Alt+o};
 
-### end of frequently used ###
 
 ### Running ###
 Select configuration and run = {Alt+Shift+F10};
 Select configuration and debug = {Alt+Shift+F9};
-Debug = {Shift+F9};
 Run context configuration from editor = {Ctrl+Shift+F10};
-Step over = {F8};
-Step into = {F7};
+Resume = {F9};
+(Step={F8}|into={F7}) [1..20] [times] = When($2, Repeat($2, Wait(200) $1), $1);
+Toggle breakpoint = {Ctrl+F8};
 Step out = {Shift+F8};
 Run to cursor = {Alt+F9};
 Evaluate expression = {Alt+F8};
 Quick evaluate expression = {Ctrl+Alt+F8};
-Resume program = {F9};
-Toggle breakpoint = {Ctrl+F8};
 View breakpoints = {Ctrl+Shift+F8};
 
+### end of frequently used ###
 
 #to super-method/super-class = {Ctrl+u};
 Go to (previous=Up|next=Down) method = {Alt+$1};
