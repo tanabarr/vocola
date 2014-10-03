@@ -12,7 +12,7 @@ SHELL(pathname) := Replace($pathname, " ", "\ ");
 <common_actions> := (edit="vim" | source="source");
 
 <common_actions> (vim | bash) config              = "$1 ~/.$2rc"{Enter};
-bash history                 = {Ctrl+r};
+history                 = {Ctrl+r};
 break                        = {Ctrl+c};
 break end of file                        = {Ctrl+d};
 escape process         = {esc}{ctrl+z};
