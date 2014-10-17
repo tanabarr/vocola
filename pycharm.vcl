@@ -19,7 +19,7 @@ commit [to] version control = {ctrl+alt+k};
 (switch=n|close=x) split = {ctrl+w} $1;
 # compatible alias for vim command
 vim window (right|left|switch) = {ctrl+w}"n";
-[(charm|window)] split vertical={ctrl+shift+\};
+#[(charm|window)] split vertical={ctrl+shift+\};
 #split tools={shift+\};
 
 ### Navigation ###

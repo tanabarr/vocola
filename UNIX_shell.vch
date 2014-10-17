@@ -37,7 +37,7 @@ cygwin password = "^2A";
 (sub|SVM=svn) (checkout|diff|commit|update|remove|checkout bug=co -b|log=log_grep|start bug=start_bug|status) = "$1 $2 ";
 start environment 1..5 = "source \$ENV$1/bin/activate{enter}";
 stop environment = "deactivate{enter}"; 
-Jango export (test|development=dev)settings = "export DJANGO_SETTINGS_MODULE=vims.settings.$1_settings";
+Jango export (test|development=dev)settings = "export DJANGO_SETTINGS_MODULE=home_test.settings.$1_settings";
 Django (shell|database shell=dbshell|sink=syncdb|sink input="syncdb < input"|run="runserver 127.0.0.1:8100"|dump=dumpdata) = "python manage.py $1{enter}";
 pip (freeze|completion|install|list|help) = "pip $1";
 pip option (bash|upgrade|outdated|local|no index="no-index"|find links="find-links") = " --$1 ";
